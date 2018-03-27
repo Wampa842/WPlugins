@@ -48,5 +48,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="settings.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy "$(TargetPath)" "H:\MMD\PMX Editor\PmxEditor\_plugin\User\WPlugins" /Y
+xcopy "$(TargetDir)settings.xml" "H:\MMD\PMX Editor\PmxEditor\_plugin\User\WPlugins" /Y</PostBuildEvent>
+  </PropertyGroup>
 </Project>

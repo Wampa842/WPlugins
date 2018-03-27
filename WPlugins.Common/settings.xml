@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WPluginsSettings>
+  <ObjImport>
+    <MetricUnits>true</MetricUnits>
+    <FlipFaces>false</FlipFaces>
+    <SwapYZ>false</SwapYZ>
+    <UniformScale>true</UniformScale>
+    <XScale>1</XScale>
+    <YScale>1</YScale>
+    <ZScale>1</ZScale>
+    <MirrorX>false</MirrorX>
+    <MirrorY>false</MirrorY>
+    <MirrorZ>false</MirrorZ>
+    <MirrorU>false</MirrorU>
+    <MirrorV>false</MirrorV>
+    <WithBone>false</WithBone>
+  </ObjImport>
+  <ObjExport>
+    <UniformScale>true</UniformScale>
+    <FlipFaces>false</FlipFaces>
+    <SwapYZ>false</SwapYZ>
+    <XScale>1.0</XScale>
+    <YScale>1.0</YScale>
+    <ZScale>1.0</ZScale>
+    <MirrorX>false</MirrorX>
+    <MirrorY>false</MirrorY>
+    <MirrorZ>false</MirrorZ>
+    <MirrorU>false</MirrorU>
+    <MirrorV>false</MirrorV>
+    <CopyBitmaps>true</CopyBitmaps>
+  </ObjExport>
+</WPluginsSettings>
