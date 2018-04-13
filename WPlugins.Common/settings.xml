@@ -5,28 +5,11 @@
     <FlipFaces>false</FlipFaces>
     <SwapYZ>false</SwapYZ>
     <UniformScale>true</UniformScale>
-    <XScale>1</XScale>
-    <YScale>1</YScale>
-    <ZScale>1</ZScale>
-    <MirrorX>false</MirrorX>
-    <MirrorY>false</MirrorY>
-    <MirrorZ>false</MirrorZ>
-    <MirrorU>false</MirrorU>
-    <MirrorV>false</MirrorV>
-    <WithBone>false</WithBone>
+    <XScale mirror="false">1</XScale>
+    <YScale mirror="false">1</YScale>
+    <ZScale mirror="false">1</ZScale>
+    <UScale mirror="false">1</UScale>
+    <VScale mirror="false">1</VScale>
+    <BoneMode>0</BoneMode>
   </ObjImport>
-  <ObjExport>
-    <UniformScale>true</UniformScale>
-    <FlipFaces>false</FlipFaces>
-    <SwapYZ>false</SwapYZ>
-    <XScale>1.0</XScale>
-    <YScale>1.0</YScale>
-    <ZScale>1.0</ZScale>
-    <MirrorX>false</MirrorX>
-    <MirrorY>false</MirrorY>
-    <MirrorZ>false</MirrorZ>
-    <MirrorU>false</MirrorU>
-    <MirrorV>false</MirrorV>
-    <CopyBitmaps>true</CopyBitmaps>
-  </ObjExport>
 </WPluginsSettings>

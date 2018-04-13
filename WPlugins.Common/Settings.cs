@@ -9,19 +9,19 @@ using System.Windows.Forms;
 
 namespace WPlugins.Common
 {
-	public class ObjImportSettings : IDisposable
+	public class ObjImportSettings
 	{
 		public enum CreateBoneMode { None, Origin, Average };
-		bool MetricUnits = false;
-		bool FlipFaces = false;
-		bool SwapYZ = false;
-		bool UniformScale = true;
-		float ScaleX = 1.0f;
-		float ScaleY = 1.0f;
-		float ScaleZ = 1.0f;
-		float ScaleU = 1.0f;
-		float ScaleV = 1.0f;
-		CreateBoneMode CreateBone = CreateBoneMode.None;
+		public bool MetricUnits { get; set; } = false;
+		public bool FlipFaces { get; set; } = false;
+		public bool SwapYZ { get; set; } = false;
+		public bool UniformScale { get; set; } = true;
+		public float ScaleX { get; set; } = 1.0f;
+		public float ScaleY { get; set; } = 1.0f;
+		public float ScaleZ { get; set; } = 1.0f;
+		public float ScaleU { get; set; } = 1.0f;
+		public float ScaleV { get; set; } = 1.0f;
+		public CreateBoneMode CreateBone { get; set; } = CreateBoneMode.None;
 
 		private void ReadSettings()
 		{
@@ -33,6 +33,7 @@ namespace WPlugins.Common
 			catch(System.IO.FileNotFoundException ex)
 			{
 				MessageBox.Show("Settings.xml not found.\n" + ex.Message + '\n' + ex.FileName + "\nDefault values will be used.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
 			}
 			XmlNodeList nodes = doc.DocumentElement["ObjImport"].ChildNodes;
 			foreach (XmlNode n in nodes)
@@ -71,6 +72,8 @@ namespace WPlugins.Common
 						try
 						{
 							this.ScaleX = float.Parse(n.InnerText.Trim());
+							if (n.Attributes["mirror"].InnerText.Trim().ToLowerInvariant() == "true")
+								this.ScaleX *= -1;
 						}
 						catch { }
 						break;
@@ -78,6 +81,8 @@ namespace WPlugins.Common
 						try
 						{
 							this.ScaleY = float.Parse(n.InnerText.Trim());
+							if (n.Attributes["mirror"].InnerText.Trim().ToLowerInvariant() == "true")
+								this.ScaleY *= -1;
 						}
 						catch { }
 						break;
@@ -85,46 +90,26 @@ namespace WPlugins.Common
 						try
 						{
 							this.ScaleZ = float.Parse(n.InnerText.Trim());
-						}
-						catch { }
-						break;
-					case "MirrorX":
-						try
-						{
-							if (bool.Parse(n.InnerText.Trim()))
-								this.ScaleX *= -1;
-						}
-						catch { }
-						break;
-					case "MirrorY":
-						try
-						{
-							if (bool.Parse(n.InnerText.Trim()))
-								this.ScaleY *= -1;
-						}
-						catch { }
-						break;
-					case "MirrorZ":
-						try
-						{
-							if (bool.Parse(n.InnerText.Trim()))
+							if (n.Attributes["mirror"].InnerText.Trim().ToLowerInvariant() == "true")
 								this.ScaleZ *= -1;
 						}
 						catch { }
 						break;
-					case "MirrorU":
+					case "UScale":
 						try
 						{
-							if (bool.Parse(n.InnerText.Trim()))
+							this.ScaleU = float.Parse(n.InnerText.Trim());
+							if (n.Attributes["mirror"].InnerText.Trim().ToLowerInvariant() == "true")
 								this.ScaleU *= -1;
 						}
 						catch { }
 						break;
-					case "MirrorV":
+					case "VScale":
 						try
 						{
-							if (bool.Parse(n.InnerText.Trim()))
-								this.ScaleV*= -1;
+							this.ScaleV = float.Parse(n.InnerText.Trim());
+							if (n.Attributes["mirror"].InnerText.Trim().ToLowerInvariant() == "true")
+								this.ScaleV *= -1;
 						}
 						catch { }
 						break;
@@ -139,12 +124,7 @@ namespace WPlugins.Common
 				}
 			}
 		}
-
-		public void Dispose()
-		{
-			throw new NotImplementedException();
-		}
-
+		
 		public ObjImportSettings()
 		{
 			ReadSettings();

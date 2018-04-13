@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPlugins.Common", "WPlugins.Common\WPlugins.Common.csproj", "{FA4DB914-C20F-474A-8C97-251C7CE78688}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UVUnwrap", "UVUnwrap\UVUnwrap.csproj", "{4440D6D7-D00E-4B78-8634-48004271BE88}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{FA4DB914-C20F-474A-8C97-251C7CE78688}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA4DB914-C20F-474A-8C97-251C7CE78688}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA4DB914-C20F-474A-8C97-251C7CE78688}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4440D6D7-D00E-4B78-8634-48004271BE88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4440D6D7-D00E-4B78-8634-48004271BE88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4440D6D7-D00E-4B78-8634-48004271BE88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4440D6D7-D00E-4B78-8634-48004271BE88}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
