@@ -11,5 +11,7 @@
     <UScale mirror="false">1</UScale>
     <VScale mirror="false">1</VScale>
     <BoneMode>0</BoneMode>
+    <MaterialNaming>1</MaterialNaming>
+    <BitmapAction>1</BitmapAction>
   </ObjImport>
 </WPluginsSettings>

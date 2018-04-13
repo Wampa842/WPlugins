@@ -12,6 +12,8 @@ namespace WPlugins.Common
 	public class ObjImportSettings
 	{
 		public enum CreateBoneMode { None, Origin, Average };
+		public enum MaterialNamingMode { Numbered, GroupName, BitmapName }
+		public enum BitmapImportAction { None, FileName, Copy, AbsoluteLink }
 		public bool MetricUnits { get; set; } = false;
 		public bool FlipFaces { get; set; } = false;
 		public bool SwapYZ { get; set; } = false;
@@ -22,6 +24,8 @@ namespace WPlugins.Common
 		public float ScaleU { get; set; } = 1.0f;
 		public float ScaleV { get; set; } = 1.0f;
 		public CreateBoneMode CreateBone { get; set; } = CreateBoneMode.None;
+		public MaterialNamingMode MaterialNaming { get; set; } = MaterialNamingMode.GroupName;
+		public BitmapImportAction BitmapAction { get; set; } = BitmapImportAction.Copy;
 
 		private void ReadSettings()
 		{
@@ -30,7 +34,7 @@ namespace WPlugins.Common
 			{
 				doc.Load(Settings.SettingsFileUrl);
 			}
-			catch(System.IO.FileNotFoundException ex)
+			catch (System.IO.FileNotFoundException ex)
 			{
 				MessageBox.Show("Settings.xml not found.\n" + ex.Message + '\n' + ex.FileName + "\nDefault values will be used.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
@@ -121,10 +125,28 @@ namespace WPlugins.Common
 						else
 							this.CreateBone = CreateBoneMode.None;
 						break;
+					case "MaterialNaming":
+						if (n.InnerText.Trim() == "2")
+							this.MaterialNaming = MaterialNamingMode.BitmapName;
+						else if (n.InnerText.Trim() == "1")
+							this.MaterialNaming = MaterialNamingMode.GroupName;
+						else
+							this.MaterialNaming = MaterialNamingMode.Numbered;
+						break;
+					case "BitmapAction":
+						if (n.InnerText.Trim() == "3")
+							this.BitmapAction = BitmapImportAction.AbsoluteLink;
+						else if (n.InnerText.Trim() == "2")
+							this.BitmapAction = BitmapImportAction.Copy;
+						else if (n.InnerText.Trim() == "1")
+							this.BitmapAction = BitmapImportAction.FileName;
+						else
+							this.BitmapAction = BitmapImportAction.None;
+						break;
 				}
 			}
 		}
-		
+
 		public ObjImportSettings()
 		{
 			ReadSettings();

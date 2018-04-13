@@ -21,7 +21,7 @@ namespace WPlugins.Common
         {
             get
             {
-                return "WPlugins Core";
+                return "WPlugins: Common";
             }
         }
 
