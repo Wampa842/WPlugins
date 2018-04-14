@@ -14,10 +14,11 @@ namespace WPlugins.Common
 		public enum CreateBoneMode { None, Origin, Average };
 		public enum MaterialNamingMode { Numbered, GroupName, BitmapName }
 		public enum BitmapImportAction { None, FileName, Copy, AbsoluteLink }
-		public bool MetricUnits { get; set; } = false;
+		public bool UseMetricUnits { get; set; } = false;
 		public bool FlipFaces { get; set; } = false;
 		public bool SwapYZ { get; set; } = false;
 		public bool UniformScale { get; set; } = true;
+		public bool UniformUVScale { get; set; } = true;
 		public float ScaleX { get; set; } = 1.0f;
 		public float ScaleY { get; set; } = 1.0f;
 		public float ScaleZ { get; set; } = 1.0f;
@@ -47,7 +48,7 @@ namespace WPlugins.Common
 					case "MetricUnits":
 						try
 						{
-							this.MetricUnits = bool.Parse(n.InnerText.Trim());
+							this.UseMetricUnits = bool.Parse(n.InnerText.Trim());
 						}
 						catch { }
 						break;
@@ -69,6 +70,13 @@ namespace WPlugins.Common
 						try
 						{
 							this.UniformScale = bool.Parse(n.InnerText.Trim());
+						}
+						catch { }
+						break;
+					case "UniformUVScale":
+						try
+						{
+							this.UniformUVScale = bool.Parse(n.InnerText.Trim());
 						}
 						catch { }
 						break;

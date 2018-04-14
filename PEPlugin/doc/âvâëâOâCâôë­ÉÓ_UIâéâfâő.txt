@@ -1,0 +1,297 @@
+■UIモデル機能解説
+
+○UIモデルについて
+
+View上に追加配置した PMXモデルデータ(外部ファイル読み込みまたはプラグインからの直接作成)を
+プラグインからの各イベント制御と組み合わせることにより、UI(ユーザーインターフェイス)として機能させることが可能です。
+
+UIモデルはこれらの一連のプラグイン機能及び追加配置される PMXモデルデータについての呼称となります。
+
+
+○使い方
+
+UIモデルは Cプラグインから作成することができます。
+Cプラグインの基本的な使い方については「プラグイン解説_Cプラグイン.txt」やサンプルスクリプトなどを参照してください。
+
+●生成方法
+
+PXCBridge.RegisterUIModel()
+
+から生成／登録を行います。事前に基本構造となる PMXデータを作成しておく必要があります。
+
+UIモデル生成後は指定した PMXデータを変更しても UIモデル側に反映されることはありません。
+一度登録した UIモデルは本体側で管理され、更新については専用の処理を呼び出す必要があります(更新できるのは一部のデータのみ)
+
+
+●破棄
+
+IPXUIModel.Release()
+
+を直接呼び出すか、または
+
+IPXUIModel.SetAutoRelease()
+
+を事前に設定しておく必要があります。
+
+※
+SetAutoRelease()はプラグイン終了時に自動的に破棄を行うように設定しますが、
+PMXエディタに通常配置したプラグインの終了タイミングは "PMXエディタ終了時と同時" になるので、
+未設定のままでも特に問題に気付かない可能性があります。
+なお SetAutoRelease()を設定した場合に Release()を呼び出すと、自動破棄時に不具合を生じます。
+通常は個別設定による破棄(Release())を推奨します。
+
+
+○性能
+
+UIモデルでは設定された PMXのいくつかの機能が動作しません。
+また本体側の PMXには実装されていない機能を利用することが可能です。
+
+●対応外
+物理演算関係
+セルフシャドウ
+地面影
+
+●追加性能
+ワールド行列による変換
+ビルボード(全軸＝正面表示／Y軸固定)
+材質(色など)の直接更新(非材質モーフ)
+深度(Z)の有効状態
+モデル手前側への描画
+テクスチャのメモリ内配置(任意編集可能)
+文字表示機能
+
+この他、通常の PMXと同様にボーン及びモーフ変形を行うことができます。
+
+
+※以下 IPXUIModelインターフェイスの記述(IPXUIModel.SetWorld()など)を省略します。引数など関数の詳細はオブジェクトブラウザなどでご確認ください。
+
+○基本特性
+Visible : 表示状態
+Light   : 照明の有効状態
+Depth   : 深度(Z)の有効状態 | 無効時は描画時にZバッファ(＝前後関係)を無視します
+TopMost : 最前面描画 | PMXモデルと他のUIモデルの中で最も手前側に描画します(ボーンなどの追加表示オブジェクトの手前には描画できません)
+
+SetBillboard() : ビルボード設定 | 無効／全軸／Y軸
+
+ビルボードに設定された UIモデルは常に画面正面を向くオブジェクトとなります(全軸の場合)
+数値や画像表示など常に特定方向を表示し続ける必要がある場合に有用です。
+
+※ビルボードは2D表示とは異なるので、視点に関わらず常時同位置同サイズで描画することはできません(特別な設定が必要になります)
+
+
+○変形／更新
+
+●初期化
+PXCBridge.RegisterUIModel(..., bool transform = false)
+ : 初期化時に変形可／変形不可 を指定
+
+●ワールド行列 | 変形不可でも適用可
+SetWorld() : 行列設定
+GetWorld() : 行列取得
+
+●ボーン
+SetBone()          : 個別ボーンへ下記3種類(S/R/T)の一括設定
+SetBoneScale()     : 個別ボーンのスケール(x/y/z)の設定
+SetBoneRotate()    : 個別ボーンの回転量(クォータニオン)の設定
+SetBoneTranslate() : 個別ボーンの移動量(x/y/z)の設定
+ResetBone()        : 全てのボーンの初期化
+
+●モーフ
+SetMorph()         : 個別モーフのモーフ値の設定
+ResetMorph()       : 全てのモーフの初期化
+
+●変形更新
+UpdateTransform()  : 変形の更新 | ワールド行列を除くボーン／モーフの変形適用(変形不可モデルに対しては画面の再描画のみを行います)
+
+●変形適用後の状態取得
+GetTransformedVertexPosition() : 頂点位置の取得
+GetTransformedVertexNormal()   : 頂点法線の取得
+GetTransformedBonePosition()   : ボーン位置の取得
+GetTransformedBoneMatrix()     : ボーン変形行列の取得(頂点変形にそのまま使用可能な行列量)
+
+●材質更新 | 変形不可でも適用可
+UpdateMaterialColor() : 材質色の更新
+UpdateMaterialEdge()  : エッジの更新 | エッジ色は材質色の更新で対応
+UpdateMaterialFlags() : 材質フラグの更新 | 両面描画 のみ
+
+※材質モーフは更新後の材質値を基準に適用されます。
+
+※負荷
+ボーン／モーフ変形       -> コスト大(内部のモデルデータを直接変更)
+ワールド行列／材質の更新 -> コスト小(描画用のパラメータを設定するのみ)
+
+
+○特殊テクスチャ
+
+通常の PMXでは材質テクスチャはファイルを対象とした固定データしか扱えませんが、
+UIモデルではメモリ上の Bitmapデータを指定することが可能です。
+
+SetBitmapTexture()    : 指定の材質テクスチャを Bitmapテクスチャに設定
+UpdateBitmapTexture() : テクスチャデータの更新
+
+取り扱える Bitmapのフォーマットは 32bitARGB のみ
+Toonやスフィアテクスチャは変更できません
+
+当然ながら画像データの更新はコストが非常に大きくなるので、取り扱いにご注意ください。
+
+※
+Bitmap画像に対して文字を描画→更新により View内に任意に文字列を表示することも可能です。
+テキスト表示に関しては簡単な支援クラスとして PXUIModelHelper.TextControl が用意されています。
+
+
+○イベント
+
+UIモデルに対してマウス関連のイベントを登録することができます。
+まずイベント登録用のリスナを作成する必要があります。
+
+CreateEventListener()  : イベントリスナ作成
+ReleaseEventListener() : イベントリスナ破棄
+
+※初期化に必要なイベントコネクタは PXCBridge.CreateEventConnector() にて作成可(Viewイベントと共通)
+
+イベントリスナは指定の材質(複数指定可)を一つのイベント領域とみなし下記のイベントを呼び出します。
+
+※
+リスナは複数作成することができますが、既に別のリスナの対象となっている材質を指定した場合、
+その対象領域から除外され新しく指定したリスナへ領域が委譲されます。
+
+================================
+例) 材質0,1,2 のモデルの場合 :
+
+var listener_all = uim.CreateEventListener(c);   // 全領域を対象としたリスナ [0,1,2]
+var listener_2 = uim.CreateEventListener(c, 2);  // 材質[2]を対象としたリスナ
+
+-> listener_allは [2] がなくなり [0,1] を対象とするようになる
+================================
+
+●マウスイベント詳細
+IPXUIModelEventListener
+
+MouseOver    : マウスカーソルが領域上で移動している場合に呼び出されます
+MouseDown    : マウスカーソルが領域上にある場合にボタンを押されると呼び出されます
+MouseUp      : マウスカーソルが領域上にある場合にボタンを離されると呼び出されます
+MouseEnter   : マウスカーソルが領域外から領域上に移動した場合に呼び出されます
+MouseLeave   : マウスカーソルが領域上から領域外に移動した場合に呼び出されます
+MouseDrag    : MouseDown後にドラッグ操作を続けている場合に呼び出されます
+MouseDragEnd : ドラッグ操作を終了した場合に呼び出されます
+MouseClick   : マウスカーソルが領域上にある場合にクリック操作を行うと呼び出されます(※)
+MouseDoubleClick : マウスカーソルが領域上にある場合にダブルクリック操作を行うと呼び出されます
+
+※MouseClickに関しての注意点
+
+通常の Click操作は、コントロール内で MouseDown→MouseUp と操作されることで認識されますが、
+UIモデルにおいては View画面上のイベント処理を用いていることより、(操作場所に関わらず)
+ほぼ全域においての MouseDown→MouseUp がクリック判定と見なされてしまいます。
+
+例)中央でMouseDown→ドラッグしたまま端まで移動→MouseUp という操作でもクリック判定
+
+ユーザーから見た操作方法としては、同一座標での MouseDown→MouseUp を
+クリック判定とみなしたいケースが多いと予想されるので、その場合は以下のようなイベント処理を用いてください。
+
+================================
+// Click相当イベント
+listener.MouseDragEnd += (object sender, PXEventArgs.UIModelMouseDrag e) => {
+    // Left | 同一座標での MouseDown→MouseUp
+    if (e.Button == MouseButtons.Left && e.X == e.StX && e.Y == e.StY) {
+        // 処理
+    }
+};
+================================
+
+※注意点など
+MouseEnter や MouseLeave はイベント処理や更新方法によっては正常に動作しないことがあります(仕様)
+
+
+●イベント作成補助
+
+PXUIModelHelper クラスにより簡単なイベント処理を作成することができます
+
+※PXUIModelHelperクラスは単純なイベント処理の追加を行っているだけなので、複数回呼び出すと正常に動作しなくなります。
+
+
+■マウスオーバーによる色変化(MouseEnter/MouseLeave イベント処理追加)
+
+MaterialColorEvPara に対象材質と 変化する色A→B 及び有効にする色種類を設定 (PMX指定で初期化すれば色Aは自動設定)
+PXUIModelHelper.SetMouseOverColor() を対象材質のリスナと指定したパラメータで呼び出し設定
+
+
+■マウスドラッグによるオブジェクト移動(ワールド行列移動)
+
+移動操作用のリスナを作成後、
+PXUIModelHelper.SetMouseDragMove() を呼び出し設定(IPXViewControl を指定すると移動場所がより正確になります)
+
+================================
+// SetMouseDragMove() 内部仕様
+
+static public void SetMouseDragMove(IPXUIModel uim, IPXUIModelEventListener listener, IPXViewControl viewCtrl = null)
+{
+    M stm = new M();
+    V3 vp = new V3();
+
+    listener.MouseDown += (object sender, PXEventArgs.UIModelMouse e) => {
+        try {
+            if (e.Button == System.Windows.Forms.MouseButtons.Left) {
+                // ドラッグ用
+                stm = uim.GetWorld();
+
+                if (viewCtrl != null) {
+                    vp = viewCtrl.VCursorPosition;
+                    viewCtrl.VCursorPosition = new V3(stm.M41, stm.M42, stm.M43);
+                }
+            }
+        }
+        catch (Exception ex) {
+            System.Diagnostics.Debug.Assert(false, ex.Message);
+        }
+    };
+
+    // ドラッグ移動
+    listener.MouseDrag += (object sender, PXEventArgs.UIModelMouseDrag e) => {
+        try {
+            if (e.Button == System.Windows.Forms.MouseButtons.Left) {
+                M m = new M(stm);
+                m.M41 += e.VDrag.X;
+                m.M42 += e.VDrag.Y;
+                m.M43 += e.VDrag.Z;
+                uim.SetWorld(m);
+            }
+        }
+        catch (Exception ex) {
+            System.Diagnostics.Debug.Assert(false, ex.Message);
+        }
+    };
+
+    if (viewCtrl != null) {
+        // ドラッグ移動
+        listener.MouseDragEnd += (object sender, PXEventArgs.UIModelMouseDrag e) => {
+            try {
+                if (e.Button == System.Windows.Forms.MouseButtons.Left) {
+                    viewCtrl.VCursorPosition = vp;
+                }
+            }
+            catch (Exception ex) {
+                System.Diagnostics.Debug.Assert(false, ex.Message);
+            }
+        };
+    }
+}
+
+※多少改変すればボーン移動などにも応用可能です。
+
+================================
+
+
+■テキスト表示
+
+PXUIModelHelper.CreateTextControl() により TextControlクラスを生成 (事前の Bitmapテクスチャ設定は不要)
+
+textCtrl.Clear();            // 背景色でクリア
+textCtrl.DrawText("Hello."); // テキスト描画
+textCtrl.UpdateTextImage();  // 更新
+
+不要になったら textCtrl.Dispose();
+
+※TextControlクラスの Imageプロパティ(Bitmap) を直接描画することもできます。
+
+
+

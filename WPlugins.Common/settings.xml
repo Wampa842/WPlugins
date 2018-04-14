@@ -5,6 +5,7 @@
     <FlipFaces>false</FlipFaces>
     <SwapYZ>false</SwapYZ>
     <UniformScale>true</UniformScale>
+    <UniformUVScale>true</UniformUVScale>
     <XScale mirror="false">1</XScale>
     <YScale mirror="false">1</YScale>
     <ZScale mirror="false">1</ZScale>

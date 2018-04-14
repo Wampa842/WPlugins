@@ -1,0 +1,317 @@
+■PMXエディタのプラグイン機能(PEPlugin β版)について
+
+
+○プラグインとは
+
+一連の外部拡張機能です。
+プラグイン機能を使うことにより、外部からPMXエディタに追加機能を実装することが可能になります。
+
+
+○プラグインでできること
+
+・モデルデータ(PMX)の取得／任意変更／更新
+・エディタ本体の一部操作
+・PmxView等各Viewの一部操作
+
+※.NETの機能は基本的に全て使用可能なので、任意の操作フォームを起動し編集補助を行うなども可能となります。
+※一部機能に制限があったり予告なく仕様の変更がある場合があります。
+
+
+○作成に必要なもの
+
+.NETフレームワーク4.0以上のクラスライブラリを作成できる環境
+etc) Microsoft VisualStudio.NET 2010 / Microsoft VisualC# 2010 Express Edition 他
+
+※CSScriptプラグインを使用することで、上記の開発環境がなくてもプラグイン機能を利用／作成することは可能です。
+
+
+
+○作り方(VC#2010の場合)
+
+1. クラスライブラリとしてプロジェクトを作成
+2. PMXエディタの"PEPlugin.dll"を参照設定へ追加
+3. 作成するライブラリクラスに"PEPlugin.IPEPlugin"を実装、
+　または"PEPlugin.PEPluginClass"から派生し"Run(IPERunArgs args)"メソッド等をオーバーライド
+
+4. 必要な処理を記述しビルド
+5．出来上がった"*.dll"ファイルをPMXエディタの"_plugin"フォルダ内へコピー(配布時はDLL単体で配布してください)
+
+※プラグインDLLの実行対象環境は "AnyCPU" 推奨 (x86だと動きません)
+※初期状態ではビルド時に"PEPlugin.dll"がDLLと同じ場所に生成(コピー)されるかもしれませんが、こちらは必要ありません。
+※このプラグインDLLはPMXエディタのプラグイン作成にのみ使用してください。
+
+
+○プラグインの起動方法
+
+1. "_plugin"フォルダ内にプラグインDLLを保存後、PMXエディタを再起動
+2. [編集]-[プラグイン] メニュー内にプラグインが登録されているので、任意に起動
+
+※PMXエディタ起動時に同時に実行するプラグインも作成可能です(後述)
+※メニューへの登録も任意に変更可能です
+
+
+
+○プラグインの起動方法 - 外部DLLの直接実行
+
+[編集]-[プラグインDLLの直接実行] から操作フォームが表示されるので、対象のDLLを選んで実行。
+
+尚、一度実行したプラグインDLLはPMXエディタにロードされたままになるので(.NETの仕様)、
+DLLの更新を行う場合は本体の再起動が必要。
+
+→Cプラグインの場合は破棄及びリロードすることが可能です。
+
+
+
+○プラグイン作成TIPS
+
+□プラグインの実行は？
+void Run(IPERunArgs args) メソッド(以下、関数)に実行処理を記述してください。
+ホスト(PMXエディタ)側へのアクセスは Run関数に渡される IPERunArgs インターフェイスを通して行うことができます。
+
+
+□PMXデータの編集
+
+プラグイン内では PMXエディタ側のPMXモデルデータを間接的に編集することが可能です。手順としては、
+IPERunArgs.Host.Connector.Pmx 以下の各処理を用います。
+
+1. 現在のPMXデータの複製取得 : IPXPmx IPXPmxConnector.GetCurrentState()
+2. IPXPmx として PMXモデルデータが返されるのでそれを通して編集(PMXエディタ側は変更されない)
+3. 編集されたIPXPmxデータでPXエディタ側を更新 : void IPXPmxConnector.Update(****)  // いくつか種類があります
+
+
+例) モデル名を変更する場合
+
+// PEPluginClass派生のオーバーライド
+public override void Run(IPERunArgs args)
+{
+    try{
+        // 現在のPMXデータを複製取得
+        PEPlugin.Pmx.IPXPmx pe = args.Host.Connector.Pmx.GetCurrentState();
+
+        // モデル名変更
+        pe.ModelInfo.ModelName = "変更しました";
+
+        // 編集したモデル情報でPMXエディタ側を更新
+        args.Host.Connector.Pmx.Update(pe);
+        // ヘッダ部分のみ更新する場合(更新対象が限定されている方が負荷が軽くなります)
+        //args.Host.Connector.Pmx.Update(pe, PEPlugin.Pmx.PmxUpdateObject.ModelInfo, -1);
+
+        // エディタ側の表示を更新する場合(一部を除いて表示更新の必要があります | Form更新は旧仕様互換用:Pmd)
+        args.Host.Connector.Form.UpdateList(PEPlugin.Pmd.UpdateObject.Header);
+    }
+    catch {
+        // 例外キャッチ:適宜設定してください
+    }
+}
+
+
+
+□ビルダについて
+
+オブジェクトの管理は公開されているインターフェイスを介して行う仕様なので、
+直接インスタンスは生成できません。
+
+オブジェクトの追加や複製などでは専用のビルダから生成する必要があります。
+
+PMX用の各オブジェクトは
+
+  PEPlugin.PEStaticBuilder.Pmx
+
+から生成できます。
+
+旧仕様向けの IPEVector3 などベクトル数値系インターフェイスは V3() など実装されているクラスで代用可能です(詳しくは"CSScript.txt"参照)
+
+
+
+
+□プラグインオプションの変更
+
+IPEPluginOption 及び PEPluginOption を用いて設定します。以下のオプション項目が変更可能です。
+
+・PMXエディタ起動時にプラグイン実行
+・メニューへの登録の可否
+・メニューへ登録されるテキスト(空の場合はプラグイン名が登録されます)
+
+
+●IPEPluginOption  // オプション内容
+bool Bootup { get; }  // 起動時実行
+bool RegisterMenu { get; }  // プラグインメニューへの登録
+string RegisterMenuText { get; }  // プラグインメニューへの登録テキスト(空の場合はプラグイン名を使用)
+
+プラグインクラスの IPEPlugin.Option から任意のオプション設定の値を返すように実装してください。
+PEPluginOption 派生の場合は以下のようにコンストラクタにおいて m_option を再設定することでも対応可能です。
+
+
+例) m_optionを再設定してオプション変更
+
+// PEPluginClass派生クラス
+public class NewPlugin : PEPluginClass
+    // コンストラクタ
+    public NewPlugin() : base()
+    {
+        // Bootup:false | RegistMenu:true | RegistMenuText:"新規プラグイン"
+        // → メニューへ"新規プラグイン"で登録しメニューから実行する。起動時には実行しない。
+        m_option = new PEPluginOption(false, true, "新規プラグイン");
+    }
+}
+
+
+
+□独自クラスへのプラグインインターフェイスの実装(継承)
+
+各プラグイン側で使用するクラスにPMXエディタのプラグインインターフェイスを実装した場合、
+プラグインのverUP(インターフェイスへの任意の追加など)により
+以降のバージョンでは使用することのできない公開プラグインとなってしまうことがあります。
+
+PEPlugin.IPEPlugin 以外は極力実装(継承)を行わないことを推奨します。
+
+
+
+
+
+□PMXデータ構造
+
+おおまかにPMXエディタ本体の各タブ情報に対応したデータ構造になっています。
+
+
+●IPXPmx プラグイン用PMXインターフェイス
+
+・ヘッダ
+IPXHeader Header { get; }
+
+・モデル情報
+IPXModelInfo ModelInfo { get; }
+
+・頂点リスト
+IList<IPXVertex> Vertex { get; }
+
+・材質リスト(面は材質内)
+IList<IPXMaterial> Material { get; }
+
+・ボーンリスト
+IList<IPXBone> Bone { get; }
+
+・モーフリスト
+IList<IPXMorph> Morph { get; }
+
+・表示枠リスト
+IList<IPXNode> Node { get; }
+
+・剛体リスト
+IList<IPXBody> Body { get; }
+
+・Jointリスト
+IList<IPXJoint> Joint { get; }
+
+・SoftBodyリスト
+IList<IPXSoftBody> SoftBody { get; }
+
+
+※各インターフェイス内の個別データについての説明は、
+プラグインDLLをオブジェクトブラウザなどで確認するなどしてください(基本的にはエディタ本体と同じ構造になっています)
+
+
+
+□try-catch のススメ
+
+プラグイン処理をPMXエディタ側から起動した場合、プラグイン内部で発生した例外を捕捉することができないようです。
+
+場合によっては、内部での例外発生によりPMXエディタ本体も強制終了してしまう場合もあるかもしれませんので、
+実装したRun()関数内においては、必ず例外処理によって例外を捕捉してください(スレッド間処理についても同様)
+
+
+
+
+□表示の更新
+
+PMXデータの更新を行った後エディタ本体を確認しても、対応した箇所が変更されていない場合があります。
+各Viewなどの操作でも同様にモデルの表示に変更がない場合があります。
+
+これらは内部データの変更がリストやViewに反映されていない状況になります(なんらかの操作をすると更新される)
+
+※以下のような関数を使うことで適宜更新されます。
+IPXPmxViewConnector.UpdateModel()
+IPEFormConnector.UpdateList()
+IPEFormConnector.Selected****Index()
+IPXPmxViewConnector.UpdateView()
+他更新処理系
+
+
+
+□Formを利用したプラグイン作成
+
+任意のFormクラスを利用したプラグインを作成することも可能です。
+
+一例として、クラスライブラリに任意のフォームを追加した場合は、
+以下のような手順でプラグインから使うことが可能となります。
+
+※実際はこの他に、追加したフォームにホスト側とやり取りできるような仕組みが必要になります。
+
+
+例)
+1. クラスライブラリを起動時実行にオプション設定(メニューにも登録)
+2. クラスライブラリにForm追加
+3. Run関数に起動時とメニュー呼び出しでの分岐した処理を記述
+
+// 起動時
+if (args.IsBootup) {
+    // フォームの初期化
+    m_form = new *****Form();
+    // フォームへホストオブジェクトの通知など
+    ....
+}
+// メニュー呼び出し時
+else{
+    // フォームの表示状態の変更
+    m_form.Visible = !m_form.Visible;    // 表示状態の切り替え
+}
+
+4. フォームが閉じるボタンで破棄されないように変更(Form.FormClosingイベント追加)
+if (e.CloseReason == CloseReason.UserClosing) {
+    // クローズキャンセル
+    e.Cancel = true;
+    // フォームを非表示設定
+    this.Visible = false;
+}
+
+5. Dispose()をオーバーライドし、フォームの後始末(Form.Close())
+
+
+これらの機能を利用することで、PMXエディタ本体に
+自作のエディタ機能を追加実装することも可能になります。
+
+
+
+
+□過去verとの互換性
+
+プラグイン機能は PMXエディタ の前身である PMDエディタ に実装されていた機能をそのまま引き継いでいます。
+※View関係などはレガシー向きのまま
+
+プラグインの動作には最低限 64bit環境への移行が必要になります(両対応用のAnyCPUで作成されたプラグインはそのまま動きます)
+
+それ以外は基本的に同じ構成で動作すると思われますが、細かい仕様の変更などもありますので、
+動作しない可能性も十分あることにご注意ください。
+
+※SlimDX の DLL を利用する場合は "特定バージョン" 設定を False に変更しておくことで、
+エディタ側の同梱DLLが更新された場合でも継続して利用できるようになるかもしれません。
+
+
+
+□Cプラグインについて
+
+詳細は別項「プラグイン解説_Cプラグイン」をご参照ください。
+
+
+
+
+以上
+
+
+□更新履歴
+
+0.0.7.2 Cプラグイン追加。外部ブリッジ機能削除
+0.0.6.0 PMXエディタ版
+
+
+

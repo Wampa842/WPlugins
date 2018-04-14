@@ -1,0 +1,374 @@
+■Cプラグイン機能詳細
+
+
+○Cプラグインとは
+
+コンパクトプラグインの略で "Cプラグイン" と呼称します(対応として従来プラグインは "PEプラグイン" と呼ぶこととします)
+
+※C言語などによるネイティブ環境ベースのプラグイン機構ではありません。
+
+PEプラグインではベースとしている .NETフレームワークの仕様によりプラグインDLLのアンロードができませんでした。
+対して Cプラグインではアンロードが可能になるよう改善が行われています。
+
+プラグイン機能の総量は PEプラグインより少なく、PMX編集用の最低限の機能のみを有しています。
+PMXデータの編集は PEプラグインで利用されていた IPXPmx インターフェイスをそのまま利用することができます(一部制限あり)
+
+※UIモデルやViewイベントなど Cプラグイン独自の拡張もされています。
+
+作成したプラグインは PMXエディタにて PEプラグインと共通の方法で設置及び利用が可能です。
+
+
+○作成に必要なもの
+
+PEプラグインと同様に .NETフレームワーク(4.0)のクラスライブラリを作成できる環境。
+
+デバッグ用のプロセスアタッチ機能を有効に活用できるので、
+VisualStudio Express(Edition) の場合は VS2013以降が推奨です。
+
+
+○PEプラグインとの比較
+
+機能量 : 
+ 少ない(PMXの取得／更新、選択要素の取得や各イベント処理など)
+
+PMXの取得／更新 : 
+ 個別更新は不可(一括して行うことしかできない)
+ 取得／更新は内部で一旦全変換が必要になるので PEプラグインよりも負荷が大きい ※頻繁に更新が必要な機能は不向き
+
+更新処理 :
+ PEプラグインでは PMXデータ／フォーム／PmxView の更新処理をそれぞれ呼び出す必要があったが、
+ Cプラグインは PMX更新時に同時に全て更新(上記負荷の上昇と合わせて注意が必要) ※View制御からViewのみの描画更新も可能です
+
+プラグインDLLの更新 :
+ PEプラグインは毎回再起動が必要
+ Cプラグインはエディタ実行中にそのまま更新可能(外部プラグイン実行のみ)
+
+デバッグ作成 :
+ プロセスアタッチにより PEプラグインでも可能だが DLLをアンロードできない(再起動を必要とする)
+ Cプラグインでは非常に効率よく運用可能
+
+Boot実行 :
+ Cプラグインでは起動時実行は不可
+
+メニュー登録 :
+ PEプラグインにある登録フラグは Cプラグインには非実装
+ メニューテキスト及びプラグイン名を空にした場合は登録されない(非推奨)
+
+
+○注意点
+
+■登録子
+Cプラグインの利用には決められた登録子の記述が必要になります。
+PXCPlugin.Registerクラス(RegisterBase派生) に記述します(詳細はサンプルを要確認)
+
+■PMXファイルの取り扱い
+PEプラグインと異なり外部のPMXデータ(ファイル)の読み込み、書き込みに対してエディタ本体の処理を介しません。
+正規化処理など細部では異なる結果となる場合があるのでご注意ください。
+
+※CプラグインではPMDファイル及びver1のPMXファイルの取り扱いはできません。
+
+■PMXインターフェイス
+PMX編集用の PMXインターフェイスは PEプラグインと共通の IPXPmx を使うことができますが、
+IPXPmx内部の Primitiveプロパティ(プリミティブ作成用)は利用できません。
+
+■プリミティブ作成
+Cプラグインでのプリミティブ作成は外部の PXCPrimitiveBuilder を介する必要があります。
+
+■ビルダ
+PEプラグインでの汎用のビルダ(PEStaticBuilder)を呼び出すことはできますが、正常に機能しません。
+Cプラグインでは 専用の PXCBuilder を使う必要があります。
+
+■ビルダ／プリミティブ作成の初期化
+プリミティブ作成及びビルダについては、PXCBridge という静的クラスからそれぞれ利用できますが、
+利用前にコネクタを介しての初期化が必要となります(一度初期化すればプラグインを終了するまで利用可能)
+
+プラグインクラスを汎用の PXCPluginClass から派生して作成した場合は、base.Run() 処理内で上記の初期化が行われます。
+
+■独自クラスからの作成
+プラグインクラスを PXCPluginClassから継承せずに IPXCPlugin派生の独自クラスを利用する場合はビルダ／プリミティブの初期化が必要。
+またその場合は MarshalByRefObject を継承する必要があります。
+
+■DLLの共用
+Cプラグイン用のDLLと PEプラグイン用のDLLは共用することはできません。分けて作成してください。
+※PEプラグインがあると一般プラグインでは Cプラグイン側が無視されます。
+
+■その他
+PMXインターフェイスの使い方やプラグインDLLのプロパティに関しての注意点などは PEプラグインの説明を確認してください。
+
+
+
+○デバッグ応用
+
+PMXエディタの「外部プラグイン実行機能」(本体メニュー [編集]-[プラグインDLLの直接実行])
+に作成したプラグインDLLファイルをドロップ。
+
+下の対象プラグインに正常に表示されていれば実行可能。
+
+このとき VS側からPMXエディタにプロセスアタッチすることで、
+VS側でステップ実行などのデバッグ機能を使うことができるようになります(要ブレークポイント設定)
+
+※当然ですが、DLLはデバッグモードで作成してください。
+
+以上のデバッグ作業は PEプラグインでも一応可能ですが、
+PEプラグインの場合は PMXエディタを終了するまで DLLファイルの更新ができなくなります。
+
+Cプラグインの場合は DLLパス右側の破棄ボタンが有効になるので、
+一旦破棄することで PMXエディタ稼働中でも DLLの更新を行うことができます。
+
+破棄→リロードを繰り返すことで簡単に再実行ができるので、プラグインを効率よく作成及びデバッグすることが可能です。
+
+※状況によっては破棄してもDLLファイルがロックされたままになることがあるかもしれませんが(原因不明)、
+その場合は PMXエディタを再起動してみてください。
+
+
+
+○Viewイベント
+
+PXCBridge.CreateEventConnector() からイベントコネクタを作成、
+同コネクタから CreateViewEventListener()を呼び出すことにより、
+Viewに対応したイベントリスナ(IPXViewEventListener) を取得できます。
+
+●Viewイベント詳細
+IPXViewEventListener
+
+MouseClick
+MouseDoubleClick
+MouseMove
+MouseDown
+MouseUp
+MouseWheel(※)
+KeyDown
+KeyUp
+
+ObjectSelected : 各オブジェクトの選択状態が変更した場合に呼び出されます(変更対象の通知のみ)
+ModelUpdated   : モデルデータに更新がある場合に呼び出されます
+Undo  : Undo処理を行うと呼び出されます
+Redo  : Redo処理を行うと呼び出されます
+
+※
+MouseWheelはマウス位置などの取り扱いが他のイベントと異なるので注意(分割画面時)
+マウス／キーイベントに関しては標準の同名イベント処理と同様(ClickはView全体が対象となります(仕様))
+
+
+○System制御／View制御
+
+PXCBridge.SystemCtrl() -> IPXSystemControl
+PXCBridge.ViewCtrl()   -> IPXViewControl
+
+からそれぞれ取得可能です。
+
+登録プラグインの実行や視点の設定など、PEプラグインに配置されていた一部の機能が使えるようになっています。
+詳細についてはオブジェクトブラウザなどでご確認ください。
+
+
+
+
+□サンプルコード
+
+・PMXの取得／更新を行う基本構造
+========================================================================
+
+using PXCPlugin;
+using PEPlugin.Pmx;
+
+// 登録子 | namespace及びクラス名はサンプルと同一にしてください
+namespace PXCPlugin
+{
+    public class Register : RegisterBase
+    {
+        public override string[] ClassNames
+        {
+            get
+            {
+                // 対象プラグインを namespace からフルネームで記述(複数指定可能)
+                return new string[]{
+                    "CPluginTest.CPluginClass"      
+                };
+            }
+        }
+    }
+}
+
+// プラグイン処理 | 登録子と異なり名称は自由に設定可能です
+namespace CPluginTest
+{
+    public class CPluginClass : PXCPluginClass
+    {
+        public override string Name
+        {
+            get { return "CPluginClass"; }
+        }
+
+        public override string Version
+        {
+            get { return "0.0"; }
+        }
+
+        public override string Description
+        {
+            get { return ""; }
+        }
+
+        public override string MenuText
+        {
+            get { return "CPluginClass"; }
+        }
+
+        public override void Run(IPXCPluginRunArgs args)
+        {
+            base.Run(args);
+            try {
+                // PMX取得
+                IPXPmx pmx = PXCBridge.GetCurrentPmx(args.Connector);
+
+                // データ更新
+
+
+                // PMX更新
+                PXCBridge.UpdatePmx(args.Connector, pmx);
+            }
+            catch (Exception ex) {
+                // 例外処理
+            }
+        }
+    }
+}
+
+========================================================================
+
+
+・操作フォーム(モードレスダイアログ)を利用する基本構造
+========================================================================
+
+using System;
+using PXCPlugin;
+
+// 登録子 | namespace及びクラス名はサンプルと同一にしてください
+namespace PXCPlugin
+{
+    public class Register : RegisterBase
+    {
+        public override string[] ClassNames
+        {
+            get
+            {
+                // 対象プラグインを namespace からフルネームで記述(複数指定可能)
+                return new string[]{
+                    "FormTest.CPluginFormClass"      
+                };
+            }
+        }
+    }
+}
+
+// プラグイン処理
+namespace FormTest
+{
+    public class CPluginFormClass : PXCPluginClass
+    {
+        // 仮のフォームクラス
+        private Form1 m_form = null;
+
+        public override string MenuText
+        {
+            get
+            {
+                return "FormTest";
+            }
+        }
+
+        public override void Run(IPXCPluginRunArgs args)
+        {
+            base.Run(args);
+            try {
+                if (m_form == null) {
+                    m_form = new Form1(args);
+                    m_form.Visible = true;
+                }
+                else {
+                    m_form.Visible = true;
+                }
+            }
+            catch (Exception ex) {
+            }
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            if (m_form != null) {
+                m_form.Close();
+            }
+        }
+
+    }
+}
+
+-----
+
+// フォーム側の処理(一部のみ)
+namespace FormTest
+{
+    public partial class Form1 : Form
+    {
+        private IPXCPluginRunArgs m_args = null;
+
+        public Form1(IPXCPluginRunArgs args)
+        {
+            InitializeComponent();
+            m_args = args;
+        }
+
+        // クローズ処理を非表示へ変更
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing) {
+                e.Cancel = true;
+                this.Visible = false;
+            }
+        }
+...
+
+    }
+}
+
+========================================================================
+
+
+・ビルダを使ったオブジェクト追加例(Run処理のみ)
+========================================================================
+
+        public override void Run(IPXCPluginRunArgs args)
+        {
+            base.Run(args);
+            try {
+                // PMX取得
+                IPXPmx pmx = PXCBridge.GetCurrentPmx(args.Connector);
+
+                // ボーン追加
+                var bone = m_bld.Bone();    // ビルダ変数から作成
+                bone.Name = "追加ボーン";
+                bone.IsTranslation = true;
+                pmx.Bone.Add(bone);
+
+                // プリミティブ(箱)追加(材質が一つもないと不正終了)
+                PXCBridge.PrimitiveBuilder.AddBox(pmx, 0, new V3(), 4, 4, 4, pmx.Bone[0]);
+
+
+                // PMX更新
+                PXCBridge.UpdatePmx(args.Connector, pmx);
+            }
+            catch (Exception ex) {
+                // 例外処理
+            }
+        }
+
+========================================================================
+
+
+
+
+
+
+
+
