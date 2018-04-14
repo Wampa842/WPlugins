@@ -9,6 +9,7 @@ using System.Windows.Forms;
 
 namespace WPlugins.Common
 {
+
 	public class ObjImportSettings
 	{
 		public enum CreateBoneMode { None, Origin, Average };
@@ -28,20 +29,9 @@ namespace WPlugins.Common
 		public MaterialNamingMode MaterialNaming { get; set; } = MaterialNamingMode.GroupName;
 		public BitmapImportAction BitmapAction { get; set; } = BitmapImportAction.Copy;
 
-		private void ReadSettings()
+		private void ReadSettingsFromNode(XmlNode node)
 		{
-			XmlDocument doc = new XmlDocument();
-			try
-			{
-				doc.Load(Settings.SettingsFileUrl);
-			}
-			catch (System.IO.FileNotFoundException ex)
-			{
-				MessageBox.Show("Settings.xml not found.\n" + ex.Message + '\n' + ex.FileName + "\nDefault values will be used.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-			}
-			XmlNodeList nodes = doc.DocumentElement["ObjImport"].ChildNodes;
-			foreach (XmlNode n in nodes)
+			foreach (XmlNode n in node.ChildNodes)
 			{
 				switch (n.LocalName)
 				{
@@ -155,27 +145,51 @@ namespace WPlugins.Common
 			}
 		}
 
-		public ObjImportSettings()
+		public ObjImportSettings(XmlNode node)
 		{
-			ReadSettings();
+			ReadSettingsFromNode(node);
 		}
+
+		public void UpdateNode(XmlNode node)
+		{
+
+		}
+
+		public ObjImportSettings(){ }
 	}
 
-	public static class Settings
+	public class ObjExportSettings
+	{
+
+	}
+
+	public class Settings
 	{
 		public static readonly string SettingsFileUrl = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\settings.xml";
-
 		private static ObjImportSettings _objImportSettings;
-		public static ObjImportSettings ObjImportSettings
+		private static ObjExportSettings _objExportSettings;
+		protected XmlDocument _xml = new XmlDocument();
+
+		public Settings()
 		{
-			get
+			_xml.Load(SettingsFileUrl);
+			XmlNode root = _xml.DocumentElement;
+			foreach(XmlNode node in root.ChildNodes)
 			{
-				if (_objImportSettings == null)
+				switch(node.Name)
 				{
-					_objImportSettings = new ObjImportSettings();
+					case "ObjImport":
+						_objImportSettings = new ObjImportSettings(node);
+						break;
+					case "ObjExport":
+						break;
 				}
-				return _objImportSettings;
 			}
+		}
+
+		public void Save()
+		{
+
 		}
 	}
 }
