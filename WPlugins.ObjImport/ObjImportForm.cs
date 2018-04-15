@@ -16,39 +16,41 @@ namespace WPlugins.ObjImport
 	public partial class ObjImportForm : Form
 	{
 		private Common.Settings settingsDoc;
-		private Common.ObjImportSettings settings;
 		private IPERunArgs args;
+		public Common.ObjImportSettings Settings;
 
 		public ObjImportForm(string path, IPERunArgs args)
 		{
 			InitializeComponent();
 			this.args = args;
 			settingsDoc = new Common.Settings();
-			settings = settingsDoc.ObjImport;
+			Settings = settingsDoc.ObjImport;
 		}
 
 		private void ObjImportForm_Load(object sender, EventArgs e)
 		{
-			imperialRadio.Checked = !settings.UseMetricUnits;
-			metricRadio.Checked = settings.UseMetricUnits;
+			flipFacesCheck.Checked = Settings.FlipFaces;
+			swapAxesCheck.Checked = Settings.SwapYZ;
+			imperialRadio.Checked = !Settings.UseMetricUnits;
+			metricRadio.Checked = Settings.UseMetricUnits;
 
-			uniformModelScaleCheck.Checked = settings.UniformScale;
-			uniformTextureScaleCheck.Checked = settings.UniformUVScale;
+			uniformModelScaleCheck.Checked = Settings.UniformScale;
+			uniformTextureScaleCheck.Checked = Settings.UniformUVScale;
 
-			mirrorXCheck.Checked = settings.ScaleX < 0;
-			scaleXNumber.Value = Math.Abs((decimal)settings.ScaleX);
-			mirrorYCheck.Checked = settings.ScaleY < 0;
-			scaleYNumber.Value = Math.Abs((decimal)settings.ScaleY);
-			mirrorZCheck.Checked = settings.ScaleZ < 0;
-			scaleZNumber.Value = Math.Abs((decimal)settings.ScaleZ);
-			mirrorUCheck.Checked = settings.ScaleU < 0;
-			scaleUNumber.Value = Math.Abs((decimal)settings.ScaleU);
-			mirrorVCheck.Checked = settings.ScaleV < 0;
-			scaleVNumber.Value = Math.Abs((decimal)settings.ScaleV);
+			mirrorXCheck.Checked = Settings.ScaleX < 0;
+			scaleXNumber.Value = Math.Abs((decimal)Settings.ScaleX);
+			mirrorYCheck.Checked = Settings.ScaleY < 0;
+			scaleYNumber.Value = Math.Abs((decimal)Settings.ScaleY);
+			mirrorZCheck.Checked = Settings.ScaleZ < 0;
+			scaleZNumber.Value = Math.Abs((decimal)Settings.ScaleZ);
+			mirrorUCheck.Checked = Settings.ScaleU < 0;
+			scaleUNumber.Value = Math.Abs((decimal)Settings.ScaleU);
+			mirrorVCheck.Checked = Settings.ScaleV < 0;
+			scaleVNumber.Value = Math.Abs((decimal)Settings.ScaleV);
 
-			materialNamingSelect.SelectedIndex = (int)settings.MaterialNaming;
-			bitmapActionSelect.SelectedIndex = (int)settings.BitmapAction;
-			boneActionSelect.SelectedIndex = (int)settings.CreateBone;
+			materialNamingSelect.SelectedIndex = (int)Settings.MaterialNaming;
+			bitmapActionSelect.SelectedIndex = (int)Settings.BitmapAction;
+			boneActionSelect.SelectedIndex = (int)Settings.CreateBone;
 		}
 
 		private void uniformModelScaleCheck_CheckedChanged(object sender, EventArgs e)
@@ -62,18 +64,32 @@ namespace WPlugins.ObjImport
 			scaleVNumber.Value = scaleUNumber.Value;
 			scaleVNumber.Enabled = !((CheckBox)sender).Checked;
 		}
-
-		private void cancelButton_Click(object sender, EventArgs e)
-		{
-			this.Close();
-		}
-
+		
 		private void importButton_Click(object sender, EventArgs e)
 		{
-			if(storeSettingsCheck.Checked)
+			this.Settings.ScaleX = (float)scaleXNumber.Value * (mirrorXCheck.Checked ? -1 : 1);
+			this.Settings.ScaleY = (float)scaleYNumber.Value * (mirrorYCheck.Checked ? -1 : 1);
+			this.Settings.ScaleZ = (float)scaleZNumber.Value * (mirrorZCheck.Checked ? -1 : 1);
+			this.Settings.ScaleU = (float)scaleUNumber.Value * (mirrorUCheck.Checked ? -1 : 1);
+			this.Settings.ScaleV = (float)scaleVNumber.Value * (mirrorVCheck.Checked ? -1 : 1);
+			this.Settings.UniformScale = uniformModelScaleCheck.Checked;
+			this.Settings.UniformUVScale = uniformTextureScaleCheck.Checked;
+
+			this.Settings.SwapYZ = swapAxesCheck.Checked;
+			this.Settings.TurnQuads = turnQuadsCheck.Checked;
+			this.Settings.UseMetricUnits = metricRadio.Checked;
+			this.Settings.FlipFaces = flipFacesCheck.Checked;
+
+			this.Settings.BitmapAction = (Common.ObjImportSettings.BitmapImportAction)bitmapActionSelect.SelectedIndex;
+			this.Settings.MaterialNaming = (Common.ObjImportSettings.MaterialNamingMode)materialNamingSelect.SelectedIndex;
+			this.Settings.CreateBone = (Common.ObjImportSettings.CreateBoneMode)boneActionSelect.SelectedIndex;
+
+			this.DialogResult = DialogResult.OK;
+			if (storeSettingsCheck.Checked)
 			{
 				settingsDoc.Save();
 			}
+			this.Close();
 		}
 	}
 }

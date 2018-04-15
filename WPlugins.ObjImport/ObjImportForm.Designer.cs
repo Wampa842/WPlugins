@@ -50,12 +50,16 @@
 			this.uniformTextureScaleCheck = new System.Windows.Forms.CheckBox();
 			this.uniformModelScaleCheck = new System.Windows.Forms.CheckBox();
 			this.importActionGroup = new System.Windows.Forms.GroupBox();
-			this.storeSettingsCheck = new System.Windows.Forms.CheckBox();
+			this.flipFacesCheck = new System.Windows.Forms.CheckBox();
+			this.turnQuadsCheck = new System.Windows.Forms.CheckBox();
+			this.swapAxesCheck = new System.Windows.Forms.CheckBox();
 			this.bitmapActionSelect = new System.Windows.Forms.ComboBox();
 			this.materialNamingSelect = new System.Windows.Forms.ComboBox();
 			this.boneActionSelect = new System.Windows.Forms.ComboBox();
+			this.storeSettingsCheck = new System.Windows.Forms.CheckBox();
 			this.cancelButton = new System.Windows.Forms.Button();
 			this.importButton = new System.Windows.Forms.Button();
+			this.optionsGroup = new System.Windows.Forms.GroupBox();
 			this.unitSystemGroup.SuspendLayout();
 			this.scalingGroup.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.scaleVNumber)).BeginInit();
@@ -64,6 +68,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.scaleYNumber)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.scaleXNumber)).BeginInit();
 			this.importActionGroup.SuspendLayout();
+			this.optionsGroup.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// unitSystemGroup
@@ -344,26 +349,48 @@
 			// 
 			// importActionGroup
 			// 
-			this.importActionGroup.Controls.Add(this.storeSettingsCheck);
+			this.importActionGroup.Controls.Add(this.flipFacesCheck);
+			this.importActionGroup.Controls.Add(this.turnQuadsCheck);
+			this.importActionGroup.Controls.Add(this.swapAxesCheck);
 			this.importActionGroup.Controls.Add(this.bitmapActionSelect);
 			this.importActionGroup.Controls.Add(this.materialNamingSelect);
 			this.importActionGroup.Controls.Add(this.boneActionSelect);
 			this.importActionGroup.Location = new System.Drawing.Point(12, 89);
 			this.importActionGroup.Name = "importActionGroup";
-			this.importActionGroup.Size = new System.Drawing.Size(182, 137);
+			this.importActionGroup.Size = new System.Drawing.Size(182, 185);
 			this.importActionGroup.TabIndex = 3;
 			this.importActionGroup.TabStop = false;
 			this.importActionGroup.Text = "Import actions";
 			// 
-			// storeSettingsCheck
+			// flipFacesCheck
 			// 
-			this.storeSettingsCheck.AutoSize = true;
-			this.storeSettingsCheck.Location = new System.Drawing.Point(6, 114);
-			this.storeSettingsCheck.Name = "storeSettingsCheck";
-			this.storeSettingsCheck.Size = new System.Drawing.Size(90, 17);
-			this.storeSettingsCheck.TabIndex = 3;
-			this.storeSettingsCheck.Text = "Store settings";
-			this.storeSettingsCheck.UseVisualStyleBackColor = true;
+			this.flipFacesCheck.AutoSize = true;
+			this.flipFacesCheck.Location = new System.Drawing.Point(6, 162);
+			this.flipFacesCheck.Name = "flipFacesCheck";
+			this.flipFacesCheck.Size = new System.Drawing.Size(71, 17);
+			this.flipFacesCheck.TabIndex = 6;
+			this.flipFacesCheck.Text = "Flip faces";
+			this.flipFacesCheck.UseVisualStyleBackColor = true;
+			// 
+			// turnQuadsCheck
+			// 
+			this.turnQuadsCheck.AutoSize = true;
+			this.turnQuadsCheck.Location = new System.Drawing.Point(6, 139);
+			this.turnQuadsCheck.Name = "turnQuadsCheck";
+			this.turnQuadsCheck.Size = new System.Drawing.Size(80, 17);
+			this.turnQuadsCheck.TabIndex = 5;
+			this.turnQuadsCheck.Text = "Turn quads";
+			this.turnQuadsCheck.UseVisualStyleBackColor = true;
+			// 
+			// swapAxesCheck
+			// 
+			this.swapAxesCheck.AutoSize = true;
+			this.swapAxesCheck.Location = new System.Drawing.Point(6, 116);
+			this.swapAxesCheck.Name = "swapAxesCheck";
+			this.swapAxesCheck.Size = new System.Drawing.Size(119, 17);
+			this.swapAxesCheck.TabIndex = 4;
+			this.swapAxesCheck.Text = "Swap Y and Z axes";
+			this.swapAxesCheck.UseVisualStyleBackColor = true;
 			// 
 			// bitmapActionSelect
 			// 
@@ -405,32 +432,54 @@
 			this.boneActionSelect.Size = new System.Drawing.Size(170, 21);
 			this.boneActionSelect.TabIndex = 0;
 			// 
+			// storeSettingsCheck
+			// 
+			this.storeSettingsCheck.AutoSize = true;
+			this.storeSettingsCheck.Location = new System.Drawing.Point(6, 19);
+			this.storeSettingsCheck.Name = "storeSettingsCheck";
+			this.storeSettingsCheck.Size = new System.Drawing.Size(90, 17);
+			this.storeSettingsCheck.TabIndex = 3;
+			this.storeSettingsCheck.Text = "Store settings";
+			this.storeSettingsCheck.UseVisualStyleBackColor = true;
+			// 
 			// cancelButton
 			// 
-			this.cancelButton.Location = new System.Drawing.Point(261, 232);
+			this.cancelButton.Location = new System.Drawing.Point(200, 287);
 			this.cancelButton.Name = "cancelButton";
-			this.cancelButton.Size = new System.Drawing.Size(130, 23);
+			this.cancelButton.Size = new System.Drawing.Size(192, 23);
 			this.cancelButton.TabIndex = 4;
 			this.cancelButton.Text = "Cancel";
 			this.cancelButton.UseVisualStyleBackColor = true;
-			this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
 			// 
 			// importButton
 			// 
 			this.importButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-			this.importButton.Location = new System.Drawing.Point(12, 232);
+			this.importButton.Location = new System.Drawing.Point(12, 287);
 			this.importButton.Name = "importButton";
-			this.importButton.Size = new System.Drawing.Size(243, 23);
+			this.importButton.Size = new System.Drawing.Size(182, 23);
 			this.importButton.TabIndex = 5;
 			this.importButton.Text = "Import";
 			this.importButton.UseVisualStyleBackColor = true;
 			this.importButton.Click += new System.EventHandler(this.importButton_Click);
 			// 
+			// optionsGroup
+			// 
+			this.optionsGroup.Controls.Add(this.storeSettingsCheck);
+			this.optionsGroup.Location = new System.Drawing.Point(200, 232);
+			this.optionsGroup.Name = "optionsGroup";
+			this.optionsGroup.Size = new System.Drawing.Size(191, 42);
+			this.optionsGroup.TabIndex = 6;
+			this.optionsGroup.TabStop = false;
+			this.optionsGroup.Text = "Options";
+			// 
 			// ObjImportForm
 			// 
+			this.AcceptButton = this.importButton;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(403, 267);
+			this.CancelButton = this.cancelButton;
+			this.ClientSize = new System.Drawing.Size(404, 322);
+			this.Controls.Add(this.optionsGroup);
 			this.Controls.Add(this.importButton);
 			this.Controls.Add(this.cancelButton);
 			this.Controls.Add(this.importActionGroup);
@@ -454,6 +503,8 @@
 			((System.ComponentModel.ISupportInitialize)(this.scaleXNumber)).EndInit();
 			this.importActionGroup.ResumeLayout(false);
 			this.importActionGroup.PerformLayout();
+			this.optionsGroup.ResumeLayout(false);
+			this.optionsGroup.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -488,5 +539,9 @@
 		private System.Windows.Forms.CheckBox storeSettingsCheck;
 		private System.Windows.Forms.Button cancelButton;
 		private System.Windows.Forms.Button importButton;
+		private System.Windows.Forms.CheckBox turnQuadsCheck;
+		private System.Windows.Forms.CheckBox swapAxesCheck;
+		private System.Windows.Forms.GroupBox optionsGroup;
+		private System.Windows.Forms.CheckBox flipFacesCheck;
 	}
 }

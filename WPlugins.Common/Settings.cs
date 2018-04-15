@@ -20,6 +20,7 @@ namespace WPlugins.Common
 		public bool UseMetricUnits { get; set; } = false;
 		public bool FlipFaces { get; set; } = false;
 		public bool SwapYZ { get; set; } = false;
+		public bool TurnQuads { get; set; } = false;
 		public bool UniformScale { get; set; } = true;
 		public bool UniformUVScale { get; set; } = true;
 		public float ScaleX { get; set; } = 1.0f;
@@ -228,8 +229,6 @@ namespace WPlugins.Common
 				}
 			}
 		}
-
-		public ObjImportSettings() { }
 	}
 
 	public class Settings
