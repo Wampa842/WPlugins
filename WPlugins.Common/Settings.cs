@@ -9,9 +9,11 @@ using System.Windows.Forms;
 
 namespace WPlugins.Common
 {
-
 	public class ObjImportSettings
 	{
+		public XmlDocument Document { get; set; }
+		public XmlNode Node { get; set; }
+
 		public enum CreateBoneMode { None, Origin, Average };
 		public enum MaterialNamingMode { Numbered, GroupName, BitmapName }
 		public enum BitmapImportAction { None, FileName, Copy, AbsoluteLink }
@@ -145,41 +147,110 @@ namespace WPlugins.Common
 			}
 		}
 
-		public ObjImportSettings(XmlNode node)
+		public ObjImportSettings(XmlNode node, XmlDocument doc)
 		{
+			this.Node = node;
+			this.Document = doc;
 			ReadSettingsFromNode(node);
 		}
 
-		public void UpdateNode(XmlNode node)
+		public void UpdateNode()
 		{
-
+			Dictionary<string, bool> NodesExist = new Dictionary<string, bool>()
+			{
+				{"UseMetricUnits", false},
+				{"FlipFaces", false},
+				{"SwapYZ", false},
+				{"UniformScale", false},
+				{"UniformUVScale", false},
+				{"ScaleX", false},
+				{"ScaleY", false},
+				{"ScaleZ", false},
+				{"ScaleU", false},
+				{"ScaleV", false},
+				{"CreateBone", false},
+				{"MaterialNaming", false},
+				{"BitmapAction", false}
+			};
+			foreach(XmlNode n in Node.ChildNodes)
+			{
+				NodesExist[n.Name] = true;
+			}
+			
+			foreach(var kvp in NodesExist)
+			{
+				if(!kvp.Value)
+				{
+					Node.AppendChild(Document.CreateElement(kvp.Key));
+				}
+				XmlNode n = Node[kvp.Key];
+				switch(kvp.Key)
+				{
+					case "UseMetricUnits":
+						n.InnerText = this.UseMetricUnits.ToString().ToLowerInvariant();
+						break;
+					case "FlipFaces":
+						n.InnerText = this.FlipFaces.ToString().ToLowerInvariant();
+						break;
+					case "SwapYZ":
+						n.InnerText = this.SwapYZ.ToString().ToLowerInvariant();
+						break;
+					case "UniformScale":
+						n.InnerText = this.UniformScale.ToString().ToLowerInvariant();
+						break;
+					case "UniformUVScale":
+						n.InnerText = this.UniformUVScale.ToString().ToLowerInvariant();
+						break;
+					case "ScaleX":
+						n.InnerText = this.ScaleX.ToString().ToLowerInvariant();
+						break;
+					case "ScaleY":
+						n.InnerText = this.ScaleY.ToString().ToLowerInvariant();
+						break;
+					case "ScaleZ":
+						n.InnerText = this.ScaleZ.ToString().ToLowerInvariant();
+						break;
+					case "ScaleU":
+						n.InnerText = this.ScaleU.ToString().ToLowerInvariant();
+						break;
+					case "ScaleV":
+						n.InnerText = this.ScaleV.ToString().ToLowerInvariant();
+						break;
+					case "CreateBone":
+						n.InnerText = ((int)this.CreateBone).ToString().ToLowerInvariant();
+						break;
+					case "MaterialNaming":
+						n.InnerText = ((int)this.MaterialNaming).ToString().ToLowerInvariant();
+						break;
+					case "BitmapAction":
+						n.InnerText = ((int)this.BitmapAction).ToString().ToLowerInvariant();
+						break;
+				}
+			}
 		}
 
-		public ObjImportSettings(){ }
-	}
-
-	public class ObjExportSettings
-	{
-
+		public ObjImportSettings() { }
 	}
 
 	public class Settings
 	{
 		public static readonly string SettingsFileUrl = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\settings.xml";
-		private static ObjImportSettings _objImportSettings;
-		private static ObjExportSettings _objExportSettings;
+		private ObjImportSettings _objImportSettings;
 		protected XmlDocument _xml = new XmlDocument();
+
+		public ObjImportSettings ObjImport { get { return _objImportSettings; } }
 
 		public Settings()
 		{
 			_xml.Load(SettingsFileUrl);
 			XmlNode root = _xml.DocumentElement;
-			foreach(XmlNode node in root.ChildNodes)
+
+			foreach (XmlNode node in root.ChildNodes)
 			{
-				switch(node.Name)
+				switch (node.Name)
 				{
 					case "ObjImport":
-						_objImportSettings = new ObjImportSettings(node);
+						_objImportSettings = new ObjImportSettings(node, _xml);
 						break;
 					case "ObjExport":
 						break;
@@ -189,7 +260,8 @@ namespace WPlugins.Common
 
 		public void Save()
 		{
-
+			_objImportSettings.UpdateNode();
+			_xml.Save(SettingsFileUrl);
 		}
 	}
 }

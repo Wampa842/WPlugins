@@ -15,6 +15,7 @@ namespace WPlugins.ObjImport
 {
 	public partial class ObjImportForm : Form
 	{
+		private Common.Settings settingsDoc;
 		private Common.ObjImportSettings settings;
 		private IPERunArgs args;
 
@@ -22,7 +23,8 @@ namespace WPlugins.ObjImport
 		{
 			InitializeComponent();
 			this.args = args;
-			settings = new Common.ObjImportSettings();
+			settingsDoc = new Common.Settings();
+			settings = settingsDoc.ObjImport;
 		}
 
 		private void ObjImportForm_Load(object sender, EventArgs e)
@@ -68,7 +70,10 @@ namespace WPlugins.ObjImport
 
 		private void importButton_Click(object sender, EventArgs e)
 		{
-
+			if(storeSettingsCheck.Checked)
+			{
+				settingsDoc.Save();
+			}
 		}
 	}
 }

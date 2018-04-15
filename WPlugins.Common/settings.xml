@@ -1,18 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <WPluginsSettings>
   <ObjImport>
-    <MetricUnits>true</MetricUnits>
+    <UseMetricUnits>false</UseMetricUnits>
     <FlipFaces>false</FlipFaces>
     <SwapYZ>false</SwapYZ>
     <UniformScale>true</UniformScale>
     <UniformUVScale>true</UniformUVScale>
-    <XScale mirror="false">1</XScale>
-    <YScale mirror="false">1</YScale>
-    <ZScale mirror="false">1</ZScale>
-    <UScale mirror="false">1</UScale>
-    <VScale mirror="false">1</VScale>
-    <BoneMode>0</BoneMode>
+    <ScaleX>1</ScaleX>
+    <ScaleY>1</ScaleY>
+    <ScaleZ>1</ScaleZ>
+    <ScaleU>1</ScaleU>
+    <ScaleV>1</ScaleV>
+    <CreateBone>0</CreateBone>
     <MaterialNaming>1</MaterialNaming>
-    <BitmapAction>1</BitmapAction>
+    <BitmapAction>2</BitmapAction>
   </ObjImport>
 </WPluginsSettings>
