@@ -25,12 +25,14 @@ namespace WPlugins.ObjImport
 			this.args = args;
 			settingsDoc = new Common.Settings();
 			Settings = settingsDoc.ObjImport;
+			MessageBox.Show(Settings.ToString());
 		}
 
 		private void ObjImportForm_Load(object sender, EventArgs e)
 		{
 			flipFacesCheck.Checked = Settings.FlipFaces;
 			swapAxesCheck.Checked = Settings.SwapYZ;
+			turnQuadsCheck.Checked = Settings.TurnQuads;
 			imperialRadio.Checked = !Settings.UseMetricUnits;
 			metricRadio.Checked = Settings.UseMetricUnits;
 
@@ -49,7 +51,6 @@ namespace WPlugins.ObjImport
 			scaleVNumber.Value = Math.Abs((decimal)Settings.ScaleV);
 
 			materialNamingSelect.SelectedIndex = (int)Settings.MaterialNaming;
-			bitmapActionSelect.SelectedIndex = (int)Settings.BitmapAction;
 			boneActionSelect.SelectedIndex = (int)Settings.CreateBone;
 		}
 
@@ -79,8 +80,7 @@ namespace WPlugins.ObjImport
 			this.Settings.TurnQuads = turnQuadsCheck.Checked;
 			this.Settings.UseMetricUnits = metricRadio.Checked;
 			this.Settings.FlipFaces = flipFacesCheck.Checked;
-
-			this.Settings.BitmapAction = (Common.ObjImportSettings.BitmapImportAction)bitmapActionSelect.SelectedIndex;
+			
 			this.Settings.MaterialNaming = (Common.ObjImportSettings.MaterialNamingMode)materialNamingSelect.SelectedIndex;
 			this.Settings.CreateBone = (Common.ObjImportSettings.CreateBoneMode)boneActionSelect.SelectedIndex;
 
@@ -90,6 +90,22 @@ namespace WPlugins.ObjImport
 				settingsDoc.Save();
 			}
 			this.Close();
+		}
+
+		private void scaleXNumber_ValueChanged(object sender, EventArgs e)
+		{
+			if(uniformModelScaleCheck.Checked)
+			{
+				scaleYNumber.Value = scaleZNumber.Value = ((NumericUpDown)sender).Value;
+			}
+		}
+
+		private void scaleUNumber_ValueChanged(object sender, EventArgs e)
+		{
+			if (uniformTextureScaleCheck.Checked)
+			{
+				scaleVNumber.Value = ((NumericUpDown)sender).Value;
+			}
 		}
 	}
 }
