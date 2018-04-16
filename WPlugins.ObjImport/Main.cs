@@ -266,7 +266,7 @@ namespace WPlugins.ObjImport
 						case "v":
 							try
 							{
-								vList.Add(new V3(float.Parse(tok[1]), float.Parse(tok[2]), float.Parse(tok[3])));
+								vList.Add(new V3(float.Parse(tok[1]), float.Parse(tok[2]), -float.Parse(tok[3])));
 							}
 							catch (FormatException)
 							{
@@ -276,7 +276,7 @@ namespace WPlugins.ObjImport
 						case "vt":
 							try
 							{
-								vtList.Add(new V2(float.Parse(tok[1]), float.Parse(tok[2])));
+								vtList.Add(new V2(float.Parse(tok[1]), -float.Parse(tok[2])));
 							}
 							catch (FormatException)
 							{
@@ -286,7 +286,7 @@ namespace WPlugins.ObjImport
 						case "vn":
 							try
 							{
-								vnList.Add(new V3(float.Parse(tok[1]), float.Parse(tok[2]), float.Parse(tok[3])));
+								vnList.Add(new V3(float.Parse(tok[1]), float.Parse(tok[2]), -float.Parse(tok[3])));
 							}
 							catch (FormatException)
 							{
@@ -412,35 +412,43 @@ namespace WPlugins.ObjImport
 
 		public IPXPmx ToPmx()
 		{
+			MessageBox.Show(settings.ToString());
 			IPXPmx pmx = builder.Pmx();
 			pmx.Clear();
 
 			pmx.ModelInfo.ModelName = pmx.ModelInfo.ModelNameE = ObjFileName;
 
-			//Register bone
+			//Set up bone
 			IPXBone bone = builder.Bone();
 			bone.Name = bone.NameE = ObjFileName;
-			switch (settings.CreateBone)
-			{
-				case ObjImportSettings.CreateBoneMode.Origin:
-					bone.Position = new V3();
-					break;
-				case ObjImportSettings.CreateBoneMode.Average:
-					V3 sum = new V3();
-					foreach (var v in vList)
-						sum += v;
-					bone.Position = sum / vList.Count;
-					break;
-			}
-			if (settings.CreateBone != ObjImportSettings.CreateBoneMode.None)
-				pmx.Bone.Add(bone);
+			bone.Position = new V3();
 
 			//Register vertices
 			foreach (IPXVertex v in vertices)
 			{
-				v.Position *= new V3(settings.ScaleX, settings.ScaleY, settings.ScaleZ);
-				v.Position /= 10.0f;
+				v.Position *= new V3(settings.ScaleX, settings.ScaleY, settings.ScaleZ) / 1.0f;
+				if (settings.UseMetricUnits)
+					v.Position *= 2.54f;
+
+				if(settings.SwapYZ)
+				{
+					float temp = v.Position.Y;
+					v.Position.Y = v.Position.Z;
+					v.Position.Z = temp;
+					temp = v.Normal.Y;
+					v.Normal.Y = v.Normal.Z;
+					v.Normal.Z = temp;
+				}
+
+				if(settings.FlipFaces)
+				{
+					v.Normal *= -1;
+				}
+
 				v.UV *= new V2(settings.ScaleU, settings.ScaleV);
+
+				if (settings.CreateBone == ObjImportSettings.CreateBoneMode.Average)
+					bone.Position += v.Position;
 				if (settings.CreateBone != ObjImportSettings.CreateBoneMode.None)
 					v.Bone1 = bone;
 				else
@@ -448,6 +456,12 @@ namespace WPlugins.ObjImport
 				v.Weight1 = 1.0f;
 				pmx.Vertex.Add(v);
 			}
+
+			//Register the bone
+			if (settings.CreateBone == ObjImportSettings.CreateBoneMode.Average)
+				bone.Position /= pmx.Vertex.Count;
+			if (settings.CreateBone != ObjImportSettings.CreateBoneMode.None)
+				pmx.Bone.Add(bone);
 
 			//Register materials and faces
 			foreach (var m in materials)
@@ -500,8 +514,8 @@ namespace WPlugins.ObjImport
 			return pmx;
 		}
 
-		public string Ext { get { return ".obj"; } }
+		public string Ext => ".obj";
 
-		public string Caption { get { return "OBJ Import (WPlugins)"; } }
+		public string Caption => "WPlugins Obj Importer (version " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString() + ")";
 	}
 }

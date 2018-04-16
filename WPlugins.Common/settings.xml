@@ -4,6 +4,7 @@
     <UseMetricUnits>false</UseMetricUnits>
     <FlipFaces>false</FlipFaces>
     <SwapYZ>false</SwapYZ>
+    <TurnQuads>false</TurnQuads>
     <UniformScale>true</UniformScale>
     <UniformUVScale>true</UniformUVScale>
     <ScaleX>1</ScaleX>

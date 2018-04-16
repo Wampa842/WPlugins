@@ -25,7 +25,6 @@ namespace WPlugins.ObjImport
 			this.args = args;
 			settingsDoc = new Common.Settings();
 			Settings = settingsDoc.ObjImport;
-			MessageBox.Show(Settings.ToString());
 		}
 
 		private void ObjImportForm_Load(object sender, EventArgs e)
