@@ -30,7 +30,10 @@ namespace WPlugins.ObjImport
 
 	class ObjFileImporter
 	{
-		public string ObjFileName;
+		public string ObjFileName { get; private set; }
+		public int ErrorNum { get; private set; } = 0;
+		public int ErrorNumMtl { get; private set; } = 0;
+		public string LogFileUrl { get; } = System.Reflection.Assembly.GetExecutingAssembly().Location + ".log";
 		private IPXPmxBuilder builder;
 		private readonly ObjImportSettings settings;
 		private List<IPXVertex> vertices;
@@ -96,7 +99,8 @@ namespace WPlugins.ObjImport
 								}
 								catch (FormatException)
 								{
-									logger.WriteLine($"(MTL) FormatException on line {lineNum}: {line}");
+									logger.WriteLine($"ERROR (MTL) FormatException on line {lineNum}: {line}");
+									this.ErrorNumMtl++;
 								}
 							}
 							break;
@@ -109,7 +113,8 @@ namespace WPlugins.ObjImport
 								}
 								catch (FormatException)
 								{
-									logger.WriteLine($"(MTL) FormatException on line {lineNum}: {line}");
+									logger.WriteLine($"ERROR (MTL) FormatException on line {lineNum}: {line}");
+									this.ErrorNumMtl++;
 								}
 							}
 							break;
@@ -122,7 +127,8 @@ namespace WPlugins.ObjImport
 								}
 								catch (FormatException)
 								{
-									logger.WriteLine($"(MTL) FormatException on line {lineNum}: {line}");
+									logger.WriteLine($"ERROR (MTL) FormatException on line {lineNum}: {line}");
+									this.ErrorNumMtl++;
 								}
 							}
 							break;
@@ -135,7 +141,8 @@ namespace WPlugins.ObjImport
 								}
 								catch (FormatException)
 								{
-									logger.WriteLine($"(MTL) FormatException on line {lineNum}: {line}");
+									logger.WriteLine($"ERROR (MTL) FormatException on line {lineNum}: {line}");
+									this.ErrorNumMtl++;
 								}
 							}
 							break;
@@ -148,7 +155,8 @@ namespace WPlugins.ObjImport
 								}
 								catch (FormatException)
 								{
-									logger.WriteLine($"(MTL) FormatException on line {lineNum}: {line}");
+									logger.WriteLine($"ERROR (MTL) FormatException on line {lineNum}: {line}");
+									this.ErrorNumMtl++;
 								}
 							}
 							break;
@@ -161,7 +169,8 @@ namespace WPlugins.ObjImport
 								}
 								catch (FormatException)
 								{
-									logger.WriteLine($"(MTL) FormatException on line {lineNum}: {line}");
+									logger.WriteLine($"ERROR (MTL) FormatException on line {lineNum}: {line}");
+									this.ErrorNumMtl++;
 								}
 							}
 							break;
@@ -172,9 +181,22 @@ namespace WPlugins.ObjImport
 								mat.Ambient = new V3(0.5f, 0.5f, 0.5f);
 								mat.Diffuse = new V4(1.0f, 1.0f, 1.0f, mat.Diffuse.A);
 							}
+							else
+							{
+								logger.WriteLine($"ERROR (MTL) Missing newmtl for line {lineNum}");
+								this.ErrorNumMtl++;
+							}
 							break;
 						case "newmtl":
-							string name = line.Trim().Substring(7, line.Length - 7);
+							string name;
+							if (tok.Length <= 1)
+							{
+								logger.WriteLine($"ERROR (MTL) Invalid material declaration on line {lineNum}");
+								this.ErrorNumMtl++;
+								name = "material_" + lineNum.ToString();
+							}
+							else
+								name = line.Trim().Substring(7, line.Length - 7);
 							if (!output.ContainsKey(name))
 							{
 								mat = builder.Material();
@@ -184,6 +206,8 @@ namespace WPlugins.ObjImport
 							break;
 					}
 				}
+				logger.WriteLine($"LOG (MTL) Finished ({this.ErrorNumMtl} errors)");
+				logger.WriteLine($"LOG (MTL) Created {output.Count} materials");
 			}
 			return output;
 		}
@@ -242,13 +266,21 @@ namespace WPlugins.ObjImport
 			IPXMaterial material = builder.Material();
 			IPXMaterial template = null;
 
-			using (logger = new StreamWriter(System.Reflection.Assembly.GetExecutingAssembly().Location + ".log"))
+			using (logger = new StreamWriter(this.LogFileUrl))
 			using (StreamReader reader = new StreamReader(path))
 			{
 				string line;
 				string[] tok;
 
 				int lineNum = 0;
+				int vNum = 0;
+				int vtNum = 0;
+				int vnNum = 0;
+				int fNum = 0;
+				int triNum = 0;
+				int quadNum = 0;
+				int triOutNum = 0;
+				int gNum = 0;
 				string groupName;
 
 				while (!reader.EndOfStream)
@@ -270,8 +302,10 @@ namespace WPlugins.ObjImport
 							}
 							catch (FormatException)
 							{
-								logger.WriteLine($"(OBJ) FormatException on line {lineNum}: {line}");
+								logger.WriteLine($"ERROR (OBJ) FormatException on line {lineNum}: {line}");
+								this.ErrorNum++;
 							}
+							++vNum;
 							break;
 						case "vt":
 							try
@@ -280,8 +314,10 @@ namespace WPlugins.ObjImport
 							}
 							catch (FormatException)
 							{
-								logger.WriteLine($"(OBJ) FormatException on line {lineNum}: {line}");
+								logger.WriteLine($"ERROR (OBJ) FormatException on line {lineNum}: {line}");
+								this.ErrorNum++;
 							}
+							++vtNum;
 							break;
 						case "vn":
 							try
@@ -290,13 +326,18 @@ namespace WPlugins.ObjImport
 							}
 							catch (FormatException)
 							{
-								logger.WriteLine($"(OBJ) FormatException on line {lineNum}: {line}");
+								logger.WriteLine($"ERROR (OBJ) FormatException on line {lineNum}: {line}");
+								this.ErrorNum++;
 							}
+							++vnNum;
 							break;
 						case "f":
+							++fNum;
 							//Construct triangle
 							if (tok.Length == 4)
 							{
+								++triNum;
+								++triOutNum;
 								VertexElements(tok[1], out v, out vt, out vn);
 								v1 = CreateVertex(v, vt, vn);
 								if (v1 >= 0)
@@ -320,6 +361,8 @@ namespace WPlugins.ObjImport
 							}
 							else if (tok.Length == 5)
 							{
+								++quadNum;
+								++triOutNum;
 								VertexElements(tok[1], out v, out vt, out vn);
 								v1 = CreateVertex(v, vt, vn);
 								if (v1 >= 0)
@@ -354,8 +397,8 @@ namespace WPlugins.ObjImport
 							}
 							else
 							{
-								logger.WriteLine($"(OBJ) Error: unsupported polygon ({tok.Length - 1} sides) on line {lineNum}: {line}");
-								throw new PolygonException(line, tok.Length, lineNum);
+								logger.WriteLine($"ERROR (OBJ) Unsupported polygon ({tok.Length - 1} points) on line {lineNum}: {line}");
+								this.ErrorNum++;
 							}
 							break;
 						case "g":
@@ -367,7 +410,11 @@ namespace WPlugins.ObjImport
 								materials.Add(material.Name, material);
 							}
 							else
-								logger.WriteLine($"(OBJ) Invalid group definition on line {lineNum}: {line}");
+							{
+								logger.WriteLine($"ERROR (OBJ) Invalid group definition on line {lineNum}: {line}");
+								this.ErrorNum++;
+							}
+							++gNum;
 							break;
 						case "usemtl":
 							string name = line.Trim().Substring(7, line.Length - 7);
@@ -399,7 +446,10 @@ namespace WPlugins.ObjImport
 									material.Shadow = true;
 								}
 								else
-									logger.WriteLine($"(OBJ) Material not found ({name}) on line {lineNum}");
+								{
+									logger.WriteLine($"WARNING (OBJ) Material not found ({name}) on line {lineNum}");
+									this.ErrorNum++;
+								}
 							}
 							break;
 						case "mtllib":
@@ -407,12 +457,13 @@ namespace WPlugins.ObjImport
 							break;
 					}
 				}
+				logger.WriteLine($"LOG (OBJ) Finished ({ErrorNum} errors)");
+				logger.WriteLine($"LOG (OBJ) {vNum} vertices, {vtNum} texture coordinates, {vnNum} normal vectors, {fNum} face records ({triNum} triangles, {quadNum} quads), {triOutNum} total triangles, {gNum} groups");
 			}
 		}
 
 		public IPXPmx ToPmx()
 		{
-			MessageBox.Show(settings.ToString());
 			IPXPmx pmx = builder.Pmx();
 			pmx.Clear();
 
@@ -426,11 +477,11 @@ namespace WPlugins.ObjImport
 			//Register vertices
 			foreach (IPXVertex v in vertices)
 			{
-				v.Position *= new V3(settings.ScaleX, settings.ScaleY, settings.ScaleZ) / 1.0f;
+				v.Position *= new V3(settings.ScaleX, settings.ScaleY, settings.ScaleZ) / 10.0f;
 				if (settings.UseMetricUnits)
 					v.Position *= 2.54f;
 
-				if(settings.SwapYZ)
+				if (settings.SwapYZ)
 				{
 					float temp = v.Position.Y;
 					v.Position.Y = v.Position.Z;
@@ -440,7 +491,7 @@ namespace WPlugins.ObjImport
 					v.Normal.Z = temp;
 				}
 
-				if(settings.FlipFaces)
+				if (settings.FlipFaces)
 				{
 					v.Normal *= -1;
 				}
@@ -477,7 +528,7 @@ namespace WPlugins.ObjImport
 				}
 				if (settings.MaterialNaming == ObjImportSettings.MaterialNamingMode.BitmapName)
 					m.Value.Name = m.Value.NameE = m.Value.Tex;
-				if(settings.MaterialNaming == ObjImportSettings.MaterialNamingMode.Numbered)
+				if (settings.MaterialNaming == ObjImportSettings.MaterialNamingMode.Numbered)
 					m.Value.Name = m.Value.NameE = pmx.Material.Count.ToString();
 				pmx.Material.Add(m.Value);
 			}
@@ -502,6 +553,13 @@ namespace WPlugins.ObjImport
 				if (form.DialogResult == DialogResult.OK)
 				{
 					ObjFileImporter importer = new ObjFileImporter(path, builder, form.Settings);
+					if (importer.ErrorNum + importer.ErrorNumMtl > 0)
+					{
+						if (MessageBox.Show($"There have been errors during import:\n{importer.ErrorNum} while processing OBJ\n{importer.ErrorNumMtl} while processing MTL\n\nWould you like to open the log file to find out what happened?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+						{
+							System.Diagnostics.Process.Start(importer.LogFileUrl);
+						}
+					}
 					return importer.ToPmx();
 				}
 			}
@@ -510,7 +568,6 @@ namespace WPlugins.ObjImport
 				MessageBox.Show($"{ex}");
 			}
 			pmx = builder.Pmx();
-			pmx.ModelInfo.ModelName = "fuck";
 			return pmx;
 		}
 

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <WPluginsSettings>
   <ObjImport>
-    <UseMetricUnits>false</UseMetricUnits>
+    <UseMetricUnits>true</UseMetricUnits>
     <FlipFaces>false</FlipFaces>
     <SwapYZ>false</SwapYZ>
     <TurnQuads>false</TurnQuads>

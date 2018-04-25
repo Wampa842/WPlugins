@@ -140,6 +140,11 @@ namespace WPlugins.Common
 			ReadSettingsFromNode(node);
 		}
 
+		public ObjImportSettings()
+		{
+
+		}
+
 		public void UpdateNode()
 		{
 			Dictionary<string, bool> NodesExist = new Dictionary<string, bool>()
@@ -158,19 +163,19 @@ namespace WPlugins.Common
 				{"CreateBone", false},
 				{"MaterialNaming", false}
 			};
-			foreach(XmlNode n in Node.ChildNodes)
+			foreach (XmlNode n in Node.ChildNodes)
 			{
 				NodesExist[n.Name] = true;
 			}
-			
-			foreach(var kvp in NodesExist)
+
+			foreach (var kvp in NodesExist)
 			{
-				if(!kvp.Value)
+				if (!kvp.Value)
 				{
 					Node.AppendChild(Document.CreateElement(kvp.Key));
 				}
 				XmlNode n = Node[kvp.Key];
-				switch(kvp.Key)
+				switch (kvp.Key)
 				{
 					case "UseMetricUnits":
 						n.InnerText = this.UseMetricUnits.ToString().ToLowerInvariant();
@@ -214,42 +219,70 @@ namespace WPlugins.Common
 				}
 			}
 		}
+	}
 
-		public override string ToString()
+	public class ObjExportSettings
+	{
+		public XmlDocument Document { get; set; }
+		public XmlNode Node { get; set; }
+
+		private void ReadSettingsFromNode(XmlNode node)
+		{ }
+
+		public ObjExportSettings(XmlNode node, XmlDocument doc)
 		{
-			return $"metrics: {UseMetricUnits}\nflip: {FlipFaces}\nswap: {SwapYZ}\nturn: {TurnQuads}\nXYZ uniform: {UniformScale}\nUV uniform: {UniformUVScale}\nscale: {ScaleX} {ScaleY} {ScaleZ} | {ScaleU} {ScaleV}\n{CreateBone} {MaterialNaming}";
+			this.Node = node;
+			this.Document = doc;
+			ReadSettingsFromNode(node);
+		}
+
+		public ObjExportSettings() { }
+
+		public void UpdateNode()
+		{
+
 		}
 	}
 
 	public class Settings
 	{
 		public static readonly string SettingsFileUrl = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\settings.xml";
-		private ObjImportSettings _objImportSettings;
 		protected XmlDocument _xml = new XmlDocument();
+		private ObjImportSettings _objImport;
+		private ObjExportSettings _objExport;
 
-		public ObjImportSettings ObjImport { get { return _objImportSettings; } }
+		public ObjImportSettings ObjImport { get => _objImport; private set => _objImport = value; }
+		public ObjExportSettings ObjExport { get => _objExport; private set => _objExport = value; }
 
 		public Settings()
 		{
-			_xml.Load(SettingsFileUrl);
-			XmlNode root = _xml.DocumentElement;
-
-			foreach (XmlNode node in root.ChildNodes)
+			try
 			{
-				switch (node.Name)
+				_xml.Load(SettingsFileUrl);
+				XmlNode root = _xml.DocumentElement;
+
+				foreach (XmlNode node in root.ChildNodes)
 				{
-					case "ObjImport":
-						_objImportSettings = new ObjImportSettings(node, _xml);
-						break;
-					case "ObjExport":
-						break;
+					switch (node.Name)
+					{
+						case "ObjImport":
+							ObjImport = new ObjImportSettings(node, _xml);
+							break;
+						case "ObjExport":
+							break;
+					}
 				}
+			}
+			catch (System.Exception ex) when (ex is System.IO.IOException || ex is System.Security.SecurityException)
+			{
+				MessageBox.Show($"The settings file at \"{SettingsFileUrl}\" couldn't be opened: \n{ex.Message}\nMake sure the file exists and that you have permission to open it.", "File not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				ObjImport = new ObjImportSettings();
 			}
 		}
 
 		public void Save()
 		{
-			_objImportSettings.UpdateNode();
+			ObjImport.UpdateNode();
 			_xml.Save(SettingsFileUrl);
 		}
 	}
