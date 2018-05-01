@@ -109,7 +109,7 @@ namespace WPlugins.ObjImport
 							{
 								try
 								{
-									mat.Specular = new V3(float.Parse(tok[1]), float.Parse(tok[2]), 1.0f);
+									mat.Specular = new V3(float.Parse(tok[1]), float.Parse(tok[2]), float.Parse(tok[3]));
 								}
 								catch (FormatException)
 								{
