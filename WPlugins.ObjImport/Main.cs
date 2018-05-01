@@ -351,9 +351,9 @@ namespace WPlugins.ObjImport
 										if (v3 >= 0)
 										{
 											IPXFace face = builder.Face();
-											face.Vertex1 = vertices[v1];
+											face.Vertex3 = vertices[v1];
 											face.Vertex2 = vertices[v2];
-											face.Vertex3 = vertices[v3];
+											face.Vertex1 = vertices[v3];
 											material.Faces.Add(face);
 										}
 									}
@@ -380,15 +380,15 @@ namespace WPlugins.ObjImport
 											if (v4 >= 0)
 											{
 												IPXFace face = builder.Face();
-												face.Vertex1 = vertices[v1];
+												face.Vertex3 = vertices[v1];
 												face.Vertex2 = vertices[v2];
-												face.Vertex3 = vertices[settings.TurnQuads ? v3 : v4];
+												face.Vertex1 = vertices[settings.TurnQuads ? v3 : v4];
 												material.Faces.Add(face);
 
 												face = builder.Face();
-												face.Vertex1 = vertices[settings.TurnQuads ? v1 : v2];
+												face.Vertex3 = vertices[settings.TurnQuads ? v1 : v2];
 												face.Vertex2 = vertices[v3];
-												face.Vertex3 = vertices[v4];
+												face.Vertex1 = vertices[v4];
 												material.Faces.Add(face);
 											}
 										}
