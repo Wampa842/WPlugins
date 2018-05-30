@@ -63,7 +63,7 @@ At present, the plugins don't work with legacy PMD Editor releases.
 &nbsp;&nbsp;&nbsp;&nbsp;Try to reproduce it, narrow down the possible sources. Most of the errors will produce an error message which will help you hunt down the cause.  
 &nbsp;&nbsp;&nbsp;&nbsp;If you can't solve the issue yourself, encounter a repeating problem, or it seems to be my fault, you can leave a bug report on the [Issues](#todo) page, or [contact me](#todo).
 
-#### Frequent issues:
+### Frequent issues:
 
 #### Error message that says you're missing an assembly  
 &nbsp;&nbsp;&nbsp;&nbsp;This usually happens when .NET Framework is outdated or missing, or a DLL file is missing. [Install or update](#requirements) .NET Framework, [reinstall](#installation) the plugin, and make sure other applications (e.g. an antivirus) aren't trying to delete the DLL files.
