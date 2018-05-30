@@ -29,7 +29,7 @@ Developed by Wampa842
 ## Installation
 1. Download the latest release from the [Releases](#todo) page.
 2. If your system blocks executable files downloaded from the internet, make sure you unblock the ZIP archives or the individual DLL files (right click > Properties > Unblock)  
-3. Copy the WPlugins directory to &lt;PMX folder&gt;\\\_plugin\\Use
+3. Copy the WPlugins directory to &lt;PMX folder&gt;\\\_plugin\\User
 
 ## Requirements
 
@@ -43,8 +43,9 @@ At present, the plugins don't work with legacy PMD Editor releases.
 ------
 ## Links and download
 
-##### WPlugins [[project page]](https://wampa842.github.io/wplugins)  
-[[GitHub repository]](https://github.com/wampa842/wplugins) [[Releases]](https://github.com/wampa842/wplugins/releases) [[Issues]](https://github.com/wampa842/wplugins/issues)
+#### [[Releases]](https://github.com/wampa842/wplugins/releases) (download from here)  
+
+##### [[Project website]](https://wampa842.github.io/wplugins) [[GitHub repository]](https://github.com/wampa842/wplugins) [[Issues]](https://github.com/wampa842/wplugins/issues)  
 
 ------
 ## Troubleshooting and compatibility
