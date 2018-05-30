@@ -55,9 +55,11 @@
 			this.swapAxesCheck = new System.Windows.Forms.CheckBox();
 			this.materialNamingSelect = new System.Windows.Forms.ComboBox();
 			this.boneActionSelect = new System.Windows.Forms.ComboBox();
-			this.storeSettingsCheck = new System.Windows.Forms.CheckBox();
+			this.saveDefaultCheck = new System.Windows.Forms.CheckBox();
 			this.cancelButton = new System.Windows.Forms.Button();
 			this.importButton = new System.Windows.Forms.Button();
+			this.saveJobCheck = new System.Windows.Forms.CheckBox();
+			this.saveJobHelpLink = new System.Windows.Forms.LinkLabel();
 			this.unitSystemGroup.SuspendLayout();
 			this.scalingGroup.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.scaleVNumber)).BeginInit();
@@ -416,22 +418,22 @@
 			this.boneActionSelect.Size = new System.Drawing.Size(170, 21);
 			this.boneActionSelect.TabIndex = 0;
 			// 
-			// storeSettingsCheck
+			// saveDefaultCheck
 			// 
-			this.storeSettingsCheck.AutoSize = true;
-			this.storeSettingsCheck.Location = new System.Drawing.Point(12, 244);
-			this.storeSettingsCheck.Name = "storeSettingsCheck";
-			this.storeSettingsCheck.Size = new System.Drawing.Size(90, 17);
-			this.storeSettingsCheck.TabIndex = 3;
-			this.storeSettingsCheck.Text = "Store settings";
-			this.storeSettingsCheck.UseVisualStyleBackColor = true;
+			this.saveDefaultCheck.AutoSize = true;
+			this.saveDefaultCheck.Location = new System.Drawing.Point(12, 238);
+			this.saveDefaultCheck.Name = "saveDefaultCheck";
+			this.saveDefaultCheck.Size = new System.Drawing.Size(139, 17);
+			this.saveDefaultCheck.TabIndex = 3;
+			this.saveDefaultCheck.Text = "Save settings as default";
+			this.saveDefaultCheck.UseVisualStyleBackColor = true;
 			// 
 			// cancelButton
 			// 
 			this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.cancelButton.Location = new System.Drawing.Point(286, 240);
+			this.cancelButton.Location = new System.Drawing.Point(317, 263);
 			this.cancelButton.Name = "cancelButton";
-			this.cancelButton.Size = new System.Drawing.Size(106, 23);
+			this.cancelButton.Size = new System.Drawing.Size(75, 23);
 			this.cancelButton.TabIndex = 4;
 			this.cancelButton.Text = "Cancel";
 			this.cancelButton.UseVisualStyleBackColor = true;
@@ -439,13 +441,34 @@
 			// importButton
 			// 
 			this.importButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-			this.importButton.Location = new System.Drawing.Point(114, 240);
+			this.importButton.Location = new System.Drawing.Point(12, 261);
 			this.importButton.Name = "importButton";
-			this.importButton.Size = new System.Drawing.Size(166, 23);
+			this.importButton.Size = new System.Drawing.Size(210, 23);
 			this.importButton.TabIndex = 5;
 			this.importButton.Text = "Import";
 			this.importButton.UseVisualStyleBackColor = true;
 			this.importButton.Click += new System.EventHandler(this.importButton_Click);
+			// 
+			// saveJobCheck
+			// 
+			this.saveJobCheck.AutoSize = true;
+			this.saveJobCheck.Location = new System.Drawing.Point(200, 238);
+			this.saveJobCheck.Name = "saveJobCheck";
+			this.saveJobCheck.Size = new System.Drawing.Size(141, 17);
+			this.saveJobCheck.TabIndex = 6;
+			this.saveJobCheck.Text = "Save settings for this job";
+			this.saveJobCheck.UseVisualStyleBackColor = true;
+			// 
+			// saveJobHelpLink
+			// 
+			this.saveJobHelpLink.AutoSize = true;
+			this.saveJobHelpLink.Location = new System.Drawing.Point(337, 239);
+			this.saveJobHelpLink.Name = "saveJobHelpLink";
+			this.saveJobHelpLink.Size = new System.Drawing.Size(19, 13);
+			this.saveJobHelpLink.TabIndex = 7;
+			this.saveJobHelpLink.TabStop = true;
+			this.saveJobHelpLink.Text = "(?)";
+			this.saveJobHelpLink.Click += new System.EventHandler(this.saveJobHelpLink_Click);
 			// 
 			// ObjImportForm
 			// 
@@ -453,8 +476,10 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.cancelButton;
-			this.ClientSize = new System.Drawing.Size(404, 275);
-			this.Controls.Add(this.storeSettingsCheck);
+			this.ClientSize = new System.Drawing.Size(404, 298);
+			this.Controls.Add(this.saveJobHelpLink);
+			this.Controls.Add(this.saveJobCheck);
+			this.Controls.Add(this.saveDefaultCheck);
 			this.Controls.Add(this.importButton);
 			this.Controls.Add(this.cancelButton);
 			this.Controls.Add(this.importActionGroup);
@@ -509,11 +534,13 @@
 		private System.Windows.Forms.GroupBox importActionGroup;
 		private System.Windows.Forms.ComboBox boneActionSelect;
 		private System.Windows.Forms.ComboBox materialNamingSelect;
-		private System.Windows.Forms.CheckBox storeSettingsCheck;
+		private System.Windows.Forms.CheckBox saveDefaultCheck;
 		private System.Windows.Forms.Button cancelButton;
 		private System.Windows.Forms.Button importButton;
 		private System.Windows.Forms.CheckBox turnQuadsCheck;
 		private System.Windows.Forms.CheckBox swapAxesCheck;
 		private System.Windows.Forms.CheckBox flipFacesCheck;
+		private System.Windows.Forms.CheckBox saveJobCheck;
+		private System.Windows.Forms.LinkLabel saveJobHelpLink;
 	}
 }

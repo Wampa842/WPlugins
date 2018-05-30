@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPlugins.Common", "WPlugins
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPlugins.ObjImport", "WPlugins.ObjImport\WPlugins.ObjImport.csproj", "{72A186A3-3BBF-49C4-9D9A-018FFD486199}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPlugins.ObjExport", "WPlugins.ObjExport\WPlugins.ObjExport.csproj", "{E0848A52-C784-4CA9-B41C-649FFE50888B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{72A186A3-3BBF-49C4-9D9A-018FFD486199}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{72A186A3-3BBF-49C4-9D9A-018FFD486199}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{72A186A3-3BBF-49C4-9D9A-018FFD486199}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0848A52-C784-4CA9-B41C-649FFE50888B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0848A52-C784-4CA9-B41C-649FFE50888B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0848A52-C784-4CA9-B41C-649FFE50888B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0848A52-C784-4CA9-B41C-649FFE50888B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

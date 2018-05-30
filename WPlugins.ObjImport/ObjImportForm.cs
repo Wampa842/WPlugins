@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
 
 using PEPlugin;
 using PEPlugin.Pmx;
@@ -17,13 +18,55 @@ namespace WPlugins.ObjImport
 	{
 		private Common.Settings settingsDoc;
 		private IPERunArgs args;
+		private string path;
+		private string jobPath;
 		public Common.ObjImportSettings Settings;
 
 		public ObjImportForm(string path, IPERunArgs args)
 		{
 			InitializeComponent();
 			this.args = args;
-			settingsDoc = new Common.Settings();
+			this.path = path;
+			this.jobPath = path + ".wp_import.xml";
+
+			if (System.IO.File.Exists(jobPath))
+			{
+				switch (MessageBox.Show("This file has an associated job file. Would you like to load it?\n(Press Cancel to delete it)", "Job file found", MessageBoxButtons.YesNoCancel))
+				{
+					case DialogResult.Yes:
+						try
+						{
+							settingsDoc = new Common.Settings(jobPath);
+						}
+						catch (XmlException ex)
+						{
+							MessageBox.Show($"Could not load job file:\n{ex.Message}\n{ex.StackTrace}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+							settingsDoc = new Common.Settings();
+						}
+						break;
+					case DialogResult.Cancel:
+						try
+						{
+							System.IO.File.Delete(jobPath);
+						}
+						catch(System.IO.IOException ex)
+						{
+							MessageBox.Show($"Could not delete file:\n{ex.Message}\n{ex.StackTrace}", "Error");
+						}
+						finally
+						{
+							settingsDoc = new Common.Settings();
+						}
+						break;
+					default:
+						settingsDoc = new Common.Settings();
+						break;
+				}
+			}
+			else
+			{
+				settingsDoc = new Common.Settings();
+			}
 			Settings = settingsDoc.ObjImport;
 		}
 
@@ -64,7 +107,7 @@ namespace WPlugins.ObjImport
 			scaleVNumber.Value = scaleUNumber.Value;
 			scaleVNumber.Enabled = !((CheckBox)sender).Checked;
 		}
-		
+
 		private void importButton_Click(object sender, EventArgs e)
 		{
 			this.Settings.ScaleX = (float)scaleXNumber.Value * (mirrorXCheck.Checked ? -1 : 1);
@@ -79,21 +122,39 @@ namespace WPlugins.ObjImport
 			this.Settings.TurnQuads = turnQuadsCheck.Checked;
 			this.Settings.UseMetricUnits = metricRadio.Checked;
 			this.Settings.FlipFaces = flipFacesCheck.Checked;
-			
+
 			this.Settings.MaterialNaming = (Common.ObjImportSettings.MaterialNamingMode)materialNamingSelect.SelectedIndex;
 			this.Settings.CreateBone = (Common.ObjImportSettings.CreateBoneMode)boneActionSelect.SelectedIndex;
 
 			this.DialogResult = DialogResult.OK;
-			if (storeSettingsCheck.Checked)
+			if (saveDefaultCheck.Checked)
 			{
 				settingsDoc.Save();
+			}
+			if (saveJobCheck.Checked)
+			{
+				XmlDocument doc = new XmlDocument();
+				doc.AppendChild(doc.CreateXmlDeclaration("1.0", "utf-8", "no"));
+				XmlElement root = doc.CreateElement("WPluginsSettings");
+				this.Settings.UpdateNode();
+				XmlNode node = doc.ImportNode(this.Settings.Node, true);
+				root.AppendChild(node);
+				doc.AppendChild(root);
+				try
+				{
+					doc.Save(this.jobPath);
+				}
+				catch (XmlException ex)
+				{
+					MessageBox.Show($"Could not save job file:\n{ex.Message}\n{ex.StackTrace}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				}
 			}
 			this.Close();
 		}
 
 		private void scaleXNumber_ValueChanged(object sender, EventArgs e)
 		{
-			if(uniformModelScaleCheck.Checked)
+			if (uniformModelScaleCheck.Checked)
 			{
 				scaleYNumber.Value = scaleZNumber.Value = ((NumericUpDown)sender).Value;
 			}
@@ -105,6 +166,13 @@ namespace WPlugins.ObjImport
 			{
 				scaleVNumber.Value = ((NumericUpDown)sender).Value;
 			}
+		}
+
+		private void saveJobHelpLink_Click(object sender, EventArgs e)
+		{
+			//MessageBox.Show("By saving the settings for a specific job, you can streamline the import process of files you have to import frequently (e.g. models in development) by storing the settings in a file instead of . If an OBJ file has a job file, you'll be prompted whether you want to load, ignore or delete it.\nThe job file's name is the name of the OBJ file, followed by \".wp_import.xml\".", "Help: job files", MessageBoxButtons.OK, MessageBoxIcon.Information);
+			string longAssText = "Job files help streamline the import process of frequently imported models by storing the settings in an XML file specific to a single OBJ file, without overwriting the default settings.\nIf a job file is detected, you will be prompted whether to load, ignore or delete it.\nThe job file will have the name of the OBJ file, followed by .wp_import.xml (for example: Something.obj.wp_import.xml).";
+			MessageBox.Show(longAssText, "Help: job files", MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
 	}
 }
