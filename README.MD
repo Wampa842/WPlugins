@@ -6,15 +6,15 @@ Developed by Wampa842
 ---
 
 #### Table of contents
----------
 
 1. [Features](#features)
 	- [Wavefront OBJ importer](#wavefront-obj-importer)
 2. [Installation](#installation)
-3. [Troubleshooting and compatibility](#troubleshooting-and-compatibility)
-4. [Contribute](#contribute)
-5. [License](#license)
-6. [Planned features](#planned-features)
+3. [Requirements](#requirements)  
+4. [Troubleshooting and compatibility](#troubleshooting-and-compatibility)
+5. [Contribute](#contribute)
+6. [License](#license)
+7. [Planned features](#planned-features)
 
 ------
 ## Features
