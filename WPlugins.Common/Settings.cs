@@ -254,11 +254,11 @@ namespace WPlugins.Common
 		public ObjImportSettings ObjImport { get => _objImport; private set => _objImport = value; }
 		public ObjExportSettings ObjExport { get => _objExport; private set => _objExport = value; }
 
-		public Settings()
+		public Settings(string filePath)
 		{
 			try
 			{
-				_xml.Load(SettingsFileUrl);
+				_xml.Load(filePath);
 				XmlNode root = _xml.DocumentElement;
 
 				foreach (XmlNode node in root.ChildNodes)
@@ -279,6 +279,8 @@ namespace WPlugins.Common
 				ObjImport = new ObjImportSettings();
 			}
 		}
+
+		public Settings() : this(SettingsFileUrl) { }
 
 		public void Save()
 		{
