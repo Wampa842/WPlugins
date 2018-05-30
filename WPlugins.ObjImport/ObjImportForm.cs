@@ -170,9 +170,7 @@ namespace WPlugins.ObjImport
 
 		private void saveJobHelpLink_Click(object sender, EventArgs e)
 		{
-			//MessageBox.Show("By saving the settings for a specific job, you can streamline the import process of files you have to import frequently (e.g. models in development) by storing the settings in a file instead of . If an OBJ file has a job file, you'll be prompted whether you want to load, ignore or delete it.\nThe job file's name is the name of the OBJ file, followed by \".wp_import.xml\".", "Help: job files", MessageBoxButtons.OK, MessageBoxIcon.Information);
-			string longAssText = "Job files help streamline the import process of frequently imported models by storing the settings in an XML file specific to a single OBJ file, without overwriting the default settings.\nIf a job file is detected, you will be prompted whether to load, ignore or delete it.\nThe job file will have the name of the OBJ file, followed by .wp_import.xml (for example: Something.obj.wp_import.xml).";
-			MessageBox.Show(longAssText, "Help: job files", MessageBoxButtons.OK, MessageBoxIcon.Information);
+			MessageBox.Show("Job files help streamline the import process of frequently imported models by storing the settings in an XML file specific to a single OBJ file, without overwriting the default settings.\nIf a job file is detected, you will be prompted whether to load, ignore or delete it.\nThe job file will have the name of the OBJ file, followed by .wp_import.xml (for example: Something.obj.wp_import.xml).", "Help: job files", MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
 	}
 }
