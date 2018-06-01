@@ -15,4 +15,18 @@
     <CreateBone>0</CreateBone>
     <MaterialNaming>1</MaterialNaming>
   </ObjImport>
+  <ObjExport>
+    <UseMetricUnits>true</UseMetricUnits>
+    <FlipFaces>false</FlipFaces>
+    <SwapYZ>false</SwapYZ>
+    <UniformScale>true</UniformScale>
+    <UniformUVScale>true</UniformUVScale>
+    <ScaleX>1</ScaleX>
+    <ScaleY>1</ScaleY>
+    <ScaleZ>1</ScaleZ>
+    <ScaleU>1</ScaleU>
+    <ScaleV>1</ScaleV>
+    <BitmapAction>3</BitmapAction>
+    <BitmapPath></BitmapPath>
+  </ObjExport>
 </WPluginsSettings>

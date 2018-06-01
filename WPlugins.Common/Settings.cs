@@ -223,6 +223,21 @@ namespace WPlugins.Common
 
 	public class ObjExportSettings
 	{
+		public enum BitmapActionMode { None, Copy, Absolute, Relative };
+		public bool UseMetricUnits { get; set; } = false;
+		public bool FlipFaces { get; set; } = false;
+		public bool SwapYZ { get; set; } = false;
+		public bool TurnQuads { get; set; } = false;
+		public bool UniformScale { get; set; } = true;
+		public bool UniformUVScale { get; set; } = true;
+		public float ScaleX { get; set; } = 1.0f;
+		public float ScaleY { get; set; } = 1.0f;
+		public float ScaleZ { get; set; } = 1.0f;
+		public float ScaleU { get; set; } = 1.0f;
+		public float ScaleV { get; set; } = 1.0f;
+		public BitmapActionMode BitmapAction { get; set; } = BitmapActionMode.Relative;
+		public string BitmapPath { get; set; } = "";
+
 		public XmlDocument Document { get; set; }
 		public XmlNode Node { get; set; }
 
