@@ -11,10 +11,11 @@ Developed by Wampa842
 	- [Wavefront OBJ importer](#wavefront-obj-importer)
 2. [Installation](#installation)
 3. [Requirements](#requirements)  
-4. [Troubleshooting and compatibility](#troubleshooting-and-compatibility)
-5. [Contribute](#contribute)
-6. [License](#license)
-7. [Planned features](#planned-features)
+4. [Links and download](#links-and-download)  
+5. [Troubleshooting and compatibility](#troubleshooting-and-compatibility)
+6. [Contribute](#contribute)
+7. [License](#license)
+8. [Planned features](#planned-features)
 
 ------
 ## Features
@@ -27,7 +28,7 @@ Developed by Wampa842
 
 ------
 ## Installation
-1. Download the latest release from the [Releases](#todo) page.
+1. Download the latest release from the [Releases](#links-and-download) page.
 2. If your system blocks executable files downloaded from the internet, make sure you unblock the ZIP archives or the individual DLL files (right click > Properties > Unblock)  
 3. Copy the WPlugins directory to &lt;PMX folder&gt;\\\_plugin\\User
 
@@ -61,7 +62,7 @@ At present, the plugins don't work with legacy PMD Editor releases.
 
 #### What can I do if I encounter an issue?  
 &nbsp;&nbsp;&nbsp;&nbsp;Try to reproduce it, narrow down the possible sources. Most of the errors will produce an error message which will help you hunt down the cause.  
-&nbsp;&nbsp;&nbsp;&nbsp;If you can't solve the issue yourself, encounter a repeating problem, or it seems to be my fault, you can leave a bug report on the [Issues](#todo) page, or [contact me](#todo).
+&nbsp;&nbsp;&nbsp;&nbsp;If you can't solve the issue yourself, encounter a repeating problem, or it seems to be my fault, you can leave a bug report on the [Issues](https://github.com/Wampa842/wPlugins/issues) page, or [contact me](#contact).
 
 ### Frequent issues:
 
@@ -72,7 +73,7 @@ At present, the plugins don't work with legacy PMD Editor releases.
 &nbsp;&nbsp;&nbsp;&nbsp;For security reasons, Windows blocks executables downloaded from the internet and PMX Editor couldn't execute the plugin's files. Make sure they're not blocked ([installation](#installation) step 2) and that other applications (e.g. an antivirus) are not blocking their execution.
 
 #### Unhandled exceptions  
-&nbsp;&nbsp;&nbsp;&nbsp;I try to handle as many exceptions as I can, but some might slip through the cracks. If an unhandled exception occurs, click on "Details", copy the text you find below, and leave a bug report on the [Issues](#todo) page or [contact me](#todo).  
+&nbsp;&nbsp;&nbsp;&nbsp;I try to handle as many exceptions as I can, but some might slip through the cracks. If an unhandled exception occurs, click on "Details", copy the text you find below, and leave a bug report on the [Issues](https://github.com/Wampa842/wPlugins/issues) page or [contact me](#contact).  
 &nbsp;&nbsp;&nbsp;&nbsp;You can also fix it yourself - see how you can [contribute](#contribute).
 
 #### Errors related to files  
@@ -89,7 +90,7 @@ At present, the plugins don't work with legacy PMD Editor releases.
 &nbsp;&nbsp;&nbsp;&nbsp;Some operations performed by the plugins can be costly in terms of performance and computer resources. I'll try to move such operations to other threads with a handy progress bar, but if a plugin causes PMX to hang and not respond, just wait it out. In case of an infinite loop, the best thing to do is to kill the process from Task Manager.
 
 #### A plugin caused a file to become corrupted or otherwise lost  
-&nbsp;&nbsp;&nbsp;&nbsp;I don't mean to sound callous, but it's the user's responsibility to save often and make backups. If the issue was caused by a plugin, file a report on the [Issues](#todo) page or [contact me](#todo).
+&nbsp;&nbsp;&nbsp;&nbsp;I don't mean to sound callous, but it's the user's responsibility to save often and make backups. If the issue was caused by a plugin, file a report on the [Issues](https://github.com/Wampa842/wPlugins/issues) page or [contact me](#contact).
 
 ------
 ## Contribute
@@ -110,3 +111,10 @@ TBD
 - Scale Morph: scale a morph by a scalar, with shortcuts to inverse.  
 - Name Utils: translate and edit material/bones/etc names in bulk using a `sed`-like tool.  
 - Material Merge: combine materials with respect to various conditions.
+
+------
+## Contact
+
+TODO
+
+------
