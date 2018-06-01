@@ -218,7 +218,7 @@
 			this.label4.Location = new System.Drawing.Point(6, 20);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(152, 13);
-			this.label4.TabIndex = 1;
+			this.label4.TabIndex = 0;
 			this.label4.Text = "Copyright (C) 2018 Wampa842";
 			// 
 			// label6

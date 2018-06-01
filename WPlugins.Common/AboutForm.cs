@@ -101,6 +101,7 @@ namespace WPlugins.Common
 
 							this.Height += 20;
 							versionGroup.Top -= 20;
+							versionGroup.Height += 20;
 							updateHintLabel.Show();
 
 							int cmp = compareSemvers(currentVersion, latestVersionLabel.Text);
