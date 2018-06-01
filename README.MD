@@ -33,12 +33,12 @@ Developed by Wampa842
 
 ## Requirements
 
-PMX Editor: [[website]](http://kkhk22.seesaa.net/)  
+#### PMX Editor: [[website]](http://kkhk22.seesaa.net/)  
 At present, the plugins don't work with legacy PMD Editor releases.
 
-.NET Framework:  
+#### .NET Framework 4.5 or later:  
 - On Windows 8 and later, .NET Framework is automatically installed and updated by Windows Update.  
-- Manual download for Windows 7 and earlier: [[download page]](https://www.microsoft.com/net/download/dotnet-framework-runtime)
+- If not, download an installer here: [[download page]](https://www.microsoft.com/net/download/dotnet-framework-runtime)
 
 ------
 ## Links and download
