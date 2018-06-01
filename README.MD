@@ -32,6 +32,9 @@ Developed by Wampa842
 2. If your system blocks executable files downloaded from the internet, make sure you unblock the ZIP archives or the individual DLL files (right click > Properties > Unblock)  
 3. Copy the WPlugins directory to &lt;PMX folder&gt;\\\_plugin\\User
 
+### Updating
+Close PMX Editor. Follow the [installation](#installation) steps, overwrite all files (except `settings.xml` to keep your preferences).
+
 ## Requirements
 
 #### PMX Editor: [[website]](http://kkhk22.seesaa.net/)  
@@ -44,9 +47,12 @@ At present, the plugins don't work with legacy PMD Editor releases.
 ------
 ## Links and download
 
-#### [[Releases]](https://github.com/wampa842/wplugins/releases) (download from here)  
+#### **[[Download the latest release]](https://github.com/wampa842/wplugins/releases/latest)**
 
-##### [[Project website]](https://wampa842.github.io/wplugins) [[GitHub repository]](https://github.com/wampa842/wplugins) [[Issues]](https://github.com/wampa842/wplugins/issues)  
+[[All releases]](https://github.com/wampa842/wplugins/releases)  
+[[GitHub repository]](https://github.com/wampa842/wplugins)  
+[[Issues]](https://github.com/wampa842/wplugins/issues)  
+[[Project website]](https://wampa842.github.io/wplugins)
 
 ------
 ## Troubleshooting and compatibility
@@ -95,7 +101,7 @@ At present, the plugins don't work with legacy PMD Editor releases.
 ------
 ## Contribute
 
-I've always believed in the importance of free and open software. For that reason, WPlugins is licensed under GNU GPL-3.0 or later (see the [next section](#license-copying)). I encourage anyone who's interested to tinker with, fork, modify and re-release my code and/or executables, as long as GPL-3.0's conditions are followed (see *LICENSE.MD* for the full license, or <https://choosealicense.com/licenses/gpl-3.0/> for a brief summary).
+I've always believed in the importance of free and open software. For that reason, WPlugins is licensed under GNU GPL-3.0 or later (see the [next section](#license-copying)). I encourage anyone who's interested to tinker with, fork, modify and re-release my code and/or executables, as long as GPL-3.0's conditions are followed (see `LICENSE.MD` for the full license, or <https://choosealicense.com/licenses/gpl-3.0/> for a brief summary).
 
 In short, you are allowed to copy, use, modify and convey/distribute the software on the following conditions:  
 - The modified software is licensed under GNU GPL-3.0 or later, or another compatible license;
