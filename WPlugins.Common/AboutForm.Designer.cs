@@ -34,14 +34,19 @@
 			this.label2 = new System.Windows.Forms.Label();
 			this.issuesLink = new System.Windows.Forms.LinkLabel();
 			this.label1 = new System.Windows.Forms.Label();
-			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.versionGroup = new System.Windows.Forms.GroupBox();
+			this.updateHintLabel = new System.Windows.Forms.LinkLabel();
 			this.fetchVersionButton = new System.Windows.Forms.Button();
 			this.latestVersionLabel = new System.Windows.Forms.Label();
 			this.currentVersionLabel = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
-			this.updateHintLabel = new System.Windows.Forms.LinkLabel();
-			this.groupBox1.SuspendLayout();
+			this.licenseGroup = new System.Windows.Forms.GroupBox();
+			this.showLicenseButton = new System.Windows.Forms.Button();
+			this.label4 = new System.Windows.Forms.Label();
+			this.label6 = new System.Windows.Forms.Label();
+			this.versionGroup.SuspendLayout();
+			this.licenseGroup.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// websiteLink
@@ -107,29 +112,40 @@
 			this.label1.TabIndex = 0;
 			this.label1.Text = "WPlugins";
 			// 
-			// groupBox1
+			// versionGroup
 			// 
-			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			this.versionGroup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox1.Controls.Add(this.updateHintLabel);
-			this.groupBox1.Controls.Add(this.fetchVersionButton);
-			this.groupBox1.Controls.Add(this.latestVersionLabel);
-			this.groupBox1.Controls.Add(this.currentVersionLabel);
-			this.groupBox1.Controls.Add(this.label5);
-			this.groupBox1.Controls.Add(this.label3);
-			this.groupBox1.Location = new System.Drawing.Point(12, 77);
-			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(308, 74);
-			this.groupBox1.TabIndex = 4;
-			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Version";
+			this.versionGroup.Controls.Add(this.updateHintLabel);
+			this.versionGroup.Controls.Add(this.fetchVersionButton);
+			this.versionGroup.Controls.Add(this.latestVersionLabel);
+			this.versionGroup.Controls.Add(this.currentVersionLabel);
+			this.versionGroup.Controls.Add(this.label5);
+			this.versionGroup.Controls.Add(this.label3);
+			this.versionGroup.Location = new System.Drawing.Point(12, 116);
+			this.versionGroup.Name = "versionGroup";
+			this.versionGroup.Size = new System.Drawing.Size(308, 74);
+			this.versionGroup.TabIndex = 4;
+			this.versionGroup.TabStop = false;
+			this.versionGroup.Text = "Version";
+			// 
+			// updateHintLabel
+			// 
+			this.updateHintLabel.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
+			this.updateHintLabel.Location = new System.Drawing.Point(6, 75);
+			this.updateHintLabel.Name = "updateHintLabel";
+			this.updateHintLabel.Size = new System.Drawing.Size(296, 15);
+			this.updateHintLabel.TabIndex = 2;
+			this.updateHintLabel.Text = "hidden";
+			this.updateHintLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.updateHintLabel.Visible = false;
+			this.updateHintLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.updateHintLabel_LinkClicked);
 			// 
 			// fetchVersionButton
 			// 
 			this.fetchVersionButton.Location = new System.Drawing.Point(168, 44);
 			this.fetchVersionButton.Name = "fetchVersionButton";
-			this.fetchVersionButton.Size = new System.Drawing.Size(120, 22);
+			this.fetchVersionButton.Size = new System.Drawing.Size(134, 22);
 			this.fetchVersionButton.TabIndex = 1;
 			this.fetchVersionButton.Text = "Check for updates";
 			this.fetchVersionButton.UseVisualStyleBackColor = true;
@@ -171,26 +187,58 @@
 			this.label3.TabIndex = 0;
 			this.label3.Text = "Current:";
 			// 
-			// updateHintLabel
+			// licenseGroup
 			// 
-			this.updateHintLabel.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
-			this.updateHintLabel.Location = new System.Drawing.Point(6, 75);
-			this.updateHintLabel.Name = "updateHintLabel";
-			this.updateHintLabel.Size = new System.Drawing.Size(296, 15);
-			this.updateHintLabel.TabIndex = 2;
-			this.updateHintLabel.Text = "hidden";
-			this.updateHintLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			this.updateHintLabel.Visible = false;
-			this.updateHintLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.updateHintLabel_LinkClicked);
+			this.licenseGroup.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.licenseGroup.Controls.Add(this.label6);
+			this.licenseGroup.Controls.Add(this.label4);
+			this.licenseGroup.Controls.Add(this.showLicenseButton);
+			this.licenseGroup.Location = new System.Drawing.Point(12, 50);
+			this.licenseGroup.Name = "licenseGroup";
+			this.licenseGroup.Size = new System.Drawing.Size(308, 60);
+			this.licenseGroup.TabIndex = 5;
+			this.licenseGroup.TabStop = false;
+			this.licenseGroup.Text = "License";
+			// 
+			// showLicenseButton
+			// 
+			this.showLicenseButton.Location = new System.Drawing.Point(168, 15);
+			this.showLicenseButton.Name = "showLicenseButton";
+			this.showLicenseButton.Size = new System.Drawing.Size(134, 23);
+			this.showLicenseButton.TabIndex = 0;
+			this.showLicenseButton.Text = "Show copyright notice";
+			this.showLicenseButton.UseVisualStyleBackColor = true;
+			this.showLicenseButton.Click += new System.EventHandler(this.showLicenseButton_Click);
+			// 
+			// label4
+			// 
+			this.label4.AutoSize = true;
+			this.label4.Location = new System.Drawing.Point(6, 20);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(152, 13);
+			this.label4.TabIndex = 1;
+			this.label4.Text = "Copyright (C) 2018 Wampa842";
+			// 
+			// label6
+			// 
+			this.label6.AutoSize = true;
+			this.label6.Location = new System.Drawing.Point(6, 38);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(116, 13);
+			this.label6.TabIndex = 2;
+			this.label6.Text = "License: GNU GPL-3.0";
 			// 
 			// AboutForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(332, 163);
+			this.ClientSize = new System.Drawing.Size(332, 202);
+			this.Controls.Add(this.licenseGroup);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.issuesLink);
-			this.Controls.Add(this.groupBox1);
+			this.Controls.Add(this.versionGroup);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.websiteLink);
 			this.Controls.Add(this.releasesLink);
@@ -199,10 +247,13 @@
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "AboutForm";
+			this.ShowInTaskbar = false;
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.Text = "About & update";
-			this.groupBox1.ResumeLayout(false);
-			this.groupBox1.PerformLayout();
+			this.versionGroup.ResumeLayout(false);
+			this.versionGroup.PerformLayout();
+			this.licenseGroup.ResumeLayout(false);
+			this.licenseGroup.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -216,12 +267,16 @@
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.LinkLabel issuesLink;
 		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.GroupBox groupBox1;
+		private System.Windows.Forms.GroupBox versionGroup;
 		private System.Windows.Forms.Label latestVersionLabel;
 		private System.Windows.Forms.Label currentVersionLabel;
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Button fetchVersionButton;
 		private System.Windows.Forms.LinkLabel updateHintLabel;
+		private System.Windows.Forms.GroupBox licenseGroup;
+		private System.Windows.Forms.Button showLicenseButton;
+		private System.Windows.Forms.Label label6;
+		private System.Windows.Forms.Label label4;
 	}
 }

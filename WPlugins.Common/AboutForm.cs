@@ -1,4 +1,22 @@
-﻿using System;
+﻿/*
+Copyright (C) 2018 Wampa842
+
+This file is part of WPlugins.
+
+WPlugins is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+WPlugins is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+*/
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -17,6 +35,7 @@ namespace WPlugins.Common
 	public partial class AboutForm : Form
 	{
 		private string currentVersion;
+		private Form licenseForm = null;
 
 		private int compareSemvers(string a, string b)
 		{
@@ -67,11 +86,11 @@ namespace WPlugins.Common
 			{
 				ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 				client.Headers.Add(HttpRequestHeader.UserAgent, "WPlugins.Common.About");
-				client.DownloadStringCompleted += new DownloadStringCompletedEventHandler(delegate(object s, DownloadStringCompletedEventArgs args)
+				client.DownloadStringCompleted += new DownloadStringCompletedEventHandler(delegate (object s, DownloadStringCompletedEventArgs args)
 				{
 					latestVersionLabel.Font = new Font(latestVersionLabel.Font, FontStyle.Regular);
 					latestVersionLabel.Text = "connection error";
-					if(args.Error == null)
+					if (args.Error == null)
 					{
 						latestVersionLabel.Text = "undefined";
 						Match m = Regex.Match(args.Result, "\"tag_name\"[\\s:]*\"([\\d.]*)\"");
@@ -80,7 +99,8 @@ namespace WPlugins.Common
 							latestVersionLabel.Text = m.Groups[1].ToString();
 							latestVersionLabel.Font = new Font(latestVersionLabel.Font, FontStyle.Bold);
 
-							this.Height = 220;
+							this.Height += 20;
+							versionGroup.Top -= 20;
 							updateHintLabel.Show();
 
 							int cmp = compareSemvers(currentVersion, latestVersionLabel.Text);
@@ -109,7 +129,45 @@ namespace WPlugins.Common
 
 		private void updateHintLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			System.Diagnostics.Process.Start("https://github.com/wampa842/wplugins/releases/latest");
+			Process.Start("https://github.com/wampa842/wplugins/releases/latest");
+		}
+
+		private void showLicenseButton_Click(object sender, EventArgs e)
+		{
+			if (licenseForm == null)
+			{
+				Form p = this;
+				licenseForm = new Form()
+				{
+					FormBorderStyle = FormBorderStyle.SizableToolWindow,
+					Text = "Copyright notice",
+					StartPosition = FormStartPosition.Manual,
+					Location = new Point(p.Location.X + p.Width, p.Location.Y),
+					Size = new Size(400, 300),
+					ShowInTaskbar = false
+				};
+				Label noticeLabel = new Label()
+				{
+					Text = "Copyright (C) 2018 Wampa842\n\nThis program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.\n\nWPlugins is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.\n\nYou should have received a copy of the GNU General Public License along with Foobar.  If not, see <http://www.gnu.org/licenses/>.",
+					AutoSize = true,
+					MaximumSize = new Size(licenseForm.ClientSize.Width, 0),
+					Location = new Point(0, 0),
+				};
+				LinkLabel gplLink = new LinkLabel()
+				{
+					Name = "gplLink",
+					Text = "http://www.gnu.org/licenses/",
+					TextAlign = ContentAlignment.TopCenter,
+					Dock = DockStyle.Bottom,
+					AutoSize = false,
+					Height = 20
+				};
+				gplLink.LinkClicked += (o, a) => { Process.Start("http://www.gnu.org/licenses/"); };
+				licenseForm.Controls.Add(noticeLabel);
+				licenseForm.Controls.Add(gplLink);
+			}
+			if (licenseForm != null)
+				licenseForm.ShowDialog();
 		}
 	}
 }
