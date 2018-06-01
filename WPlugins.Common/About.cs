@@ -27,6 +27,11 @@ using PEPlugin;
 
 namespace WPlugins.Common
 {
+	public static class Info
+	{
+		public static string Version { get; } = "0.2.0";
+	}
+
 	public class About : IPEPlugin
 	{
 		public void Run(IPERunArgs args)
@@ -36,7 +41,7 @@ namespace WPlugins.Common
 		}
 
 		public string Name => "About && Update";
-		public string Version => "0.1.2";
+		public string Version => Info.Version;
 		public string Description => "Information about and updates for WPlugins";
 		class PluginOptions : IPEPluginOption
 		{

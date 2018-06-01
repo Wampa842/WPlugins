@@ -39,22 +39,30 @@ namespace WPlugins.Common
 
 		private int compareSemvers(string a, string b)
 		{
-			string[] splitA = a.Split('.');
-			string[] splitB = b.Split('.');
-			int result;
-			if ((result = string.Compare(splitA[0], splitB[0])) != 0)
-				return result;
-			if ((result = string.Compare(splitA[1], splitB[1])) != 0)
-				return result;
-			if ((result = string.Compare(splitA[2], splitB[2])) != 0)
-				return result;
-			return 0;
+			try
+			{
+				string[] splitA = a.Split('.');
+				string[] splitB = b.Split('.');
+				int result;
+				if ((result = string.Compare(splitA[0], splitB[0])) != 0)
+					return result;
+				if ((result = string.Compare(splitA[1], splitB[1])) != 0)
+					return result;
+				if ((result = string.Compare(splitA[2], splitB[2])) != 0)
+					return result;
+				return 0;
+			}
+			catch
+			{
+				return -1;
+			}
 		}
 
 		public AboutForm()
 		{
-			currentVersion = Regex.Match(System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(), "^(\\d+\\.\\d+\\.\\d+).*").Groups[1].ToString();
 			InitializeComponent();
+			//currentVersion = Regex.Match(System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(), "^(\\d+\\.\\d+\\.\\d+).*").Groups[1].ToString();
+			currentVersionLabel.Text = currentVersion = Info.Version;
 		}
 
 		private void githubLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

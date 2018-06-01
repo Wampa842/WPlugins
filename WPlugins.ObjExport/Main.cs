@@ -164,6 +164,6 @@ namespace WPlugins.ObjExport
 
 		public string Ext => ".obj";
 
-		public string Caption => "WPlugins Obj Exporter (version " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString() + ")";
+		public string Caption => "WPlugins Obj Exporter (version " + Common.Info.Version + ")";
 	}
 }

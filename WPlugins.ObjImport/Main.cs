@@ -591,6 +591,6 @@ namespace WPlugins.ObjImport
 
 		public string Ext => ".obj";
 
-		public string Caption => "WPlugins Obj Importer (version " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString() + ")";
+		public string Caption => "WPlugins Obj Importer (version " + Common.Info.Version + ")";
 	}
 }
