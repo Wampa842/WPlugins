@@ -116,6 +116,8 @@ If you have an idea for a feature or improvement, you can post it on the [Issues
 ------
 ## License & Copying
 
+![gpl-3.0 logo](https://www.gnu.org/graphics/gplv3-127x51.png)
+
 ##### WPlugins and all associated source code files are licensed under **GNU GPL-3.0-or-later**.
 
 Copyright (C) 2018 Wampa842
