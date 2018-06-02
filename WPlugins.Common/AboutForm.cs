@@ -112,8 +112,6 @@ namespace WPlugins.Common
 							latestVersionLabel.Font = new Font(latestVersionLabel.Font, FontStyle.Bold);
 
 							this.Height += 20;
-							versionGroup.Top -= 20;
-							versionGroup.Height += 20;
 							updateHintLabel.Show();
 
 							int cmp = compareSemvers(currentVersion, latestVersionLabel.Text);

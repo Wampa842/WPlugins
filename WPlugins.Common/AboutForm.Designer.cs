@@ -42,9 +42,9 @@
 			this.label5 = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
 			this.licenseGroup = new System.Windows.Forms.GroupBox();
-			this.showLicenseButton = new System.Windows.Forms.Button();
-			this.label4 = new System.Windows.Forms.Label();
 			this.label6 = new System.Windows.Forms.Label();
+			this.label4 = new System.Windows.Forms.Label();
+			this.showLicenseButton = new System.Windows.Forms.Button();
 			this.versionGroup.SuspendLayout();
 			this.licenseGroup.SuspendLayout();
 			this.SuspendLayout();
@@ -114,7 +114,8 @@
 			// 
 			// versionGroup
 			// 
-			this.versionGroup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+			this.versionGroup.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.versionGroup.Controls.Add(this.updateHintLabel);
 			this.versionGroup.Controls.Add(this.fetchVersionButton);
@@ -131,6 +132,8 @@
 			// 
 			// updateHintLabel
 			// 
+			this.updateHintLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.updateHintLabel.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
 			this.updateHintLabel.Location = new System.Drawing.Point(6, 75);
 			this.updateHintLabel.Name = "updateHintLabel";
@@ -189,8 +192,7 @@
 			// 
 			// licenseGroup
 			// 
-			this.licenseGroup.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			this.licenseGroup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.licenseGroup.Controls.Add(this.label6);
 			this.licenseGroup.Controls.Add(this.label4);
@@ -202,15 +204,14 @@
 			this.licenseGroup.TabStop = false;
 			this.licenseGroup.Text = "License";
 			// 
-			// showLicenseButton
+			// label6
 			// 
-			this.showLicenseButton.Location = new System.Drawing.Point(168, 15);
-			this.showLicenseButton.Name = "showLicenseButton";
-			this.showLicenseButton.Size = new System.Drawing.Size(134, 23);
-			this.showLicenseButton.TabIndex = 0;
-			this.showLicenseButton.Text = "Show copyright notice";
-			this.showLicenseButton.UseVisualStyleBackColor = true;
-			this.showLicenseButton.Click += new System.EventHandler(this.showLicenseButton_Click);
+			this.label6.AutoSize = true;
+			this.label6.Location = new System.Drawing.Point(6, 38);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(116, 13);
+			this.label6.TabIndex = 2;
+			this.label6.Text = "License: GNU GPL-3.0";
 			// 
 			// label4
 			// 
@@ -221,14 +222,15 @@
 			this.label4.TabIndex = 0;
 			this.label4.Text = "Copyright (C) 2018 Wampa842";
 			// 
-			// label6
+			// showLicenseButton
 			// 
-			this.label6.AutoSize = true;
-			this.label6.Location = new System.Drawing.Point(6, 38);
-			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(116, 13);
-			this.label6.TabIndex = 2;
-			this.label6.Text = "License: GNU GPL-3.0";
+			this.showLicenseButton.Location = new System.Drawing.Point(168, 15);
+			this.showLicenseButton.Name = "showLicenseButton";
+			this.showLicenseButton.Size = new System.Drawing.Size(134, 23);
+			this.showLicenseButton.TabIndex = 0;
+			this.showLicenseButton.Text = "Show copyright notice";
+			this.showLicenseButton.UseVisualStyleBackColor = true;
+			this.showLicenseButton.Click += new System.EventHandler(this.showLicenseButton_Click);
 			// 
 			// AboutForm
 			// 
