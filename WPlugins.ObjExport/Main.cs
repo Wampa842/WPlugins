@@ -29,15 +29,17 @@ using PEPlugin;
 using PEPlugin.Pmx;
 
 /*  OBJ:
+	# Copyright notice
 	mtllib mtlfile.mtl
 
+	(flat lists with 1-base indexing)
 	v <x> <y> <z>
 	vt <x> <y>
 	vn <x> <y> <z>
 
 	g name
-	usemtl materialname
-	s <smoothing group>
+	usemtl materialname (always follows g)
+	s <smoothing group> (should be constant or numbered?)
 	f <v>/<vt>/<vn> <v>/<vt>/<vn> <v>/<vt>/<vn>
 
 	MTL:
@@ -56,61 +58,6 @@ namespace WPlugins.ObjExport
 {
 	public class Main : IPEExportPlugin
 	{
-		class ObjFileExporter
-		{
-			List<string> v = new List<string>();
-			List<string> vt = new List<string>();
-			List<string> vn = new List<string>();
-			List<string> f = new List<string>();
-			List<string> mat = new List<string>();
-
-			public ObjFileExporter(string path, IPXPmx pmx, Common.ObjExportSettings settings, DoWorkEventArgs e = null)
-			{
-				foreach(IPXMaterial m in pmx.Material)
-				{
-					foreach(IPXFace f in m.Faces)
-					{
-						//mat.Add()
-					}
-				}
-			}
-			public void SaveMtl(string path)
-			{
-				StreamWriter writer = null;
-				try
-				{
-					writer = new StreamWriter(path);
-				}
-				catch (IOException ex)
-				{
-					MessageBox.Show(ex.ToString());
-				}
-				finally
-				{
-					if (writer != null)
-						writer.Dispose();
-				}
-			}
-			public void SaveObj(string path)
-			{
-				StreamWriter writer = null;
-				try
-				{
-					writer = new StreamWriter(path);
-				}
-				catch (IOException ex)
-				{
-					MessageBox.Show(ex.ToString());
-				}
-				finally
-				{
-					if (writer != null)
-						writer.Dispose();
-				}
-			}
-		}
-
-		BackgroundWorker worker;
 		IPXPmx pmx;
 		ObjExportForm form;
 		ExportProgressForm progressForm;
@@ -125,41 +72,13 @@ namespace WPlugins.ObjExport
 				form.ShowDialog();
 				if(form.DialogResult == DialogResult.OK)
 				{
-					worker = new BackgroundWorker
-					{
-						WorkerReportsProgress = true,
-						WorkerSupportsCancellation = true
-					};
-					worker.DoWork += this.Worker_DoWork;
-					worker.ProgressChanged += this.Worker_ProgressChanged;
-					worker.RunWorkerCompleted += this.Worker_RunWorkerCompleted;
-
-					progressForm = new ExportProgressForm();
-					progressForm.Show();
-
-					worker.RunWorkerAsync();
+					//TODO: export implementation
 				}
 			}
 			catch (Exception ex)
 			{
 				MessageBox.Show($"{ex}");
 			}
-		}
-
-		private void Worker_DoWork(object sender, DoWorkEventArgs e)
-		{
-			ObjFileExporter exporter = new ObjFileExporter(this.path, pmx, form.Settings, e);
-			
-		}
-
-		private void Worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
-		{
-			throw new NotImplementedException();
-		}
-
-		private void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-		{
-			throw new NotImplementedException();
 		}
 
 		public string Ext => ".obj";
