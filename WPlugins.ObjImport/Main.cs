@@ -32,20 +32,6 @@ using WPlugins.Common;
 
 namespace WPlugins.ObjImport
 {
-	[Serializable]
-	public class PolygonException : Exception
-	{
-		public int Count { get; }
-		public int LineNumber { get; }
-		public PolygonException() { }
-		public PolygonException(string message) : base(message) { }
-		public PolygonException(string message, int count, int LineNumber) : base(message) { this.Count = count; this.LineNumber = LineNumber; }
-		public PolygonException(string message, Exception inner) : base(message, inner) { }
-		protected PolygonException(
-		  System.Runtime.Serialization.SerializationInfo info,
-		  System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
-	}
-
 	class ObjFileImporter
 	{
 		public string ObjFileName { get; private set; }
