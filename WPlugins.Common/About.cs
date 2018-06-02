@@ -27,8 +27,10 @@ using PEPlugin;
 
 namespace WPlugins.Common
 {
+	//What's my purpose?
 	public static class Info
 	{
+		//You pass the version.
 		public static string Version { get; } = "0.2.0";
 	}
 

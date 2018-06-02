@@ -46,16 +46,18 @@ namespace WPlugins.ObjImport
 		private List<V3> vList;
 		private List<V2> vtList;
 		private List<V3> vnList;
-		private Dictionary<string, int> vertexDict;
+		private Dictionary<string, int> vertexDict;					//Assigns indices to v/vt/vn hashes
 		private bool loadWithoutMaterials = false;
 		private StreamWriter logger;
 
+		//Read and parse the MTL file that belongs to the OBJ
 		private Dictionary<string, IPXMaterial> ReadMaterialLibrary(string path)
 		{
 			Dictionary<string, IPXMaterial> output = new Dictionary<string, IPXMaterial>();
 			string mtlPath = path;
 			IPXMaterial mat = null;
 
+			//Process missing file
 			if (!File.Exists(mtlPath))
 			{
 				logger.WriteLine("(MTL) File not found: " + mtlPath);
@@ -87,6 +89,7 @@ namespace WPlugins.ObjImport
 				{
 					line = reader.ReadLine().Trim();
 					++lineNum;
+					//Skip empty and comment lines
 					if (string.IsNullOrWhiteSpace(line) || line[0] == '#')
 						continue;
 					tok = line.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
@@ -94,6 +97,7 @@ namespace WPlugins.ObjImport
 
 					switch (tok[0])
 					{
+						//Diffuse color
 						case "Kd":
 							if (mat != null)
 							{
@@ -108,6 +112,7 @@ namespace WPlugins.ObjImport
 								}
 							}
 							break;
+						//Specular color
 						case "Ks":
 							if (mat != null)
 							{
@@ -122,6 +127,7 @@ namespace WPlugins.ObjImport
 								}
 							}
 							break;
+						//Specular exponent
 						case "Ns":
 							if (mat != null)
 							{
@@ -136,12 +142,13 @@ namespace WPlugins.ObjImport
 								}
 							}
 							break;
+						//Ambient color - used only in case there's no emissive color
 						case "Ka":
 							if (mat != null)
 							{
 								try
 								{
-									mat.Ambient = new V3(float.Parse(tok[1]), float.Parse(tok[2]), 1.0f);
+									mat.Ambient = new V3(float.Parse(tok[1]), float.Parse(tok[2]), float.Parse(tok[3]));
 								}
 								catch (FormatException)
 								{
@@ -150,6 +157,7 @@ namespace WPlugins.ObjImport
 								}
 							}
 							break;
+						//Opacity
 						case "d":
 							if (mat != null)
 							{
@@ -164,12 +172,13 @@ namespace WPlugins.ObjImport
 								}
 							}
 							break;
+						//Emissive - overwrites ambient color
 						case "Ke":
 							if (mat != null)
 							{
 								try
 								{
-									mat.Ambient = new V3(float.Parse(tok[1]), float.Parse(tok[2]), 1.0f);
+									mat.Ambient = new V3(float.Parse(tok[1]), float.Parse(tok[2]), float.Parse(tok[3]));
 								}
 								catch (FormatException)
 								{
@@ -178,6 +187,7 @@ namespace WPlugins.ObjImport
 								}
 							}
 							break;
+						//Diffuse texture
 						case "map_Kd":
 							if (mat != null)
 							{
@@ -191,6 +201,7 @@ namespace WPlugins.ObjImport
 								this.ErrorNumMtl++;
 							}
 							break;
+						//New material declaration
 						case "newmtl":
 							string name;
 							if (tok.Length <= 1)
@@ -201,6 +212,7 @@ namespace WPlugins.ObjImport
 							}
 							else
 								name = line.Trim().Substring(7, line.Length - 7);
+							//Check if the same material exists
 							if (!output.ContainsKey(name))
 							{
 								mat = builder.Material();
@@ -216,6 +228,7 @@ namespace WPlugins.ObjImport
 			return output;
 		}
 
+		//Deconstruct the face record and output individual indices
 		private void VertexElements(string f, out int v, out int vt, out int vn)
 		{
 			v = -1;
@@ -232,13 +245,17 @@ namespace WPlugins.ObjImport
 			--vn;
 		}
 
+		//Generates a v/vt/vn hash and returns the index of the matching vertex, or creates a new one
 		private int CreateVertex(int v, int vt, int vn)
 		{
+			//Generate hash
 			string key = v.ToString() + '/' + vt.ToString() + '/' + vn.ToString();
+			//Return existing vertex's index
 			if (vertexDict.ContainsKey(key))
 			{
 				return vertexDict[key];
 			}
+			//Create new vertex and return its index
 			else
 			{
 				IPXVertex vert = builder.Vertex();
@@ -255,6 +272,7 @@ namespace WPlugins.ObjImport
 			}
 		}
 
+		//Read the OBJ file at <path> and parse the data into IPX* types
 		public ObjFileImporter(string path, IPXPmxBuilder builder, ObjImportSettings settings)
 		{
 			this.builder = builder;
@@ -275,7 +293,9 @@ namespace WPlugins.ObjImport
 			{
 				string line;
 				string[] tok;
+				string groupName;
 
+				//Counters for the sake of verbosity
 				int lineNum = 0;
 				int vNum = 0;
 				int vtNum = 0;
@@ -285,12 +305,13 @@ namespace WPlugins.ObjImport
 				int quadNum = 0;
 				int triOutNum = 0;
 				int gNum = 0;
-				string groupName;
 
 				while (!reader.EndOfStream)
 				{
 					line = reader.ReadLine().Trim();
 					++lineNum;
+					
+					//Skip empty and comment lines
 					if (string.IsNullOrWhiteSpace(line) || line[0] == '#')
 						continue;
 					tok = line.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
@@ -299,6 +320,7 @@ namespace WPlugins.ObjImport
 
 					switch (tok[0])
 					{
+						//Vertex position
 						case "v":
 							try
 							{
@@ -311,6 +333,7 @@ namespace WPlugins.ObjImport
 							}
 							++vNum;
 							break;
+						//Texture coordinate
 						case "vt":
 							try
 							{
@@ -323,6 +346,7 @@ namespace WPlugins.ObjImport
 							}
 							++vtNum;
 							break;
+						//Vertex normal vector
 						case "vn":
 							try
 							{
@@ -335,6 +359,7 @@ namespace WPlugins.ObjImport
 							}
 							++vnNum;
 							break;
+						//Face
 						case "f":
 							++fNum;
 							//Construct triangle
@@ -363,6 +388,7 @@ namespace WPlugins.ObjImport
 									}
 								}
 							}
+							//Construct two triangles from quad
 							else if (tok.Length == 5)
 							{
 								++quadNum;
@@ -399,12 +425,14 @@ namespace WPlugins.ObjImport
 									}
 								}
 							}
+							//Handle polygons - currently not supported
 							else
 							{
 								logger.WriteLine($"ERROR (OBJ) Unsupported polygon ({tok.Length - 1} points) on line {lineNum}: {line}");
 								this.ErrorNum++;
 							}
 							break;
+						//Group - create new material instance
 						case "g":
 							if (tok.Length >= 2)
 							{
@@ -420,6 +448,7 @@ namespace WPlugins.ObjImport
 							}
 							++gNum;
 							break;
+						//Material - assign the template's properties to the instance created by g
 						case "usemtl":
 							string name = line.Trim().Substring(7, line.Length - 7);
 							if (loadWithoutMaterials)
@@ -456,6 +485,7 @@ namespace WPlugins.ObjImport
 								}
 							}
 							break;
+						//Material template library - process MTL
 						case "mtllib":
 							uniqueMaterials = ReadMaterialLibrary(Path.Combine(Path.GetDirectoryName(path), line.Trim().Substring(7, line.Length - 7).Trim()));
 							break;
@@ -466,11 +496,12 @@ namespace WPlugins.ObjImport
 			}
 		}
 
+		//Organize the parsed data into a PMX object
 		public IPXPmx ToPmx()
 		{
+			//Initialize new PMX scene
 			IPXPmx pmx = builder.Pmx();
 			pmx.Clear();
-
 			pmx.ModelInfo.ModelName = pmx.ModelInfo.ModelNameE = ObjFileName;
 
 			//Set up bone
@@ -481,10 +512,12 @@ namespace WPlugins.ObjImport
 			//Register vertices
 			foreach (IPXVertex v in vertices)
 			{
+				//Transform vertex
 				v.Position *= new V3(settings.ScaleX, settings.ScaleY, settings.ScaleZ) / 10.0f;
 				if (settings.UseMetricUnits)
 					v.Position *= 2.54f;
 
+				//Swap axes
 				if (settings.SwapYZ)
 				{
 					float temp = v.Position.Y;
@@ -495,20 +528,26 @@ namespace WPlugins.ObjImport
 					v.Normal.Z = temp;
 				}
 
+				//Flip normal vectors if faces are flipped
 				if (settings.FlipFaces)
 				{
 					v.Normal *= -1;
 				}
 
+				//Transform texture coordinates
 				v.UV *= new V2(settings.ScaleU, settings.ScaleV);
 
+				//Calculate average vertex position if needed
 				if (settings.CreateBone == ObjImportSettings.CreateBoneMode.Average)
 					bone.Position += v.Position;
+				//Weight vertices to the new bone if needed
 				if (settings.CreateBone != ObjImportSettings.CreateBoneMode.None)
 					v.Bone1 = bone;
 				else
 					v.Bone1 = pmx.Bone[0];
 				v.Weight1 = 1.0f;
+
+				//Register the vertex in the PMX object
 				pmx.Vertex.Add(v);
 			}
 
@@ -556,7 +595,9 @@ namespace WPlugins.ObjImport
 				form.ShowDialog();
 				if (form.DialogResult == DialogResult.OK)
 				{
+					//New importer parses OBJ/MTL files into IPX*-types
 					ObjFileImporter importer = new ObjFileImporter(path, builder, form.Settings);
+					//If there are errors, notify the user
 					if (importer.ErrorNum + importer.ErrorNumMtl > 0)
 					{
 						if (MessageBox.Show($"There have been errors during import:\n{importer.ErrorNum} while processing OBJ\n{importer.ErrorNumMtl} while processing MTL\n\nWould you like to open the log file to find out what happened?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
@@ -571,6 +612,7 @@ namespace WPlugins.ObjImport
 			{
 				MessageBox.Show($"{ex}");
 			}
+			//If execution reaches this point, either an error has occured or the user pressed Cancel.
 			pmx = builder.Pmx();
 			return pmx;
 		}

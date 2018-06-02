@@ -37,6 +37,7 @@ namespace WPlugins.Common
 		private string currentVersion;
 		private Form licenseForm = null;
 
+		//Compare semantic version strings with the Major.Minor.Hotfix schema
 		private int compareSemvers(string a, string b)
 		{
 			try
@@ -92,15 +93,18 @@ namespace WPlugins.Common
 
 			using (WebClient client = new WebClient())
 			{
+				//GitHub API uses TLS 1.2 exclusively
 				ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 				client.Headers.Add(HttpRequestHeader.UserAgent, "WPlugins.Common.About");
+
+				//Event handler for the completion of the async operation
 				client.DownloadStringCompleted += new DownloadStringCompletedEventHandler(delegate (object s, DownloadStringCompletedEventArgs args)
 				{
 					latestVersionLabel.Font = new Font(latestVersionLabel.Font, FontStyle.Regular);
-					latestVersionLabel.Text = "connection error";
 					if (args.Error == null)
 					{
 						latestVersionLabel.Text = "undefined";
+						//The result string is a JSON object with a single tag_name property - quick and dirty, but it works.
 						Match m = Regex.Match(args.Result, "\"tag_name\"[\\s:]*\"([\\d.]*)\"");
 						if (m.Success)
 						{
@@ -131,6 +135,10 @@ namespace WPlugins.Common
 							}
 						}
 					}
+					else
+					{
+						latestVersionLabel.Text = "connection error";
+					}
 				});
 				client.DownloadStringAsync(uri);
 			}
@@ -146,6 +154,7 @@ namespace WPlugins.Common
 			if (licenseForm == null)
 			{
 				Form p = this;
+				//Create a new form with a Label showing the copyright notice, and a LinkLabel to GNU's licenses
 				licenseForm = new Form()
 				{
 					FormBorderStyle = FormBorderStyle.SizableToolWindow,
