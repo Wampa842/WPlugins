@@ -52,12 +52,9 @@ namespace WPlugins.ObjExport
 		private ObjExportSettings settings;
 		private BackgroundWorker worker;			//Processes the PMX scene asynchronously
 		private ExportProgressForm progressForm;    //UI to report progress and cancel the background process
-		
-		private StreamWriter logger;				//Logs stuff
 
 		public ObjFileExporter(string path, IPXPmx pmx, ObjExportSettings settings)
 		{
-
 			//Initialize the lists
 			vDict = new Dictionary<string, int>();
 			vtDict = new Dictionary<string, int>();
@@ -156,9 +153,6 @@ namespace WPlugins.ObjExport
 		//Worker event handler that decomposes the PMX scene and turns it into OBJ text lines
 		private void Worker_ProcessPmx(object sender, DoWorkEventArgs e)
 		{
-			logger = new StreamWriter(System.Reflection.Assembly.GetExecutingAssembly().Location + ".log");
-			logger.WriteLine("begin");
-
 			int faceCount = (int)e.Argument;
 			int matNum = 0;
 			int totalFaceNum = 0;
@@ -171,7 +165,6 @@ namespace WPlugins.ObjExport
 				if(worker.CancellationPending)
 				{
 					e.Cancel = true;
-					logger.Dispose();
 					return;
 				}
 
@@ -204,7 +197,7 @@ namespace WPlugins.ObjExport
 							}
 							catch(Exception ex)
 							{
-								MessageBox.Show($"{ex}\n\n{originalPath}\n{targetDir}\n{targetPath}\n");
+								MessageBox.Show($"{ex.GetType().ToString()} while copying \"{originalPath}\" to \"{targetPath}\"");
 							}
 							break;
 						case ObjExportSettings.BitmapActionType.Link:
@@ -232,7 +225,6 @@ namespace WPlugins.ObjExport
 					if(worker.CancellationPending)
 					{
 						e.Cancel = true;
-						logger.Dispose();
 						return;
 					}
 
@@ -259,8 +251,6 @@ namespace WPlugins.ObjExport
 				faces.Add($"# {m.Faces.Count} faces");
 				faces.Add("");
 			}
-
-			logger.Dispose();
 		}
 
 		//Initialize and start processing and reporting
@@ -275,16 +265,17 @@ namespace WPlugins.ObjExport
 			//Initialize worker
 			worker.DoWork += Worker_ProcessPmx;
 
-			//Progress reporting event handler
-
-
 			//Result reporting event handler
 			worker.RunWorkerCompleted += (o, e) =>
 			{
 				if (e.Cancelled)
+				{
 					MessageBox.Show("Process cancelled");
+				}
 				else
+				{
 					SaveFiles();
+				}
 				progressForm.Close();
 			};
 			progressForm = new ExportProgressForm(worker, faceCount);
@@ -303,7 +294,6 @@ namespace WPlugins.ObjExport
 			try
 			{
 				writer = new StreamWriter(mtlPath);
-
 				//Write file info
 				writer.WriteLine($"# WPlugins OBJ Exporter v{Info.Version} - copyright (C) 2018 Wampa842 (GNU GPL-3.0-or-later)");
 				writer.WriteLine($"# File created on {DateTime.Now.ToString("yyyy-MM-dd HH\\:mm\\:ss")} from {Path.GetFileName(pmx.FilePath)}");
