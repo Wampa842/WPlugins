@@ -48,7 +48,7 @@ namespace WPlugins.ObjExport
 			this.path = path;
 			this.jobPath = path + ".wp_export.xml";
 
-			if (System.IO.File.Exists(jobPath))
+			if (File.Exists(jobPath))
 			{
 				switch (MessageBox.Show("This file has an associated job file. Would you like to load it?\n(Press Cancel to delete it)", "Job file found", MessageBoxButtons.YesNoCancel))
 				{
@@ -68,9 +68,9 @@ namespace WPlugins.ObjExport
 					case DialogResult.Cancel:
 						try
 						{
-							System.IO.File.Delete(jobPath);
+							File.Delete(jobPath);
 						}
-						catch (System.IO.IOException ex)
+						catch (IOException ex)
 						{
 							MessageBox.Show($"Could not delete file:\n{ex.Message}\n{ex.StackTrace}", "Error");
 						}
@@ -119,7 +119,7 @@ namespace WPlugins.ObjExport
 
 		private void bitmapActionHelpLink_Click(object sender, EventArgs e)
 		{
-			MessageBox.Show("The bitmap action determines what should happen to texture image files.\n\nIgnore: don't do anything. The exported material library will not retain the textures.\nCopy: bitmap files will be copied to the export location and linked by the material library.\nLink: bitmap files will be referenced by the material library, but the files themselves will not be copied.\nAbsolute link: the material library will link to the original files by their absolute location. The files will not be copied.\n\nPath: location relative to the export directory where bitmap files should be linked and/or copied in Copy and Link mode.", "Help: bitmap actions", MessageBoxButtons.OK, MessageBoxIcon.Information);
+			MessageBox.Show("The bitmap action determines what should happen to texture image files.\n\n- Ignore: don't do anything. The exported material library will not retain the textures.\n- Copy: bitmap files will be copied to the export location and linked by the material library. Subdirectory structure will not be retained.\n-Link: bitmap files will be referenced by the material library, but the files themselves will not be copied. Subdirectory structure is retained.\n- Absolute link: the material library will link to the original files by their absolute location. The files will not be copied.\n\nPath: location relative to the export directory where bitmap files should be linked and/or copied in Copy and Link mode.", "Help: bitmap actions", MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
 
 		private void exportButton_Click(object sender, EventArgs e)
