@@ -9,6 +9,7 @@ Developed by Wampa842
 
 1. [Features](#features)
 	- [Wavefront OBJ importer](#wavefront-obj-importer)
+	- [Wavefront OBJ exporter](#wavefront-obj-exporter)
 2. [Installation](#installation)
 3. [Requirements](#requirements)  
 4. [Links and download](#links-and-download)  
@@ -25,6 +26,11 @@ Developed by Wampa842
 - Dialog with various settings.  
 - Settings can be saved as default or into a job file.  
 - Job files help streamline the import process for files that you have to import frequently (e.g. works in progress).  
+
+#### Wavefront OBJ exporter
+- Exports the PMX scene as a Wavefront Object file with its material library  
+- Dialog and default/job settings similar to the OBJ importer  
+- Optionally copy texture files to the output directory
 
 ------
 ## Installation
