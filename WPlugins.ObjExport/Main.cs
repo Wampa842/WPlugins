@@ -400,6 +400,6 @@ namespace WPlugins.ObjExport
 
 		public string Ext => ".obj";
 
-		public string Caption => "WPlugins Obj Exporter (version " + Common.Info.Version + ")";
+		public string Caption => "Wavefront OBJ (WPlugins ObjExport v" + Common.Info.Version + ")";
 	}
 }
