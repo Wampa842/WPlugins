@@ -28,39 +28,50 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.exportProgressBar = new System.Windows.Forms.ProgressBar();
-			this.cancelExportButton = new System.Windows.Forms.Button();
+			this.totalProgressBar = new System.Windows.Forms.ProgressBar();
+			this.cancelProcessButton = new System.Windows.Forms.Button();
+			this.overlayLabel = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
-			// exportProgressBar
+			// totalProgressBar
 			// 
-			this.exportProgressBar.Dock = System.Windows.Forms.DockStyle.Top;
-			this.exportProgressBar.Location = new System.Drawing.Point(0, 0);
-			this.exportProgressBar.Name = "exportProgressBar";
-			this.exportProgressBar.Size = new System.Drawing.Size(284, 25);
-			this.exportProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
-			this.exportProgressBar.TabIndex = 0;
+			this.totalProgressBar.Location = new System.Drawing.Point(12, 30);
+			this.totalProgressBar.Name = "totalProgressBar";
+			this.totalProgressBar.Size = new System.Drawing.Size(373, 27);
+			this.totalProgressBar.Step = 1;
+			this.totalProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+			this.totalProgressBar.TabIndex = 1;
 			// 
-			// cancelExportButton
+			// cancelProcessButton
 			// 
-			this.cancelExportButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.cancelExportButton.Location = new System.Drawing.Point(12, 31);
-			this.cancelExportButton.Name = "cancelExportButton";
-			this.cancelExportButton.Size = new System.Drawing.Size(260, 24);
-			this.cancelExportButton.TabIndex = 1;
-			this.cancelExportButton.Text = "Cancel";
-			this.cancelExportButton.UseVisualStyleBackColor = true;
+			this.cancelProcessButton.Location = new System.Drawing.Point(77, 63);
+			this.cancelProcessButton.Name = "cancelProcessButton";
+			this.cancelProcessButton.Size = new System.Drawing.Size(243, 23);
+			this.cancelProcessButton.TabIndex = 7;
+			this.cancelProcessButton.Text = "Cancel";
+			this.cancelProcessButton.UseVisualStyleBackColor = true;
+			this.cancelProcessButton.Click += new System.EventHandler(this.cancelProcessButton_Click);
+			// 
+			// overlayLabel
+			// 
+			this.overlayLabel.BackColor = System.Drawing.Color.Transparent;
+			this.overlayLabel.Location = new System.Drawing.Point(148, 9);
+			this.overlayLabel.Name = "overlayLabel";
+			this.overlayLabel.Size = new System.Drawing.Size(100, 18);
+			this.overlayLabel.TabIndex = 8;
+			this.overlayLabel.Text = "Please wait...";
+			this.overlayLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// ExportProgressForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(284, 58);
+			this.ClientSize = new System.Drawing.Size(397, 98);
 			this.ControlBox = false;
-			this.Controls.Add(this.cancelExportButton);
-			this.Controls.Add(this.exportProgressBar);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+			this.Controls.Add(this.overlayLabel);
+			this.Controls.Add(this.cancelProcessButton);
+			this.Controls.Add(this.totalProgressBar);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.Name = "ExportProgressForm";
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -71,8 +82,8 @@
 		}
 
 		#endregion
-
-		private System.Windows.Forms.ProgressBar exportProgressBar;
-		private System.Windows.Forms.Button cancelExportButton;
+		private System.Windows.Forms.Button cancelProcessButton;
+		private System.Windows.Forms.Label overlayLabel;
+		private System.Windows.Forms.ProgressBar totalProgressBar;
 	}
 }

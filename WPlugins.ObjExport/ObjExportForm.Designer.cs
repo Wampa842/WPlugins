@@ -33,6 +33,10 @@
 			this.exportButton = new System.Windows.Forms.Button();
 			this.cancelButton = new System.Windows.Forms.Button();
 			this.exportActionGroup = new System.Windows.Forms.GroupBox();
+			this.bitmapActionHelpLink = new System.Windows.Forms.LinkLabel();
+			this.label6 = new System.Windows.Forms.Label();
+			this.bitmapRelativePathText = new System.Windows.Forms.TextBox();
+			this.separateSmoothingGroupCheck = new System.Windows.Forms.CheckBox();
 			this.flipFacesCheck = new System.Windows.Forms.CheckBox();
 			this.swapAxesCheck = new System.Windows.Forms.CheckBox();
 			this.bitmapActionSelect = new System.Windows.Forms.ComboBox();
@@ -57,10 +61,6 @@
 			this.unitSystemGroup = new System.Windows.Forms.GroupBox();
 			this.metricRadio = new System.Windows.Forms.RadioButton();
 			this.imperialRadio = new System.Windows.Forms.RadioButton();
-			this.separateSmoothingGroupCheck = new System.Windows.Forms.CheckBox();
-			this.bitmapRelativePathText = new System.Windows.Forms.TextBox();
-			this.label6 = new System.Windows.Forms.Label();
-			this.bitmapActionHelpLink = new System.Windows.Forms.LinkLabel();
 			this.saveJobHelpLink = new System.Windows.Forms.LinkLabel();
 			this.exportActionGroup.SuspendLayout();
 			this.scalingGroup.SuspendLayout();
@@ -101,6 +101,7 @@
 			this.exportButton.TabIndex = 12;
 			this.exportButton.Text = "Export";
 			this.exportButton.UseVisualStyleBackColor = true;
+			this.exportButton.Click += new System.EventHandler(this.exportButton_Click);
 			// 
 			// cancelButton
 			// 
@@ -127,6 +128,43 @@
 			this.exportActionGroup.TabIndex = 10;
 			this.exportActionGroup.TabStop = false;
 			this.exportActionGroup.Text = "Export actions";
+			// 
+			// bitmapActionHelpLink
+			// 
+			this.bitmapActionHelpLink.AutoSize = true;
+			this.bitmapActionHelpLink.Location = new System.Drawing.Point(150, 49);
+			this.bitmapActionHelpLink.Name = "bitmapActionHelpLink";
+			this.bitmapActionHelpLink.Size = new System.Drawing.Size(19, 13);
+			this.bitmapActionHelpLink.TabIndex = 10;
+			this.bitmapActionHelpLink.TabStop = true;
+			this.bitmapActionHelpLink.Text = "(?)";
+			this.bitmapActionHelpLink.Click += new System.EventHandler(this.bitmapActionHelpLink_Click);
+			// 
+			// label6
+			// 
+			this.label6.AutoSize = true;
+			this.label6.Location = new System.Drawing.Point(6, 49);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(32, 13);
+			this.label6.TabIndex = 9;
+			this.label6.Text = "Path:";
+			// 
+			// bitmapRelativePathText
+			// 
+			this.bitmapRelativePathText.Location = new System.Drawing.Point(44, 46);
+			this.bitmapRelativePathText.Name = "bitmapRelativePathText";
+			this.bitmapRelativePathText.Size = new System.Drawing.Size(100, 20);
+			this.bitmapRelativePathText.TabIndex = 8;
+			// 
+			// separateSmoothingGroupCheck
+			// 
+			this.separateSmoothingGroupCheck.AutoSize = true;
+			this.separateSmoothingGroupCheck.Location = new System.Drawing.Point(6, 73);
+			this.separateSmoothingGroupCheck.Name = "separateSmoothingGroupCheck";
+			this.separateSmoothingGroupCheck.Size = new System.Drawing.Size(155, 17);
+			this.separateSmoothingGroupCheck.TabIndex = 7;
+			this.separateSmoothingGroupCheck.Text = "Separate smoothing groups";
+			this.separateSmoothingGroupCheck.UseVisualStyleBackColor = true;
 			// 
 			// flipFacesCheck
 			// 
@@ -265,6 +303,7 @@
             0,
             0,
             0});
+			this.scaleUNumber.ValueChanged += new System.EventHandler(this.scaleUNumber_ValueChanged);
 			// 
 			// label3
 			// 
@@ -382,6 +421,7 @@
             0,
             0,
             0});
+			this.scaleXNumber.ValueChanged += new System.EventHandler(this.scaleXNumber_ValueChanged);
 			// 
 			// uniformTextureScaleCheck
 			// 
@@ -392,6 +432,7 @@
 			this.uniformTextureScaleCheck.TabIndex = 1;
 			this.uniformTextureScaleCheck.Text = "Uniform scaling";
 			this.uniformTextureScaleCheck.UseVisualStyleBackColor = true;
+			this.uniformTextureScaleCheck.CheckedChanged += new System.EventHandler(this.uniformTextureScaleCheck_CheckedChanged);
 			// 
 			// uniformModelScaleCheck
 			// 
@@ -402,6 +443,7 @@
 			this.uniformModelScaleCheck.TabIndex = 0;
 			this.uniformModelScaleCheck.Text = "Uniform scaling";
 			this.uniformModelScaleCheck.UseVisualStyleBackColor = true;
+			this.uniformModelScaleCheck.CheckedChanged += new System.EventHandler(this.uniformModelScaleCheck_CheckedChanged);
 			// 
 			// unitSystemGroup
 			// 
@@ -436,43 +478,6 @@
 			this.imperialRadio.Text = "Imperial units";
 			this.imperialRadio.UseVisualStyleBackColor = true;
 			// 
-			// separateSmoothingGroupCheck
-			// 
-			this.separateSmoothingGroupCheck.AutoSize = true;
-			this.separateSmoothingGroupCheck.Location = new System.Drawing.Point(6, 73);
-			this.separateSmoothingGroupCheck.Name = "separateSmoothingGroupCheck";
-			this.separateSmoothingGroupCheck.Size = new System.Drawing.Size(155, 17);
-			this.separateSmoothingGroupCheck.TabIndex = 7;
-			this.separateSmoothingGroupCheck.Text = "Separate smoothing groups";
-			this.separateSmoothingGroupCheck.UseVisualStyleBackColor = true;
-			// 
-			// bitmapRelativePathText
-			// 
-			this.bitmapRelativePathText.Location = new System.Drawing.Point(44, 46);
-			this.bitmapRelativePathText.Name = "bitmapRelativePathText";
-			this.bitmapRelativePathText.Size = new System.Drawing.Size(100, 20);
-			this.bitmapRelativePathText.TabIndex = 8;
-			// 
-			// label6
-			// 
-			this.label6.AutoSize = true;
-			this.label6.Location = new System.Drawing.Point(6, 49);
-			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(32, 13);
-			this.label6.TabIndex = 9;
-			this.label6.Text = "Path:";
-			// 
-			// bitmapActionHelpLink
-			// 
-			this.bitmapActionHelpLink.AutoSize = true;
-			this.bitmapActionHelpLink.Location = new System.Drawing.Point(150, 49);
-			this.bitmapActionHelpLink.Name = "bitmapActionHelpLink";
-			this.bitmapActionHelpLink.Size = new System.Drawing.Size(19, 13);
-			this.bitmapActionHelpLink.TabIndex = 10;
-			this.bitmapActionHelpLink.TabStop = true;
-			this.bitmapActionHelpLink.Text = "(?)";
-			this.bitmapActionHelpLink.Click += new System.EventHandler(this.bitmapActionHelpLink_Click);
-			// 
 			// saveJobHelpLink
 			// 
 			this.saveJobHelpLink.AutoSize = true;
@@ -482,11 +487,14 @@
 			this.saveJobHelpLink.TabIndex = 14;
 			this.saveJobHelpLink.TabStop = true;
 			this.saveJobHelpLink.Text = "(?)";
+			this.saveJobHelpLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.saveJobHelpLink_LinkClicked);
 			// 
 			// ObjExportForm
 			// 
+			this.AcceptButton = this.exportButton;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.CancelButton = this.cancelButton;
 			this.ClientSize = new System.Drawing.Size(404, 298);
 			this.Controls.Add(this.saveJobHelpLink);
 			this.Controls.Add(this.saveJobCheck);
@@ -498,6 +506,7 @@
 			this.Controls.Add(this.unitSystemGroup);
 			this.Name = "ObjExportForm";
 			this.Text = "Export OBJ file | WPlugins";
+			this.Load += new System.EventHandler(this.ObjExportForm_Load);
 			this.exportActionGroup.ResumeLayout(false);
 			this.exportActionGroup.PerformLayout();
 			this.scalingGroup.ResumeLayout(false);

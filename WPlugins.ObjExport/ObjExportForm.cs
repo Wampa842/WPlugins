@@ -25,6 +25,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
+using System.Xml;
 
 using PEPlugin;
 using PEPlugin.Pmx;
@@ -37,7 +39,7 @@ namespace WPlugins.ObjExport
 		private IPERunArgs args;
 		private string path;
 		private string jobPath;
-		public Common.ObjExportSettings Settings;
+		public Common.ObjExportSettings Settings { get; private set; }
 
 		public ObjExportForm(string path, IPERunArgs args)
 		{
@@ -46,13 +48,156 @@ namespace WPlugins.ObjExport
 			this.path = path;
 			this.jobPath = path + ".wp_export.xml";
 
-			settingsDoc = new Common.Settings();
-			this.Settings = settingsDoc.ObjExport;
+			if (System.IO.File.Exists(jobPath))
+			{
+				switch (MessageBox.Show("This file has an associated job file. Would you like to load it?\n(Press Cancel to delete it)", "Job file found", MessageBoxButtons.YesNoCancel))
+				{
+					case DialogResult.Yes:
+						try
+						{
+							settingsDoc = new Common.Settings(jobPath);
+							saveDefaultCheck.Checked = false;
+							saveDefaultCheck.Enabled = false;
+						}
+						catch (XmlException ex)
+						{
+							MessageBox.Show($"Could not load job file:\n{ex.Message}\n{ex.StackTrace}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+							settingsDoc = new Common.Settings();
+						}
+						break;
+					case DialogResult.Cancel:
+						try
+						{
+							System.IO.File.Delete(jobPath);
+						}
+						catch (System.IO.IOException ex)
+						{
+							MessageBox.Show($"Could not delete file:\n{ex.Message}\n{ex.StackTrace}", "Error");
+						}
+						finally
+						{
+							settingsDoc = new Common.Settings();
+						}
+						break;
+					default:
+						settingsDoc = new Common.Settings();
+						break;
+				}
+			}
+			else
+			{
+				settingsDoc = new Common.Settings();
+			}
+			Settings = settingsDoc.ObjExport;
+		}
+
+		private void ObjExportForm_Load(object sender, EventArgs e)
+		{
+			flipFacesCheck.Checked = Settings.FlipFaces;
+			swapAxesCheck.Checked = Settings.SwapYZ;
+			imperialRadio.Checked = !Settings.UseMetricUnits;
+			metricRadio.Checked = Settings.UseMetricUnits;
+
+			uniformModelScaleCheck.Checked = Settings.UniformScale;
+			uniformTextureScaleCheck.Checked = Settings.UniformUVScale;
+			separateSmoothingGroupCheck.Checked = Settings.SeparateSmoothingGroups;
+
+			mirrorXCheck.Checked = Settings.ScaleX < 0;
+			scaleXNumber.Value = Math.Abs((decimal)Settings.ScaleX);
+			mirrorYCheck.Checked = Settings.ScaleY < 0;
+			scaleYNumber.Value = Math.Abs((decimal)Settings.ScaleY);
+			mirrorZCheck.Checked = Settings.ScaleZ < 0;
+			scaleZNumber.Value = Math.Abs((decimal)Settings.ScaleZ);
+			mirrorUCheck.Checked = Settings.ScaleU < 0;
+			scaleUNumber.Value = Math.Abs((decimal)Settings.ScaleU);
+			mirrorVCheck.Checked = Settings.ScaleV < 0;
+			scaleVNumber.Value = Math.Abs((decimal)Settings.ScaleV);
+
+			bitmapActionSelect.SelectedIndex = (int)Settings.BitmapAction;
+			bitmapRelativePathText.Text = Uri.IsWellFormedUriString(Settings.BitmapPath, UriKind.Relative) ? Settings.BitmapPath : "";
 		}
 
 		private void bitmapActionHelpLink_Click(object sender, EventArgs e)
 		{
 			MessageBox.Show("The bitmap action determines what should happen to texture image files.\n\nIgnore: don't do anything. The exported material library will not retain the textures.\nCopy: bitmap files will be copied to the export location and linked by the material library.\nLink: bitmap files will be referenced by the material library, but the files themselves will not be copied.\nAbsolute link: the material library will link to the original files by their absolute location. The files will not be copied.\n\nPath: location relative to the export directory where bitmap files should be linked and/or copied in Copy and Link mode.", "Help: bitmap actions", MessageBoxButtons.OK, MessageBoxIcon.Information);
+		}
+
+		private void exportButton_Click(object sender, EventArgs e)
+		{
+			this.Settings.ScaleX = (float)scaleXNumber.Value * (mirrorXCheck.Checked ? -1 : 1);
+			this.Settings.ScaleY = (float)scaleYNumber.Value * (mirrorYCheck.Checked ? -1 : 1);
+			this.Settings.ScaleZ = (float)scaleZNumber.Value * (mirrorZCheck.Checked ? -1 : 1);
+			this.Settings.ScaleU = (float)scaleUNumber.Value * (mirrorUCheck.Checked ? -1 : 1);
+			this.Settings.ScaleV = (float)scaleVNumber.Value * (mirrorVCheck.Checked ? -1 : 1);
+			this.Settings.UniformScale = uniformModelScaleCheck.Checked;
+			this.Settings.UniformUVScale = uniformTextureScaleCheck.Checked;
+
+			this.Settings.SwapYZ = swapAxesCheck.Checked;
+			this.Settings.UseMetricUnits = metricRadio.Checked;
+			this.Settings.FlipFaces = flipFacesCheck.Checked;
+			this.Settings.SeparateSmoothingGroups = separateSmoothingGroupCheck.Checked;
+
+			this.Settings.BitmapAction = (Common.ObjExportSettings.BitmapActionType)bitmapActionSelect.SelectedIndex;
+			this.Settings.BitmapPath = Uri.IsWellFormedUriString(bitmapRelativePathText.Text, UriKind.Relative) ? bitmapRelativePathText.Text : "";
+
+			this.DialogResult = DialogResult.OK;
+			if (saveDefaultCheck.Checked)
+			{
+				settingsDoc.Save();
+			}
+
+			if (saveJobCheck.Checked)
+			{
+				XmlDocument doc = new XmlDocument();
+				doc.AppendChild(doc.CreateXmlDeclaration("1.0", "utf-8", "no"));
+				XmlElement root = doc.CreateElement("WPluginsSettings");
+				this.Settings.UpdateNode();
+				XmlNode node = doc.ImportNode(this.Settings.Node, true);
+				root.AppendChild(node);
+				doc.AppendChild(root);
+				try
+				{
+					doc.Save(this.jobPath);
+				}
+				catch (XmlException ex)
+				{
+					MessageBox.Show($"Could not save job file:\n{ex.Message}\n{ex.StackTrace}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				}
+			}
+			this.Close();
+		}
+
+		private void uniformModelScaleCheck_CheckedChanged(object sender, EventArgs e)
+		{
+			scaleZNumber.Value = scaleYNumber.Value = scaleXNumber.Value;
+			scaleZNumber.Enabled = scaleYNumber.Enabled = !((CheckBox)sender).Checked;
+		}
+
+		private void uniformTextureScaleCheck_CheckedChanged(object sender, EventArgs e)
+		{
+			scaleVNumber.Value = scaleUNumber.Value;
+			scaleVNumber.Enabled = !((CheckBox)sender).Checked;
+		}
+
+		private void scaleXNumber_ValueChanged(object sender, EventArgs e)
+		{
+			if (uniformModelScaleCheck.Checked)
+			{
+				scaleYNumber.Value = scaleZNumber.Value = ((NumericUpDown)sender).Value;
+			}
+		}
+
+		private void scaleUNumber_ValueChanged(object sender, EventArgs e)
+		{
+			if (uniformTextureScaleCheck.Checked)
+			{
+				scaleVNumber.Value = ((NumericUpDown)sender).Value;
+			}
+		}
+
+		private void saveJobHelpLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+		{
+			MessageBox.Show("Job files help streamline the import process of frequently imported models by storing the settings in an XML file specific to a single OBJ file, without overwriting the default settings.\nIf a job file is detected, you will be prompted whether to load, ignore or delete it.\nThe job file will have the name of the OBJ file, followed by .wp_import.xml (for example: Something.obj.wp_import.xml).\n\nDue to a programming error, if you load a job file, you can't save those settings as default.", "Help: job files", MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
 	}
 }

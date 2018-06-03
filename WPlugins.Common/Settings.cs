@@ -205,7 +205,7 @@ namespace WPlugins.Common
 						n.InnerText = this.SwapYZ.ToString().ToLowerInvariant();
 						break;
 					case "TurnQuads":
-						n.InnerText = this.UniformUVScale.ToString().ToLowerInvariant();
+						n.InnerText = this.TurnQuads.ToString().ToLowerInvariant();
 						break;
 					case "UniformScale":
 						n.InnerText = this.UniformScale.ToString().ToLowerInvariant();
@@ -241,11 +241,11 @@ namespace WPlugins.Common
 
 	public class ObjExportSettings
 	{
-		public enum BitmapActionMode { None, Copy, Absolute, Relative };
+		public enum BitmapActionType { None, Copy, Link, Absolute };
 		public bool UseMetricUnits { get; set; } = false;
 		public bool FlipFaces { get; set; } = false;
 		public bool SwapYZ { get; set; } = false;
-		public bool TurnQuads { get; set; } = false;
+		public bool SeparateSmoothingGroups { get; set; } = false;
 		public bool UniformScale { get; set; } = true;
 		public bool UniformUVScale { get; set; } = true;
 		public float ScaleX { get; set; } = 1.0f;
@@ -253,14 +253,122 @@ namespace WPlugins.Common
 		public float ScaleZ { get; set; } = 1.0f;
 		public float ScaleU { get; set; } = 1.0f;
 		public float ScaleV { get; set; } = 1.0f;
-		public BitmapActionMode BitmapAction { get; set; } = BitmapActionMode.Relative;
+		public BitmapActionType BitmapAction { get; set; } = BitmapActionType.Link;
 		public string BitmapPath { get; set; } = "";
 
 		public XmlDocument Document { get; set; }
 		public XmlNode Node { get; set; }
 
 		private void ReadSettingsFromNode(XmlNode node)
-		{ }
+		{
+			foreach (XmlNode n in node.ChildNodes)
+			{
+				switch (n.LocalName)
+				{
+					case "UseMetricUnits":
+						try
+						{
+							this.UseMetricUnits = bool.Parse(n.InnerText.Trim());
+						}
+						catch { }
+						break;
+					case "FlipFaces":
+						try
+						{
+							this.FlipFaces = bool.Parse(n.InnerText.Trim());
+						}
+						catch { }
+						break;
+					case "SeparateSmoothingGroups":
+						try
+						{
+							this.SeparateSmoothingGroups = bool.Parse(n.InnerText.Trim());
+						}
+						catch { }
+						break;
+					case "SwapYZ":
+						try
+						{
+							this.SwapYZ = bool.Parse(n.InnerText.Trim());
+						}
+						catch { }
+						break;
+					case "UniformScale":
+						try
+						{
+							this.UniformScale = bool.Parse(n.InnerText.Trim());
+						}
+						catch { }
+						break;
+					case "UniformUVScale":
+						try
+						{
+							this.UniformUVScale = bool.Parse(n.InnerText.Trim());
+						}
+						catch { }
+						break;
+					case "ScaleX":
+						try
+						{
+							this.ScaleX = float.Parse(n.InnerText.Trim());
+						}
+						catch { }
+						break;
+					case "ScaleY":
+						try
+						{
+							this.ScaleY = float.Parse(n.InnerText.Trim());
+						}
+						catch { }
+						break;
+					case "ScaleZ":
+						try
+						{
+							this.ScaleZ = float.Parse(n.InnerText.Trim());
+						}
+						catch { }
+						break;
+					case "ScaleU":
+						try
+						{
+							this.ScaleU = float.Parse(n.InnerText.Trim());
+						}
+						catch { }
+						break;
+					case "ScaleV":
+						try
+						{
+							this.ScaleV = float.Parse(n.InnerText.Trim());
+						}
+						catch { }
+						break;
+					case "BitmapAction":
+						try
+						{
+							switch (n.InnerText.Trim())
+							{
+								case "3":
+									this.BitmapAction = BitmapActionType.Absolute;
+									break;
+								case "2":
+									this.BitmapAction = BitmapActionType.Link;
+									break;
+								case "1":
+									this.BitmapAction = BitmapActionType.Copy;
+									break;
+								default:
+									this.BitmapAction = BitmapActionType.None;
+									break;
+							}
+						}
+						catch { }
+						break;
+					case "BitmapPath":
+						this.BitmapPath = n.InnerText.Trim();
+						break;
+				}
+			}
+		}
 
 		public ObjExportSettings(XmlNode node, XmlDocument doc)
 		{
@@ -273,8 +381,79 @@ namespace WPlugins.Common
 
 		public void UpdateNode()
 		{
+			Dictionary<string, bool> NodesExist = new Dictionary<string, bool>()
+			{
+				{"UseMetricUnits", false},
+				{"FlipFaces", false},
+				{"SwapYZ", false},
+				{"SeparateSmoothingGroups", false},
+				{"UniformScale", false},
+				{"UniformUVScale", false},
+				{"ScaleX", false},
+				{"ScaleY", false},
+				{"ScaleZ", false},
+				{"ScaleU", false},
+				{"ScaleV", false},
+				{"BitmapAction", false},
+				{"BitmapPath", false}
+			};
+			foreach (XmlNode n in Node.ChildNodes)
+			{
+				NodesExist[n.Name] = true;
+			}
 
+			foreach (var kvp in NodesExist)
+			{
+				if (!kvp.Value)
+				{
+					Node.AppendChild(Document.CreateElement(kvp.Key));
+				}
+				XmlNode n = Node[kvp.Key];
+				switch (kvp.Key)
+				{
+					case "UseMetricUnits":
+						n.InnerText = this.UseMetricUnits.ToString().ToLowerInvariant();
+						break;
+					case "FlipFaces":
+						n.InnerText = this.FlipFaces.ToString().ToLowerInvariant();
+						break;
+					case "SwapYZ":
+						n.InnerText = this.SwapYZ.ToString().ToLowerInvariant();
+						break;
+					case "SeparateSmoothingGroups":
+						n.InnerText = this.SeparateSmoothingGroups.ToString().ToLowerInvariant();
+						break;
+					case "UniformScale":
+						n.InnerText = this.UniformScale.ToString().ToLowerInvariant();
+						break;
+					case "UniformUVScale":
+						n.InnerText = this.UniformUVScale.ToString().ToLowerInvariant();
+						break;
+					case "ScaleX":
+						n.InnerText = this.ScaleX.ToString().ToLowerInvariant();
+						break;
+					case "ScaleY":
+						n.InnerText = this.ScaleY.ToString().ToLowerInvariant();
+						break;
+					case "ScaleZ":
+						n.InnerText = this.ScaleZ.ToString().ToLowerInvariant();
+						break;
+					case "ScaleU":
+						n.InnerText = this.ScaleU.ToString().ToLowerInvariant();
+						break;
+					case "ScaleV":
+						n.InnerText = this.ScaleV.ToString().ToLowerInvariant();
+						break;
+					case "BitmapAction":
+						n.InnerText = ((int)this.BitmapAction).ToString().ToLowerInvariant();
+						break;
+					case "BitmapPath":
+						n.InnerText = this.BitmapPath;
+						break;
+				}
+			}
 		}
+
 	}
 
 	public class Settings
@@ -302,6 +481,7 @@ namespace WPlugins.Common
 							ObjImport = new ObjImportSettings(node, _xml);
 							break;
 						case "ObjExport":
+							ObjExport = new ObjExportSettings(node, _xml);
 							break;
 					}
 				}
@@ -318,6 +498,7 @@ namespace WPlugins.Common
 		public void Save()
 		{
 			ObjImport.UpdateNode();
+			ObjExport.UpdateNode();
 			_xml.Save(SettingsFileUrl);
 		}
 	}

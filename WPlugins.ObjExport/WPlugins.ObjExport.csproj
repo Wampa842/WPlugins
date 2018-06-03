@@ -77,4 +77,7 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy "$(TargetPath)" "H:\MMD\PMX Editor\PmxEditor\_plugin\User\WPlugins" /Y /Q</PostBuildEvent>
+  </PropertyGroup>
 </Project>

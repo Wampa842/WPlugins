@@ -30,9 +30,22 @@ namespace WPlugins.ObjExport
 {
 	public partial class ExportProgressForm : Form
 	{
-		public ExportProgressForm()
+		private BackgroundWorker worker;
+		public ExportProgressForm(BackgroundWorker worker, int max)
 		{
 			InitializeComponent();
+			this.worker = worker;
+			totalProgressBar.Maximum = max;
+		}
+
+		public void UpdateProgress(int percent, ProgressReporter rep)
+		{
+			totalProgressBar.Value = rep.TotalProgress;
+		}
+
+		private void cancelProcessButton_Click(object sender, EventArgs e)
+		{
+			worker.CancelAsync();
 		}
 	}
 }

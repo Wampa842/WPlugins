@@ -38,7 +38,7 @@ namespace WPlugins.ObjImport
 		private IPERunArgs args;
 		private string path;
 		private string jobPath;
-		public Common.ObjImportSettings Settings;
+		public Common.ObjImportSettings Settings { get; private set; }
 
 		public ObjImportForm(string path, IPERunArgs args)
 		{
@@ -55,6 +55,8 @@ namespace WPlugins.ObjImport
 						try
 						{
 							settingsDoc = new Common.Settings(jobPath);
+							saveDefaultCheck.Checked = false;
+							saveDefaultCheck.Enabled = false;
 						}
 						catch (XmlException ex)
 						{
@@ -188,7 +190,7 @@ namespace WPlugins.ObjImport
 
 		private void saveJobHelpLink_Click(object sender, EventArgs e)
 		{
-			MessageBox.Show("Job files help streamline the import process of frequently imported models by storing the settings in an XML file specific to a single OBJ file, without overwriting the default settings.\nIf a job file is detected, you will be prompted whether to load, ignore or delete it.\nThe job file will have the name of the OBJ file, followed by .wp_import.xml (for example: Something.obj.wp_import.xml).", "Help: job files", MessageBoxButtons.OK, MessageBoxIcon.Information);
+			MessageBox.Show("Job files help streamline the import process of frequently imported models by storing the settings in an XML file specific to a single OBJ file, without overwriting the default settings.\nIf a job file is detected, you will be prompted whether to load, ignore or delete it.\nThe job file will have the name of the OBJ file, followed by .wp_import.xml (for example: Something.obj.wp_import.xml).\n\nDue to a programming error, if you load a job file, you can't save those settings as default.", "Help: job files", MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
 	}
 }

@@ -17,6 +17,7 @@
   </ObjImport>
   <ObjExport>
     <UseMetricUnits>true</UseMetricUnits>
+    <SeparateSmoothingGroups>false</SeparateSmoothingGroups>
     <FlipFaces>false</FlipFaces>
     <SwapYZ>false</SwapYZ>
     <UniformScale>true</UniformScale>
@@ -26,7 +27,7 @@
     <ScaleZ>1</ScaleZ>
     <ScaleU>1</ScaleU>
     <ScaleV>1</ScaleV>
-    <BitmapAction>3</BitmapAction>
+    <BitmapAction>2</BitmapAction>
     <BitmapPath></BitmapPath>
   </ObjExport>
 </WPluginsSettings>
