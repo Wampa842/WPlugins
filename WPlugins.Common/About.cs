@@ -31,7 +31,7 @@ namespace WPlugins.Common
 	public static class Info
 	{
 		//You pass the version.
-		public static string Version { get; } = "0.3.0";
+		public static string Version => "0.3.0";
 	}
 
 	public class About : IPEPlugin

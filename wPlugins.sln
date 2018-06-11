@@ -15,6 +15,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.MD = README.MD
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPlugins.NameUtil", "WPlugins.NameUtil\WPlugins.NameUtil.csproj", "{86C5762F-F677-45D8-84BD-9648D5CBE0A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPlugins.SelectionUtil", "WPlugins.SelectionUtil\WPlugins.SelectionUtil.csproj", "{0A845022-6F7C-4F1E-A045-462FF328DF9F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{E0848A52-C784-4CA9-B41C-649FFE50888B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0848A52-C784-4CA9-B41C-649FFE50888B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E0848A52-C784-4CA9-B41C-649FFE50888B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86C5762F-F677-45D8-84BD-9648D5CBE0A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86C5762F-F677-45D8-84BD-9648D5CBE0A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86C5762F-F677-45D8-84BD-9648D5CBE0A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86C5762F-F677-45D8-84BD-9648D5CBE0A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A845022-6F7C-4F1E-A045-462FF328DF9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A845022-6F7C-4F1E-A045-462FF328DF9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A845022-6F7C-4F1E-A045-462FF328DF9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A845022-6F7C-4F1E-A045-462FF328DF9F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

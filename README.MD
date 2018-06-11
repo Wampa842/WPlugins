@@ -15,8 +15,9 @@ Developed by Wampa842
 4. [Links and download](#links-and-download)  
 5. [Troubleshooting and compatibility](#troubleshooting-and-compatibility)
 6. [Contribute](#contribute)
-7. [License & Copying](#license-copying)
+7. [License & Copying](#license--copying)
 8. [Planned features](#planned-features)
+9. [Contact](#contact)
 
 ------
 ## Features
