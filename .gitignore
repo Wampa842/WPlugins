@@ -287,3 +287,5 @@ __pycache__/
 *.odx.cs
 *.xsd.cs
 /WPlugins.Common/obj
+/thumbnail.pmx
+/thumbnail.xcf
