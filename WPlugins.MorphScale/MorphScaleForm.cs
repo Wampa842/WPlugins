@@ -66,6 +66,11 @@ namespace WPlugins.MorphScale
             }
         }
 
+        private IPXPmx GetCurrentScene()
+        {
+            return _args.Host.Connector.Pmx.GetCurrentState();
+        }
+
         private bool MorphIsOfKind(IPXMorph morph, MorphKind kind)
         {
             switch (kind)
@@ -84,6 +89,7 @@ namespace WPlugins.MorphScale
 
         private void PopulateList(MorphKind kind)
         {
+            _pmx = GetCurrentScene();
             morphList.Items.Clear();
             for(int i = 0; i < _pmx.Morph.Count; ++i)
             {
@@ -109,9 +115,11 @@ namespace WPlugins.MorphScale
 
         private void applyButton_Click(object sender, EventArgs e)
         {
+            _pmx = GetCurrentScene();
             foreach (ListViewItem item in morphList.SelectedItems)
             {
                 int index = (int)item.Tag;
+                _pmx = _args.Host.Connector.Pmx.GetCurrentState();
 
                 // Create a working copy to make sure the original remains unaffected
                 IPXMorph workingCopy = (IPXMorph)_pmx.Morph[index].Clone();
@@ -151,6 +159,7 @@ namespace WPlugins.MorphScale
             if (SelectedMorphKind == MorphKind.BoneRotation && !uniformCheck.Checked && MessageBox.Show("For bone rotation morphs, only the magnitude can be scaled, and only uniformly. If you proceed, the rotation magnitude will be scaled by the factor in the X field.\n\nWould you like to proceed?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
                 return;
 
+            _pmx = GetCurrentScene();
             // If new morphs are added, update the list automatically
             bool updateList = false;
             foreach (ListViewItem item in morphList.SelectedItems)
