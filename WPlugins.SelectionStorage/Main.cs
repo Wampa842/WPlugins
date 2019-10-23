@@ -35,7 +35,7 @@ namespace WPlugins.SelectionStorage
         }
 
         public string Name => "Selection Storage";
-        public string Version => Common.Info.Version;
+        public string Version => Common.Info.Version.ToString();
         public string Description => "A tool that allows you to store and recall any number of selections.";
         class PluginOptions : IPEPluginOption
         {

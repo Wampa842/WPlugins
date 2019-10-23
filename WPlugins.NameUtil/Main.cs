@@ -33,7 +33,7 @@ namespace WPlugins.NameUtil
 		}
 
 		public string Name => "Name utility";
-		public string Version => Common.Info.Version;
+		public string Version => Common.Info.Version.ToString();
 		public string Description => "A tool to set, replace and edit item names";
 		class PluginOptions : IPEPluginOption
 		{

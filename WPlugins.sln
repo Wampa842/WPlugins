@@ -19,6 +19,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPlugins.NameUtil", "WPlugi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPlugins.SelectionUtil", "WPlugins.SelectionUtil\WPlugins.SelectionUtil.csproj", "{0A845022-6F7C-4F1E-A045-462FF328DF9F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPlugins.MorphScale", "WPlugins.MorphScale\WPlugins.MorphScale.csproj", "{447278EC-61E5-484C-A7C6-1894E769EB39}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPlugins.SelectionStorage", "WPlugins.SelectionStorage\WPlugins.SelectionStorage.csproj", "{A6094D7B-41D3-4ECB-B28F-C516F9B3844B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +49,14 @@ Global
 		{0A845022-6F7C-4F1E-A045-462FF328DF9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A845022-6F7C-4F1E-A045-462FF328DF9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A845022-6F7C-4F1E-A045-462FF328DF9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{447278EC-61E5-484C-A7C6-1894E769EB39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{447278EC-61E5-484C-A7C6-1894E769EB39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{447278EC-61E5-484C-A7C6-1894E769EB39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{447278EC-61E5-484C-A7C6-1894E769EB39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6094D7B-41D3-4ECB-B28F-C516F9B3844B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6094D7B-41D3-4ECB-B28F-C516F9B3844B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6094D7B-41D3-4ECB-B28F-C516F9B3844B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6094D7B-41D3-4ECB-B28F-C516F9B3844B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

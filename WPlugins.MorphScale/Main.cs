@@ -34,7 +34,7 @@ namespace WPlugins.MorphScale
         }
 
         public string Name => "Morph Scale";
-        public string Version => Common.Info.Version;
+        public string Version => Common.Info.Version.ToString();
         public string Description => "A tool to scale and apply morphs.";
         class PluginOptions : IPEPluginOption
         {

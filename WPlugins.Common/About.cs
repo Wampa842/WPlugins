@@ -30,8 +30,8 @@ namespace WPlugins.Common
 	//What's my purpose?
 	public static class Info
 	{
-		//You pass the version.
-		public static string Version => "0.3.0";
+        //You pass the version.
+        public static SemanticVersion Version { get; } = new SemanticVersion(0, 4, 2);
 	}
 
 	public class About : IPEPlugin
@@ -39,11 +39,11 @@ namespace WPlugins.Common
 		public void Run(IPERunArgs args)
 		{
 			AboutForm form = new AboutForm();
-			form.ShowDialog();
+			form.Show();
 		}
 
 		public string Name => "About && Update";
-		public string Version => Info.Version;
+		public string Version => Info.Version.ToString();
 		public string Description => "Information about and updates for WPlugins";
 		class PluginOptions : IPEPluginOption
 		{
