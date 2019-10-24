@@ -45,6 +45,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.showLicenseButton = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.versionGroup.SuspendLayout();
             this.licenseGroup.SuspendLayout();
             this.SuspendLayout();
@@ -117,6 +118,7 @@
             this.versionGroup.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.versionGroup.Controls.Add(this.button1);
             this.versionGroup.Controls.Add(this.updateHintLabel);
             this.versionGroup.Controls.Add(this.fetchVersionButton);
             this.versionGroup.Controls.Add(this.latestVersionLabel);
@@ -236,6 +238,16 @@
             this.showLicenseButton.UseVisualStyleBackColor = true;
             this.showLicenseButton.Click += new System.EventHandler(this.showLicenseButton_Click);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(196, 15);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 3;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // AboutForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -285,5 +297,6 @@
 		private System.Windows.Forms.Button showLicenseButton;
 		private System.Windows.Forms.Label label6;
 		private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button button1;
     }
 }

@@ -30,65 +30,55 @@ using System.Xml;
 
 using PEPlugin;
 using PEPlugin.Pmx;
+using WPlugins.Common;
 
 namespace WPlugins.ObjExport
 {
 	public partial class ObjExportForm : Form
 	{
-		private Common.Settings settingsDoc;
-		private IPERunArgs args;
-		private string path;
-		private string jobPath;
-		public Common.ObjExportSettings Settings { get; private set; }
+		private IPERunArgs _args;
+		private string _path;
+		private string _jobPath;
+        public ObjExportSettings Settings { get; private set; }
 
 		public ObjExportForm(string path, IPERunArgs args)
 		{
 			InitializeComponent();
-			this.args = args;
-			this.path = path;
-			this.jobPath = path + ".wp_export.xml";
+			this._args = args;
+			this._path = path;
+			this._jobPath = path + ".wp_export.xml";
+            Settings = Common.Settings.Current.ObjExport;
 
-			if (File.Exists(jobPath))
+			if (File.Exists(_jobPath))
 			{
 				switch (MessageBox.Show("This file has an associated job file. Would you like to load it?\n(Press Cancel to delete it)", "Job file found", MessageBoxButtons.YesNoCancel))
 				{
 					case DialogResult.Yes:
 						try
 						{
-							settingsDoc = new Common.Settings(jobPath);
 							saveDefaultCheck.Checked = false;
 							saveDefaultCheck.Enabled = false;
+                            Settings = ObjExportSettings.Import(_jobPath);
 						}
 						catch (XmlException ex)
 						{
 							MessageBox.Show($"Could not load job file:\n{ex.Message}\n{ex.StackTrace}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-							settingsDoc = new Common.Settings();
 						}
 						break;
 					case DialogResult.Cancel:
 						try
 						{
-							File.Delete(jobPath);
+							File.Delete(_jobPath);
 						}
 						catch (IOException ex)
 						{
 							MessageBox.Show($"Could not delete file:\n{ex.Message}\n{ex.StackTrace}", "Error");
 						}
-						finally
-						{
-							settingsDoc = new Common.Settings();
-						}
 						break;
 					default:
-						settingsDoc = new Common.Settings();
 						break;
 				}
 			}
-			else
-			{
-				settingsDoc = new Common.Settings();
-			}
-			Settings = settingsDoc.ObjExport;
 		}
 
 		private void ObjExportForm_Load(object sender, EventArgs e)
@@ -143,26 +133,13 @@ namespace WPlugins.ObjExport
 			this.DialogResult = DialogResult.OK;
 			if (saveDefaultCheck.Checked)
 			{
-				settingsDoc.Save();
+                Common.Settings.Current.ObjExport = Settings;
+                Common.Settings.Save();
 			}
 
 			if (saveJobCheck.Checked)
 			{
-				XmlDocument doc = new XmlDocument();
-				doc.AppendChild(doc.CreateXmlDeclaration("1.0", "utf-8", "no"));
-				XmlElement root = doc.CreateElement("WPluginsSettings");
-				this.Settings.UpdateNode();
-				XmlNode node = doc.ImportNode(this.Settings.Node, true);
-				root.AppendChild(node);
-				doc.AppendChild(root);
-				try
-				{
-					doc.Save(this.jobPath);
-				}
-				catch (XmlException ex)
-				{
-					MessageBox.Show($"Could not save job file:\n{ex.Message}\n{ex.StackTrace}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				}
+                Settings.Export(_jobPath);
 			}
 			this.Close();
 		}

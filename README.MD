@@ -10,14 +10,15 @@ Developed by Wampa842
 1. [Features](#features)
 	- [Wavefront OBJ importer](#wavefront-obj-importer)
 	- [Wavefront OBJ exporter](#wavefront-obj-exporter)
+	- [Morph scale](#morph-scale)
 2. [Installation](#installation)
 3. [Requirements](#requirements)  
 4. [Links and download](#links-and-download)  
 5. [Troubleshooting and compatibility](#troubleshooting-and-compatibility)
 6. [Contribute](#contribute)
-7. [License & Copying](#license--copying)
-8. [Planned features](#planned-features)
-9. [Contact](#contact)
+7. [License & Copying](#license-copying)
+8. [Changelog](#changelog)
+10. [Contact](#contact)
 
 ------
 ## Features
@@ -32,6 +33,22 @@ Developed by Wampa842
 - Exports the PMX scene as a Wavefront Object file with its material library  
 - Dialog and default/job settings similar to the OBJ importer  
 - Optionally copy texture files to the output directory
+
+#### Morph Scale
+- Scale a morph by a factor:
+	- An XYZ vector to scale separately on each axis;
+	- A scalar to scale uniformly on all axes.
+- Shortcuts to negative (-X) or inverse (1/X) factors.
+- Store the scaled morph by overwriting the original, or adding it as a new morph.
+- Apply the scaled morph directly to the model.
+
+#### Selection Storage
+- Store any number of selections, identified by a name.
+- Selections can be named and managed in a user interface.
+
+#### About & Update
+- Displays copyright and license informations
+- Checks for updates on the user's request or in the background
 
 ------
 ## Installation
@@ -143,14 +160,16 @@ You should have received a copy of the GNU General Public License
 along with WPlugins.  If not, see <http://www.gnu.org/licenses/>.
 
 ------
-## Planned features
-
-- OBJ Export: an export plugin that saves the scene as an OBJ+MTL file.  
-- SafeWeld: a tool that merges vertices with respect to UV boundaries, materials, vertex normal angles and various conditions.  
-- Apply Morph: apply a vertex/UV morph (or its inverse) to the scene.  
-- Scale Morph: scale a morph by a scalar, with shortcuts to inverse.  
-- Name Utils: translate and edit material/bones/etc names in bulk using a `sed`-like tool.  
-- Material Merge: combine materials with respect to various conditions.
+## Changelog
+#### 0.4.1
+- Fixed an issue where applying a morph would revert the model to the state it was when the plugin was launched.
+#### 0.4.0
+- Added Morph Scale (WPlugins.MorphScale)
+#### 0.3.0
+- Added OBJ Export (WPlugins.ObjExport)
+#### 0.2.0
+- First release
+- Added OBJ Import (WPlugins.ObjImport)
 
 ------
 ## Contact

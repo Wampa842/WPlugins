@@ -27,7 +27,6 @@ namespace WPlugins.Common
 {
     public class AutoUpdateCheck : IPEPlugin
     {
-        private enum UpdateCheckResult { Fail, Available, UpToDate }
         private AutoUpdateForm _form;
 
         private async void CheckUpdate()
@@ -37,12 +36,16 @@ namespace WPlugins.Common
             {
                 return;
             }
+            if (Settings.Current.Update.Cancel == UpdateSettings.CancelAction.SkipVersion && latest.Equals(Settings.Current.Update.SkipVersion))
+            {
+                return;
+            }
             if (latest.CompareTo(Info.Version) > 0)
             {
                 if (_form == null || _form.IsDisposed)
                 {
-                    _form = new AutoUpdateForm(latest.ToString(), Info.Version.ToString());
-                    _form.ShowDialog();
+                    _form = new AutoUpdateForm(latest, Info.Version);
+                    _form.Show();
                 }
             }
         }
@@ -60,7 +63,7 @@ namespace WPlugins.Common
 
         public class PluginOptions : IPEPluginOption
         {
-            public bool Bootup => true;
+            public bool Bootup => Settings.Current.Update.Cancel != UpdateSettings.CancelAction.NeverCheck; // Don't even run the plugin if the user doesn't want to check for updates
 
             public bool RegisterMenu => false;
 

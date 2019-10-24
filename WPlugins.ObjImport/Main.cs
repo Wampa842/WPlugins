@@ -41,7 +41,8 @@ namespace WPlugins.ObjImport
 		private IPXPmxBuilder builder;
 		private readonly ObjImportSettings settings;
 		private List<IPXVertex> vertices;
-		private Dictionary<string, IPXMaterial> materials;          //Sub-objects in the PMX scene
+        //private Dictionary<string, IPXMaterial> materials;          //Sub-objects in the PMX scene
+        private List<IPXMaterial> materials;
 		private Dictionary<string, IPXMaterial> uniqueMaterials;    //Unique materials in the MTL file
 		private List<V3> vList;
 		private List<V2> vtList;
@@ -283,7 +284,8 @@ namespace WPlugins.ObjImport
 			vnList = new List<V3>();
 			vertexDict = new Dictionary<string, int>();
 			vertices = new List<IPXVertex>();
-			materials = new Dictionary<string, IPXMaterial>();
+            //materials = new Dictionary<string, IPXMaterial>();
+            materials = new List<IPXMaterial>();
 
 			IPXMaterial material = builder.Material();
 			IPXMaterial template = null;
@@ -439,7 +441,7 @@ namespace WPlugins.ObjImport
 								groupName = line.Trim().Substring(2, line.Length - 2);
 								material = builder.Material();
 								material.Name = material.NameE = groupName;
-								materials.Add(material.Name, material);
+								materials.Add(material);
 							}
 							else
 							{
@@ -562,7 +564,7 @@ namespace WPlugins.ObjImport
 			{
 				if (settings.FlipFaces)
 				{
-					foreach (IPXFace f in m.Value.Faces)
+					foreach (IPXFace f in m.Faces)
 					{
 						IPXVertex temp = f.Vertex1;
 						f.Vertex1 = f.Vertex3;
@@ -570,10 +572,10 @@ namespace WPlugins.ObjImport
 					}
 				}
 				if (settings.MaterialNaming == ObjImportSettings.MaterialNamingMode.BitmapName)
-					m.Value.Name = m.Value.NameE = m.Value.Tex;
+					m.Name = m.NameE = m.Tex;
 				if (settings.MaterialNaming == ObjImportSettings.MaterialNamingMode.Numbered)
-					m.Value.Name = m.Value.NameE = pmx.Material.Count.ToString();
-				pmx.Material.Add(m.Value);
+					m.Name = m.NameE = pmx.Material.Count.ToString();
+				pmx.Material.Add(m);
 			}
 
 			//end
@@ -610,7 +612,7 @@ namespace WPlugins.ObjImport
 			}
 			catch (Exception ex)
 			{
-				MessageBox.Show($"{ex}");
+                MessageBox.Show(ex.ToString());
 			}
 			//If execution reaches this point, either an error has occured or the user pressed Cancel.
 			pmx = builder.Pmx();

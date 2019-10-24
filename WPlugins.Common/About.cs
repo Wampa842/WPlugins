@@ -21,39 +21,46 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.IO;
 using System.Windows.Forms;
 using PEPlugin;
 
 namespace WPlugins.Common
 {
-	//What's my purpose?
-	public static class Info
-	{
+    //What's my purpose?
+    public static class Info
+    {
         //You pass the version.
-        public static SemanticVersion Version { get; } = new SemanticVersion(0, 4, 2);
-	}
+        public static SemanticVersion Version { get; }
+        public static string PluginDirectory { get; }
 
-	public class About : IPEPlugin
-	{
-		public void Run(IPERunArgs args)
-		{
-			AboutForm form = new AboutForm();
-			form.Show();
-		}
+        static Info()
+        {
+            Version = new SemanticVersion(0, 4, 2);
+            PluginDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+        }
+    }
 
-		public string Name => "About && Update";
-		public string Version => Info.Version.ToString();
-		public string Description => "Information about and updates for WPlugins";
-		class PluginOptions : IPEPluginOption
-		{
-			public bool Bootup => false;
+    public class About : IPEPlugin
+    {
+        public void Run(IPERunArgs args)
+        {
+            AboutForm form = new AboutForm();
+            form.Show();
+        }
 
-			public bool RegisterMenu => true;
+        public string Name => "About && Update";
+        public string Version => Info.Version.ToString();
+        public string Description => "Information about and updates for WPlugins";
+        class PluginOptions : IPEPluginOption
+        {
+            public bool Bootup => true;
 
-			public string RegisterMenuText => "About && Update";
-		}
-		public IPEPluginOption Option => new PluginOptions();
-		public void Dispose() { }
-	}
+            public bool RegisterMenu => true;
+
+            public string RegisterMenuText => "About && Update";
+        }
+        public IPEPluginOption Option => new PluginOptions();
+        public void Dispose() { }
+    }
 }

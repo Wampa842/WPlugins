@@ -20,14 +20,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.Serialization;
 
 namespace WPlugins.Common
 {
     /// <summary>
     /// A semantic version that consists of three numbers (major.minor.revision).
     /// </summary>
-    public class SemanticVersion : IComparable<SemanticVersion>
+    [Serializable]
+    public class SemanticVersion : IComparable<SemanticVersion>, IEquatable<SemanticVersion>
     {
         public int Major { get; set; }
         public int Minor { get; set; }
@@ -63,6 +64,14 @@ namespace WPlugins.Common
             return Revision.CompareTo(other.Revision);
         }
 
+        public bool Equals(SemanticVersion other)
+        {
+            return this.CompareTo(other) == 0;
+        }
+
+        /// <summary>
+        /// Parse a semantic version from a major.minor.revision string.
+        /// </summary>
         public static SemanticVersion Parse(string str)
         {
             string[] split = str.Trim().Split('.');
@@ -94,6 +103,9 @@ namespace WPlugins.Common
             return new SemanticVersion(maj, min, rev);
         }
 
+        /// <summary>
+        /// Try to parse a semantic version from a string. The return value indicates whether the parse was successful.
+        /// </summary>
         public static bool TryParse(string str, out SemanticVersion version)
         {
             string[] split = str.Trim().Split('.');

@@ -42,12 +42,12 @@
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(210, 13);
+            this.label1.Size = new System.Drawing.Size(254, 20);
             this.label1.TabIndex = 0;
             this.label1.Text = "WPlugins has found a more recent version.";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // label2
             // 
@@ -162,8 +162,8 @@
             this.MinimizeBox = false;
             this.Name = "AutoUpdateForm";
             this.Text = "Automatic Update";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.AutoUpdateForm_FormClosed);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
