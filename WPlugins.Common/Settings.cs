@@ -75,12 +75,14 @@ namespace WPlugins.Common
                 if (reader != null)
                 {
                     reader.Close();
+                    _stream.Close();
                 }
             }
 
             if (reader != null)
             {
                 reader.Close();
+                _stream.Close();
             }
 
             return settings;
@@ -109,12 +111,14 @@ namespace WPlugins.Common
                 {
                     writer.Flush();
                     writer.Close();
+                    _stream.Close();
                 }
             }
 
             if (writer != null)
             {
                 writer.Close();
+                _stream.Close();
             }
         }
 
