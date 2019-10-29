@@ -48,12 +48,23 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Selection.cs" />
     <Compile Include="SelectionStorageForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="SelectionStorageForm.Designer.cs">
       <DependentUpon>SelectionStorageForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TrimForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TrimForm.Designer.cs">
+      <DependentUpon>TrimForm.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -63,12 +74,44 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="SelectionStorageForm.resx">
       <DependentUpon>SelectionStorageForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="TrimForm.resx">
+      <DependentUpon>TrimForm.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_union.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_intersect.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_difference.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_complement.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_delete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_down.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_up.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_clone.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(TargetPath)" "H:\MMD\PMX Editor\PmxEditor\_plugin\User\WPlugins" /Y /Q</PostBuildEvent>
+    <PostBuildEvent>xcopy "$(TargetPath)" "H:\MMD\PMX Editor\PmxEditor\_plugin\User\WPlugins" /Y /Q
+xcopy "$(TargetDir)$(TargetName).pdb" "H:\MMD\PMX Editor\PmxEditor\_plugin\User\WPlugins" /Y /Q</PostBuildEvent>
   </PropertyGroup>
 </Project>

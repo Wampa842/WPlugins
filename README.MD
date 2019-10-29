@@ -17,8 +17,7 @@ Developed by Wampa842
 5. [Troubleshooting and compatibility](#troubleshooting-and-compatibility)
 6. [Contribute](#contribute)
 7. [License & Copying](#license-copying)
-8. [Changelog](#changelog)
-10. [Contact](#contact)
+8. [Contact](#contact)
 
 ------
 ## Features
@@ -45,6 +44,8 @@ Developed by Wampa842
 #### Selection Storage
 - Store any number of selections, identified by a name.
 - Selections can be named and managed in a user interface.
+- Restore selections completely or selectively by object type (vertex, triangle, bone, rigid body, joint).
+- Perform set operations (union, intersect, difference, complement) between selections.
 
 #### About & Update
 - Displays copyright and license informations
@@ -158,18 +159,6 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with WPlugins.  If not, see <http://www.gnu.org/licenses/>.
-
-------
-## Changelog
-#### 0.4.1
-- Fixed an issue where applying a morph would revert the model to the state it was when the plugin was launched.
-#### 0.4.0
-- Added Morph Scale (WPlugins.MorphScale)
-#### 0.3.0
-- Added OBJ Export (WPlugins.ObjExport)
-#### 0.2.0
-- First release
-- Added OBJ Import (WPlugins.ObjImport)
 
 ------
 ## Contact
