@@ -1,3 +1,6 @@
+# 0.5.1
+- Fixed some UI design issues
+- Added PDB files for each assembly
 # 0.5.0
 - Added Selection Storage (WPlugins.SelectionStorage)
 - Added automatic udpdate checking

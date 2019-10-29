@@ -25,7 +25,7 @@ namespace WPlugins.SelectionStorage
 
         public void AddSelection(Selection sel)
         {
-            ListViewItem item = new ListViewItem(new string[] { storedList.Items.Count.ToString(), sel.Name, sel.Vertex.Length.ToString(), sel.Triangle.Length.ToString(), sel.Bone.Length.ToString(), sel.Rigidbody.Length.ToString(), sel.Joint.Length.ToString() });
+            ListViewItem item = new ListViewItem(new string[] { sel.Name, sel.Vertex.Length.ToString(), sel.Triangle.Length.ToString(), sel.Bone.Length.ToString(), sel.Rigidbody.Length.ToString(), sel.Joint.Length.ToString() });
             item.Tag = sel;
             storedList.Items.Add(item);
         }
@@ -270,27 +270,27 @@ namespace WPlugins.SelectionStorage
                 if (result.HasFlag(TrimOptions.Vertex))
                 {
                     sel.Vertex = new int[0];
-                    item.SubItems[2].Text = "0";
+                    item.SubItems[1].Text = "0";
                 }
                 if (result.HasFlag(TrimOptions.Triangle))
                 {
                     sel.Triangle = new int[0];
-                    item.SubItems[3].Text = "0";
+                    item.SubItems[2].Text = "0";
                 }
                 if (result.HasFlag(TrimOptions.Bone))
                 {
                     sel.Bone = new int[0];
-                    item.SubItems[4].Text = "0";
+                    item.SubItems[3].Text = "0";
                 }
                 if (result.HasFlag(TrimOptions.Rigidbody))
                 {
                     sel.Rigidbody = new int[0];
-                    item.SubItems[5].Text = "0";
+                    item.SubItems[4].Text = "0";
                 }
                 if (result.HasFlag(TrimOptions.Joint))
                 {
                     sel.Joint = new int[0];
-                    item.SubItems[6].Text = "0";
+                    item.SubItems[5].Text = "0";
                 }
 
                 if(result.HasFlag(TrimOptions.Clone))

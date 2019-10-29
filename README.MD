@@ -11,6 +11,8 @@ Developed by Wampa842
 	- [Wavefront OBJ importer](#wavefront-obj-importer)
 	- [Wavefront OBJ exporter](#wavefront-obj-exporter)
 	- [Morph scale](#morph-scale)
+	- [Selection Storage](#selection-storage)
+	- [About & Update](#about-update)
 2. [Installation](#installation)
 3. [Requirements](#requirements)  
 4. [Links and download](#links-and-download)  

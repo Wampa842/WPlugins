@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
-            this.keepVertices = new System.Windows.Forms.RadioButton();
-            this.label1 = new System.Windows.Forms.Label();
             this.removeVertices = new System.Windows.Forms.RadioButton();
+            this.label1 = new System.Windows.Forms.Label();
+            this.keepVertices = new System.Windows.Forms.RadioButton();
             this.panel3 = new System.Windows.Forms.Panel();
             this.removeTriangles = new System.Windows.Forms.RadioButton();
             this.label3 = new System.Windows.Forms.Label();
@@ -69,6 +69,25 @@
             this.panel1.Size = new System.Drawing.Size(90, 77);
             this.panel1.TabIndex = 0;
             // 
+            // removeVertices
+            // 
+            this.removeVertices.Appearance = System.Windows.Forms.Appearance.Button;
+            this.removeVertices.Location = new System.Drawing.Point(6, 45);
+            this.removeVertices.Name = "removeVertices";
+            this.removeVertices.Size = new System.Drawing.Size(78, 22);
+            this.removeVertices.TabIndex = 2;
+            this.removeVertices.Text = "Remove";
+            this.removeVertices.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(5, 6);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(45, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Vertices";
+            // 
             // keepVertices
             // 
             this.keepVertices.Appearance = System.Windows.Forms.Appearance.Button;
@@ -80,25 +99,6 @@
             this.keepVertices.TabStop = true;
             this.keepVertices.Text = "Keep";
             this.keepVertices.UseVisualStyleBackColor = true;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(5, 6);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(45, 13);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Vertices";
-            // 
-            // removeVertices
-            // 
-            this.removeVertices.Appearance = System.Windows.Forms.Appearance.Button;
-            this.removeVertices.Location = new System.Drawing.Point(6, 45);
-            this.removeVertices.Name = "removeVertices";
-            this.removeVertices.Size = new System.Drawing.Size(78, 22);
-            this.removeVertices.TabIndex = 2;
-            this.removeVertices.Text = "Remove";
-            this.removeVertices.UseVisualStyleBackColor = true;
             // 
             // panel3
             // 
@@ -321,8 +321,12 @@
             this.Controls.Add(this.panel5);
             this.Controls.Add(this.panel6);
             this.Controls.Add(this.panel1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "TrimForm";
-            this.Text = "TrimForm";
+            this.Text = "Trim selection";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.TrimForm_FormClosing);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel3.ResumeLayout(false);

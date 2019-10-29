@@ -66,6 +66,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SemanticVersion.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="SettingsData\SelectionStorageSettings.cs" />
     <Compile Include="SettingsData\SettingsData.cs" />
     <Compile Include="SettingsData\UpdateSettings.cs" />
     <Compile Include="VersionCheck.cs" />

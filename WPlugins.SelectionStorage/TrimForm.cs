@@ -70,5 +70,10 @@ namespace WPlugins.SelectionStorage
             if (removeJoints.Checked) _options |= TrimOptions.Joint;
             Close();
         }
+
+        private void TrimForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            _options = TrimOptions.Cancel;
+        }
     }
 }

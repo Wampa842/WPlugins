@@ -38,7 +38,6 @@
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.keepOnTopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.storedList = new System.Windows.Forms.ListView();
-            this.indexColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.nameColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.numberVertexColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.numberTriangleColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -141,7 +140,6 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.storedList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.indexColumn,
             this.nameColumn,
             this.numberVertexColumn,
             this.numberTriangleColumn,
@@ -158,40 +156,35 @@
             this.storedList.SelectedIndexChanged += new System.EventHandler(this.storedList_SelectedIndexChanged);
             this.storedList.DoubleClick += new System.EventHandler(this.restoreButton_Click);
             // 
-            // indexColumn
-            // 
-            this.indexColumn.Text = "#";
-            this.indexColumn.Width = 25;
-            // 
             // nameColumn
             // 
             this.nameColumn.Text = "Name";
-            this.nameColumn.Width = 129;
+            this.nameColumn.Width = 112;
             // 
             // numberVertexColumn
             // 
             this.numberVertexColumn.Text = "Vertices";
-            this.numberVertexColumn.Width = 55;
+            this.numberVertexColumn.Width = 50;
             // 
             // numberTriangleColumn
             // 
             this.numberTriangleColumn.Text = "Faces";
-            this.numberTriangleColumn.Width = 55;
+            this.numberTriangleColumn.Width = 50;
             // 
             // numberBonesColumn
             // 
             this.numberBonesColumn.Text = "Bones";
-            this.numberBonesColumn.Width = 55;
+            this.numberBonesColumn.Width = 50;
             // 
             // numberBodiesColumn
             // 
             this.numberBodiesColumn.Text = "Rigid bodies";
-            this.numberBodiesColumn.Width = 75;
+            this.numberBodiesColumn.Width = 71;
             // 
             // numberJointsColumn
             // 
             this.numberJointsColumn.Text = "Joints";
-            this.numberJointsColumn.Width = 55;
+            this.numberJointsColumn.Width = 50;
             // 
             // storeCurrentButton
             // 
@@ -520,6 +513,7 @@
             this.MainMenuStrip = this.mainMenuStrip;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(480, 556);
             this.Name = "SelectionStorageForm";
             this.Text = "Selection Storage";
             this.mainMenuStrip.ResumeLayout(false);
@@ -537,7 +531,6 @@
         private System.Windows.Forms.ToolStripMenuItem keepOnTopToolStripMenuItem;
         private System.Windows.Forms.ListView storedList;
         private System.Windows.Forms.Button storeCurrentButton;
-        private System.Windows.Forms.ColumnHeader indexColumn;
         private System.Windows.Forms.ColumnHeader nameColumn;
         private System.Windows.Forms.ColumnHeader numberVertexColumn;
         private System.Windows.Forms.ColumnHeader numberTriangleColumn;
