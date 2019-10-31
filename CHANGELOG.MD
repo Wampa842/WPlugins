@@ -1,3 +1,7 @@
+# 0.5.2
+- Fixed (hopefully) an issue where the settings manager would try to write to a closed stream
+- Added a "see what's new" button to the automatic update form
+- Set the correct version because apparently I'm a doof
 # 0.5.1
 - Fixed some UI design issues
 - Added PDB files for each assembly

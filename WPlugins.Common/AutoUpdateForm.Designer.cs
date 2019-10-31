@@ -38,6 +38,7 @@
             this.skipButton = new System.Windows.Forms.Button();
             this.disableButton = new System.Windows.Forms.Button();
             this.privacyLink = new System.Windows.Forms.LinkLabel();
+            this.showChangelogLink = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // label1
@@ -87,7 +88,7 @@
             // 
             this.visitUpdateButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.visitUpdateButton.Location = new System.Drawing.Point(12, 112);
+            this.visitUpdateButton.Location = new System.Drawing.Point(12, 134);
             this.visitUpdateButton.Name = "visitUpdateButton";
             this.visitUpdateButton.Size = new System.Drawing.Size(153, 23);
             this.visitUpdateButton.TabIndex = 0;
@@ -98,7 +99,7 @@
             // ignoreButton
             // 
             this.ignoreButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.ignoreButton.Location = new System.Drawing.Point(171, 112);
+            this.ignoreButton.Location = new System.Drawing.Point(171, 134);
             this.ignoreButton.Name = "ignoreButton";
             this.ignoreButton.Size = new System.Drawing.Size(95, 23);
             this.ignoreButton.TabIndex = 1;
@@ -109,7 +110,7 @@
             // skipButton
             // 
             this.skipButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.skipButton.Location = new System.Drawing.Point(171, 141);
+            this.skipButton.Location = new System.Drawing.Point(171, 163);
             this.skipButton.Name = "skipButton";
             this.skipButton.Size = new System.Drawing.Size(95, 23);
             this.skipButton.TabIndex = 3;
@@ -121,7 +122,7 @@
             // 
             this.disableButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.disableButton.Location = new System.Drawing.Point(12, 141);
+            this.disableButton.Location = new System.Drawing.Point(12, 163);
             this.disableButton.Name = "disableButton";
             this.disableButton.Size = new System.Drawing.Size(153, 23);
             this.disableButton.TabIndex = 2;
@@ -132,7 +133,7 @@
             // privacyLink
             // 
             this.privacyLink.LinkArea = new System.Windows.Forms.LinkArea(66, 26);
-            this.privacyLink.Location = new System.Drawing.Point(12, 79);
+            this.privacyLink.Location = new System.Drawing.Point(12, 101);
             this.privacyLink.Name = "privacyLink";
             this.privacyLink.Size = new System.Drawing.Size(254, 30);
             this.privacyLink.TabIndex = 5;
@@ -142,11 +143,23 @@
             this.privacyLink.UseCompatibleTextRendering = true;
             this.privacyLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.privacyLink_LinkClicked);
             // 
+            // showChangelogLink
+            // 
+            this.showChangelogLink.Location = new System.Drawing.Point(12, 66);
+            this.showChangelogLink.Name = "showChangelogLink";
+            this.showChangelogLink.Size = new System.Drawing.Size(254, 23);
+            this.showChangelogLink.TabIndex = 6;
+            this.showChangelogLink.TabStop = true;
+            this.showChangelogLink.Text = "What\'s new in this version?";
+            this.showChangelogLink.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.showChangelogLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.showChangelogLink_LinkClicked);
+            // 
             // AutoUpdateForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(278, 179);
+            this.ClientSize = new System.Drawing.Size(278, 201);
+            this.Controls.Add(this.showChangelogLink);
             this.Controls.Add(this.privacyLink);
             this.Controls.Add(this.disableButton);
             this.Controls.Add(this.skipButton);
@@ -179,5 +192,6 @@
         private System.Windows.Forms.Button skipButton;
         private System.Windows.Forms.Button disableButton;
         private System.Windows.Forms.LinkLabel privacyLink;
+        private System.Windows.Forms.LinkLabel showChangelogLink;
     }
 }

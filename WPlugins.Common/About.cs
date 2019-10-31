@@ -36,7 +36,7 @@ namespace WPlugins.Common
 
         static Info()
         {
-            Version = new SemanticVersion(0, 5, 0);
+            Version = new SemanticVersion(0, 5, 2);
             PluginDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
         }
     }

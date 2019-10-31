@@ -88,6 +88,11 @@ namespace WPlugins.Common
             Settings.Save();
         }
 
+        private void showChangelogLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            MessageBox.Show(VersionCheck.Description, "Changelog", MessageBoxButtons.OK);
+        }
+
         private void privacyLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             string note =

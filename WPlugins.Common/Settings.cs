@@ -24,6 +24,8 @@ using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 
+// TODO: Rewrite the code that opens/closes 
+
 namespace WPlugins.Common
 {
     public static class Settings
@@ -63,8 +65,16 @@ namespace WPlugins.Common
                 if (_stream == null)
                     _stream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                 reader = XmlReader.Create(_stream);
-
-                settings = (SettingsData)_serializer.Deserialize(reader);
+                try
+                {
+                    settings = (SettingsData)_serializer.Deserialize(reader);
+                }
+                catch(ObjectDisposedException)
+                {
+                    _stream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    reader = XmlReader.Create(_stream);
+                    settings = (SettingsData)_serializer.Deserialize(reader);
+                }
             }
             catch (Exception ex)
             {
@@ -100,7 +110,17 @@ namespace WPlugins.Common
                     _stream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                 writer = XmlWriter.Create(_stream);
 
-                _serializer.Serialize(writer, settings);
+                try
+                {
+                    _serializer.Serialize(writer, settings);
+                }
+                catch(ObjectDisposedException)
+                {
+                    // This code is all kinds of fucked. I need to get a grip on streams.
+                    _stream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    writer = XmlWriter.Create(_stream);
+                    _serializer.Serialize(writer, settings);
+                }
             }
             catch (Exception ex)
             {

@@ -30,6 +30,19 @@ namespace WPlugins.Common
     {
         public const string RELEASE_URL = "https://api.github.com/repos/wampa842/wplugins/releases/latest";
 
+        private static string _description;
+        public static string Description
+        {
+            get
+            {
+                if(string.IsNullOrEmpty(_description))
+                {
+                    GetLatestVersion();
+                }
+                return _description;
+            }
+        }
+
         // Extract the semver string from the JSON file from GitHub's web API. The return value indicates whether the operation was successful.
         private static bool GetVersionString(string content, out string version)
         {
@@ -39,7 +52,13 @@ namespace WPlugins.Common
                 return false;
             }
 
-            Match regex = Regex.Match(content, "\"tag_name\"[\\s:]*\"([\\d.]*)\"");
+            Match regex = Regex.Match(content, "\"body\":.?\"(.*)\"");
+            if(regex.Success)
+            {
+                _description = regex.Groups[1].ToString().Replace("\\n", "\n").Replace("\\r", "");
+            }
+
+            regex = Regex.Match(content, "\"tag_name\"[\\s:]*\"([\\d.]*)\"");
             if(regex.Success)
             {
                 version = regex.Groups[1].ToString();
