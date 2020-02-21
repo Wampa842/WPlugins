@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
+    <Compile Include="ObjFileImporter.cs" />
     <Compile Include="ObjImportForm.cs">
       <SubType>Form</SubType>
     </Compile>
