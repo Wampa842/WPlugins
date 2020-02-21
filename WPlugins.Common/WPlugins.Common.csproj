@@ -61,6 +61,26 @@
     <Compile Include="AutoUpdateForm.Designer.cs">
       <DependentUpon>AutoUpdateForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="CommonTypes\ColorSwatch.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CommonTypes\ColorSwatch.Designer.cs">
+      <DependentUpon>ColorSwatch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CommonTypes\ColorSwatchNumeric.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CommonTypes\ColorSwatchNumeric.Designer.cs">
+      <DependentUpon>ColorSwatchNumeric.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CommonTypes\Mathf.cs" />
+    <Compile Include="CommonTypes\Vector3.cs" />
+    <Compile Include="CommonTypes\Vector3Numeric.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CommonTypes\Vector3Numeric.Designer.cs">
+      <DependentUpon>Vector3Numeric.cs</DependentUpon>
+    </Compile>
     <Compile Include="SettingsData\ObjExportSettings.cs" />
     <Compile Include="SettingsData\ObjImportSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -83,7 +103,17 @@
     <EmbeddedResource Include="AutoUpdateForm.resx">
       <DependentUpon>AutoUpdateForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="CommonTypes\ColorSwatch.resx">
+      <DependentUpon>ColorSwatch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CommonTypes\ColorSwatchNumeric.resx">
+      <DependentUpon>ColorSwatchNumeric.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CommonTypes\Vector3Numeric.resx">
+      <DependentUpon>Vector3Numeric.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy "$(TargetPath)" "H:\MMD\PMX Editor\PmxEditor\_plugin\User\WPlugins" /Y /Q
