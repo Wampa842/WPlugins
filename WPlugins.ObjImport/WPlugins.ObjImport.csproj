@@ -47,6 +47,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ImportProgressForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ImportProgressForm.Designer.cs">
+      <DependentUpon>ImportProgressForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Main.cs" />
     <Compile Include="ObjFileImporter.cs" />
     <Compile Include="ObjImportForm.cs">
@@ -56,8 +62,12 @@
       <DependentUpon>ObjImportForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="ImportProgressForm.resx">
+      <DependentUpon>ImportProgressForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ObjImportForm.resx">
       <DependentUpon>ObjImportForm.cs</DependentUpon>
     </EmbeddedResource>

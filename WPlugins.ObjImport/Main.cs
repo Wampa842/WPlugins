@@ -65,6 +65,7 @@ namespace WPlugins.ObjImport
 
 		public string Ext => ".obj";
 
-		public string Caption => "Wavefront OBJ (WPlugins ObjImport v" + Common.Info.Version + ")";
+        //public string Caption => "Wavefront OBJ (WPlugins ObjImport v" + Common.Info.Version + ")";
+        public string Caption => "Wavefront OBJ (WPlugins Importer)";
 	}
 }

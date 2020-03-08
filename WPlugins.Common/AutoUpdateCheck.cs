@@ -25,55 +25,55 @@ using PEPlugin;
 
 namespace WPlugins.Common
 {
-    public class AutoUpdateCheck : IPEPlugin
-    {
-        private AutoUpdateForm _form;
+    //public class AutoUpdateCheck : IPEPlugin
+    //{
+    //    private AutoUpdateForm _form;
 
-        private async void CheckUpdate()
-        {
-            SemanticVersion latest = await VersionCheck.GetLatestVersionAsync();
-            if (latest == null)
-            {
-                return;
-            }
-            if (Settings.Current.Update.Cancel == UpdateSettings.CancelAction.SkipVersion && latest.Equals(Settings.Current.Update.SkipVersion))
-            {
-                return;
-            }
-            if (latest.CompareTo(Info.Version) > 0)
-            {
-                if (_form == null || _form.IsDisposed)
-                {
-                    _form = new AutoUpdateForm(latest, Info.Version);
-                    _form.Show();
-                }
-            }
-        }
+    //    private async void CheckUpdate()
+    //    {
+    //        SemanticVersion latest = await VersionCheck.GetLatestVersionAsync();
+    //        if (latest == null)
+    //        {
+    //            return;
+    //        }
+    //        if (Settings.Current.CancelUpdate == Settings.CancelAction.Skip && latest.Equals(Settings.Current.SkipVersion))
+    //        {
+    //            return;
+    //        }
+    //        if (latest.CompareTo(Info.Version) > 0)
+    //        {
+    //            if (_form == null || _form.IsDisposed)
+    //            {
+    //                _form = new AutoUpdateForm(latest, Info.Version);
+    //                _form.Show();
+    //            }
+    //        }
+    //    }
 
-        public void Run(IPERunArgs args)
-        {
-            CheckUpdate();
-        }
+    //    public void Run(IPERunArgs args)
+    //    {
+    //        CheckUpdate();
+    //    }
 
-        public string Name => "WPlugins Update Checker";
+    //    public string Name => "WPlugins Update Checker";
 
-        public string Version => Info.Version.ToString();
+    //    public string Version => Info.Version.ToString();
 
-        public string Description => "Automatic update checker for WPlugins";
+    //    public string Description => "Automatic update checker for WPlugins";
 
-        public class PluginOptions : IPEPluginOption
-        {
-            public bool Bootup => Settings.Current.Update.Cancel != UpdateSettings.CancelAction.NeverCheck; // Don't even run the plugin if the user doesn't want to check for updates
+    //    public class PluginOptions : IPEPluginOption
+    //    {
+    //        public bool Bootup => Settings.Current.CancelUpdate != Settings.CancelAction.Never; // Don't even run the plugin if the user doesn't want to check for updates
 
-            public bool RegisterMenu => false;
+    //        public bool RegisterMenu => false;
 
-            public string RegisterMenuText => "WPlugins Update Checker";
-        }
+    //        public string RegisterMenuText => "WPlugins Update Checker";
+    //    }
 
-        public IPEPluginOption Option => new PluginOptions();
+    //    public IPEPluginOption Option => new PluginOptions();
 
-        public void Dispose()
-        {
-        }
-    }
+    //    public void Dispose()
+    //    {
+    //    }
+    //}
 }

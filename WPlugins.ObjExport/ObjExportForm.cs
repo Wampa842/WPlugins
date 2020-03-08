@@ -39,7 +39,7 @@ namespace WPlugins.ObjExport
 		private IPERunArgs _args;
 		private string _path;
 		private string _jobPath;
-        public ObjExportSettings Settings { get; private set; }
+        public Settings Settings { get; private set; }
 
 		public ObjExportForm(string path, IPERunArgs args)
 		{
@@ -47,7 +47,7 @@ namespace WPlugins.ObjExport
 			this._args = args;
 			this._path = path;
 			this._jobPath = path + ".wp_export.xml";
-            Settings = Common.Settings.Current.ObjExport;
+            Settings = Settings.Load();
 
 			if (File.Exists(_jobPath))
 			{
@@ -58,7 +58,7 @@ namespace WPlugins.ObjExport
 						{
 							saveDefaultCheck.Checked = false;
 							saveDefaultCheck.Enabled = false;
-                            Settings = ObjExportSettings.Import(_jobPath);
+                            Settings = Settings.Import(_jobPath);
 						}
 						catch (XmlException ex)
 						{
@@ -127,19 +127,18 @@ namespace WPlugins.ObjExport
 			this.Settings.FlipFaces = flipFacesCheck.Checked;
 			this.Settings.SeparateSmoothingGroups = separateSmoothingGroupCheck.Checked;
 
-			this.Settings.BitmapAction = (Common.ObjExportSettings.BitmapActionType)bitmapActionSelect.SelectedIndex;
+			this.Settings.BitmapAction = (Settings.BitmapActionType)bitmapActionSelect.SelectedIndex;
 			this.Settings.BitmapPath = Uri.IsWellFormedUriString(bitmapRelativePathText.Text, UriKind.Relative) ? bitmapRelativePathText.Text : "";
 
 			this.DialogResult = DialogResult.OK;
 			if (saveDefaultCheck.Checked)
 			{
-                Common.Settings.Current.ObjExport = Settings;
-                Common.Settings.Save();
+                Settings.Save(Settings);
 			}
 
 			if (saveJobCheck.Checked)
 			{
-                Settings.Export(_jobPath);
+                Settings.Export(_jobPath, Settings);
 			}
 			this.Close();
 		}

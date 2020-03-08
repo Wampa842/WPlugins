@@ -37,55 +37,55 @@ namespace WPlugins.Common
 
         private async void RemoteLog(string action)
         {
-            if (Settings.Current.Update.AllowRemoteLog)
-            {
-                using (WebClient client = new WebClient())
-                {
-                    client.Headers.Add(HttpRequestHeader.UserAgent, "WPlugins.Common.AutoUpdate");
-                    client.Headers.Add(HttpRequestHeader.ContentType, "application/x-www-form-urlencoded");
-                    //await client.UploadStringTaskAsync("http://localhost/wplugins/rlog.php", string.Format("version={0}&action={1}", _current.ToString(), action));
-                    await client.UploadStringTaskAsync("http://users.atw.hu/wplugins/rlog.php", string.Format("version={0}&action={1}", _current.ToString(), action));
-                }
-            }
+            //if (Settings.Current.AllowRemoteLog)
+            //{
+            //    using (WebClient client = new WebClient())
+            //    {
+            //        client.Headers.Add(HttpRequestHeader.UserAgent, "WPlugins.Common.AutoUpdate");
+            //        client.Headers.Add(HttpRequestHeader.ContentType, "application/x-www-form-urlencoded");
+            //        //await client.UploadStringTaskAsync("http://localhost/wplugins/rlog.php", string.Format("version={0}&action={1}", _current.ToString(), action));
+            //        await client.UploadStringTaskAsync("http://users.atw.hu/wplugins/rlog.php", string.Format("version={0}&action={1}", _current.ToString(), action));
+            //    }
+            //}
         }
 
         private void visitUpdateButton_Click(object sender, EventArgs e)
         {
-            // Visit the latest release, then close the form.
-            System.Diagnostics.Process.Start("https://github.com/wampa842/wplugins/releases/latest");
-            Settings.Current.Update.Cancel = UpdateSettings.CancelAction.None;
-            RemoteLog("update");
-            Close();
+            //// Visit the latest release, then close the form.
+            //System.Diagnostics.Process.Start("https://github.com/wampa842/wplugins/releases/latest");
+            //Settings.Current.CancelUpdate = Settings.CancelAction.Ask;
+            //RemoteLog("update");
+            //Close();
         }
 
         private void ignoreButton_Click(object sender, EventArgs e)
         {
-            // Close the form and don't do anything
-            Settings.Current.Update.Cancel = UpdateSettings.CancelAction.None;
-            RemoteLog("delay");
-            Close();
+            //// Close the form and don't do anything
+            //Settings.Current.CancelUpdate = Settings.CancelAction.Ask;
+            //RemoteLog("delay");
+            //Close();
         }
 
         private void disableButton_Click(object sender, EventArgs e)
         {
-            // Log to never check for updates, then close the form.
-            Settings.Current.Update.Cancel = UpdateSettings.CancelAction.NeverCheck;
-            RemoteLog("never");
-            Close();
+            //// Log to never check for updates, then close the form.
+            //Settings.Current.CancelUpdate = Settings.CancelAction.Never;
+            //RemoteLog("never");
+            //Close();
         }
 
         private void skipButton_Click(object sender, EventArgs e)
         {
-            // Log the version to ignore, then close the form.
-            Settings.Current.Update.Cancel = UpdateSettings.CancelAction.SkipVersion;
-            Settings.Current.Update.SkipVersion = _latest;
-            RemoteLog("skip");
-            Close();
+            //// Log the version to ignore, then close the form.
+            //Settings.Current.CancelUpdate = Settings.CancelAction.Skip;
+            //Settings.Current.SkipVersion = _latest;
+            //RemoteLog("skip");
+            //Close();
         }
 
         private void AutoUpdateForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            Settings.Save();
+            //Settings.Save();
         }
 
         private void showChangelogLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -101,8 +101,8 @@ namespace WPlugins.Common
                 "If you do not want to send this information, click on the \"No\" button below. The application will remember your choice and it'll never send this data.\n\n" +
                 "Would you like to send anonymous data about your choice?";
             DialogResult result = MessageBox.Show(note, "Privacy statement & opt-out", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-            Settings.Current.Update.AllowRemoteLog = result != DialogResult.No;
-            Settings.Save();
+            //Settings.Current.AllowRemoteLog = result != DialogResult.No;
+            //Settings.Save();
         }
     }
 }

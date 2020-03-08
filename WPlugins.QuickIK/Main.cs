@@ -23,7 +23,7 @@ namespace WPlugins.QuickIK
         public string Description => "Create bone and IK chains quickly.";
         class PluginOptions : IPEPluginOption
         {
-            public bool Bootup => true;
+            public bool Bootup => false;
 
             public bool RegisterMenu => true;
 

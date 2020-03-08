@@ -29,7 +29,6 @@ using System.Xml;
 
 using PEPlugin;
 using PEPlugin.Pmx;
-using WPlugins.Common;
 
 namespace WPlugins.ObjImport
 {
@@ -38,7 +37,7 @@ namespace WPlugins.ObjImport
 		private IPERunArgs _args;
 		private string _path;
 		private string _jobPath;
-        public ObjImportSettings Settings { get; private set; }
+        internal Settings Settings { get; private set; }
 
 		public ObjImportForm(string path, IPERunArgs args)
 		{
@@ -46,7 +45,7 @@ namespace WPlugins.ObjImport
 			_args = args;
 			_path = path;
 			_jobPath = path + ".wp_import.xml";
-            Settings = Common.Settings.Current.ObjImport;
+            Settings = Settings.Load();
 
 			if (System.IO.File.Exists(_jobPath))
 			{
@@ -57,7 +56,7 @@ namespace WPlugins.ObjImport
 						{
 							saveDefaultCheck.Checked = false;
 							saveDefaultCheck.Enabled = false;
-                            Settings = ObjImportSettings.Import(_jobPath);
+                            Settings = Settings.Import(_jobPath);
 						}
 						catch (XmlException ex)
 						{
@@ -133,18 +132,17 @@ namespace WPlugins.ObjImport
 			this.Settings.UseMetricUnits = metricRadio.Checked;
 			this.Settings.FlipFaces = flipFacesCheck.Checked;
 
-			this.Settings.MaterialNaming = (Common.ObjImportSettings.MaterialNamingMode)materialNamingSelect.SelectedIndex;
-			this.Settings.CreateBone = (Common.ObjImportSettings.CreateBoneMode)boneActionSelect.SelectedIndex;
+			this.Settings.MaterialNaming = (Settings.MaterialNamingMode)materialNamingSelect.SelectedIndex;
+			this.Settings.CreateBone = (Settings.CreateBoneMode)boneActionSelect.SelectedIndex;
 
 			this.DialogResult = DialogResult.OK;
 			if (saveDefaultCheck.Checked)
 			{
-                Common.Settings.Current.ObjImport = Settings;
-                Common.Settings.Save();
+                Settings.Save(Settings);
 			}
 			if (saveJobCheck.Checked)
 			{
-                Settings.Export(_jobPath);
+                Settings.Export(_jobPath, Settings);
 			}
 			this.Close();
 		}

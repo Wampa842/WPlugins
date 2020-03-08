@@ -156,7 +156,7 @@ namespace WPlugins.Common
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Settings.Load();
+            //Settings.Load();
         }
     }
 }

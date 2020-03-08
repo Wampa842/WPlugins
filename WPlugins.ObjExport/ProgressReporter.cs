@@ -16,13 +16,15 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with WPlugins.  If not, see <http://www.gnu.org/licenses/>.
 */
-using System;
 
-namespace WPlugins.Common
+
+namespace WPlugins.ObjExport
 {
-    [Serializable]
-    public class SelectionStorageSettings
-    {
-        bool KeepOnTop { get; set; } = false;
-    }
+    public class ProgressReporter
+	{
+		public int TotalProgress { get; set; }
+		public int FacesMax { get; set; }
+		public int FacesProgress { get; set; }
+		public int MaterialsProgress { get; set; }
+	}
 }

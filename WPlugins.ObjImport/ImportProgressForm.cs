@@ -18,24 +18,34 @@ along with WPlugins.  If not, see <http://www.gnu.org/licenses/>.
 */
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
-namespace WPlugins.Common
+namespace WPlugins.ObjImport
 {
-    [Serializable]
-    public class SettingsData
-    {
-        public UpdateSettings Update { get; set; }
-        public ObjImportSettings ObjImport { get; set; }
-        public ObjExportSettings ObjExport { get; set; }
+	public partial class ImportProgressForm : Form
+	{
+		private BackgroundWorker worker;
+		public ImportProgressForm(BackgroundWorker worker, int max)
+		{
+			InitializeComponent();
+			this.worker = worker;
+			totalProgressBar.Maximum = max;
+		}
 
-        public SettingsData()
-        {
-            Update = new UpdateSettings();
-            ObjImport = new ObjImportSettings();
-            ObjExport = new ObjExportSettings();
-        }
-    }
+		public void UpdateProgress(int percent, object rep)
+		{
+			//totalProgressBar.Value = rep.TotalProgress;
+		}
+
+		private void cancelProcessButton_Click(object sender, EventArgs e)
+		{
+			worker.CancelAsync();
+		}
+	}
 }

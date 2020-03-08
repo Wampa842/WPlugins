@@ -1,4 +1,4 @@
-﻿namespace WPlugins.ObjExport
+﻿namespace WPlugins.ObjImport
 {
 	partial class ImportProgressForm
 	{

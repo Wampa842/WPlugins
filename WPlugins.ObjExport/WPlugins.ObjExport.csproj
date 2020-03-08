@@ -60,7 +60,10 @@
     <Compile Include="ObjExportForm.Designer.cs">
       <DependentUpon>ObjExportForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ObjFileExporter.cs" />
+    <Compile Include="ProgressReporter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ExportProgressForm.resx">

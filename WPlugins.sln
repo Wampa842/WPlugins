@@ -31,6 +31,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPlugins.WeightTransfer", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPlugins.QuickIK", "WPlugins.QuickIK\WPlugins.QuickIK.csproj", "{95A6FEF1-6BFF-4114-89F8-DE438E691EB3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPlugins.ProcessBatch", "WPlugins.ProcessBatch\WPlugins.ProcessBatch.csproj", "{324993F3-9E30-452B-AEE5-56EF1768C5E0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPlugins.ProcessXml", "WPlugins.ProcessXml\WPlugins.ProcessXml.csproj", "{3BFC9C45-4AB8-4B5D-9AC0-047DEE61963D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +85,14 @@ Global
 		{95A6FEF1-6BFF-4114-89F8-DE438E691EB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95A6FEF1-6BFF-4114-89F8-DE438E691EB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95A6FEF1-6BFF-4114-89F8-DE438E691EB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{324993F3-9E30-452B-AEE5-56EF1768C5E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{324993F3-9E30-452B-AEE5-56EF1768C5E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{324993F3-9E30-452B-AEE5-56EF1768C5E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{324993F3-9E30-452B-AEE5-56EF1768C5E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BFC9C45-4AB8-4B5D-9AC0-047DEE61963D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BFC9C45-4AB8-4B5D-9AC0-047DEE61963D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BFC9C45-4AB8-4B5D-9AC0-047DEE61963D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BFC9C45-4AB8-4B5D-9AC0-047DEE61963D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

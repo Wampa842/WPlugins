@@ -28,10 +28,10 @@ using System.Windows.Forms;
 
 namespace WPlugins.ObjExport
 {
-	public partial class ExportProgressForm : Form
+	public partial class ImportProgressForm : Form
 	{
 		private BackgroundWorker worker;
-		public ExportProgressForm(BackgroundWorker worker, int max)
+		public ImportProgressForm(BackgroundWorker worker, int max)
 		{
 			InitializeComponent();
 			this.worker = worker;

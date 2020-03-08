@@ -6,28 +6,38 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.Windows.Forms;
 
-namespace WPlugins.Common
+namespace WPlugins.ObjImport
 {
-    /*[Serializable]
+    [Serializable]
     public class Settings
     {
-        public enum CancelAction { Ask, Skip, Never }
+        public enum CreateBoneMode { None, Origin, Average };
+        public enum MaterialNamingMode { Numbered, GroupName, BitmapName }
 
-        public bool AllowRemoteLog = false;
-        public CancelAction CancelUpdate = CancelAction.Ask;
-        public SemanticVersion SkipVersion = new SemanticVersion(0, 0, 0);
+        public bool UseMetricUnits { get; set; } = false;
+        public bool FlipFaces { get; set; } = false;
+        public bool SwapYZ { get; set; } = false;
+        public bool TurnQuads { get; set; } = false;
+        public bool UniformScale { get; set; } = true;
+        public bool UniformUVScale { get; set; } = true;
+        public float ScaleX { get; set; } = 1.0f;
+        public float ScaleY { get; set; } = 1.0f;
+        public float ScaleZ { get; set; } = 1.0f;
+        public float ScaleU { get; set; } = 1.0f;
+        public float ScaleV { get; set; } = 1.0f;
+        public CreateBoneMode CreateBone { get; set; } = CreateBoneMode.None;
+        public MaterialNamingMode MaterialNaming { get; set; } = MaterialNamingMode.GroupName;
 
-        internal static string FilePath => Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "WPlugins.Common.Settings.xml");
-        internal static Settings Current { get; private set; }
+        internal static string FilePath => Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "WPlugins.ObjImport.Settings.xml");
 
-        internal static void Save()
+        internal static void Save(Settings data)
         {
-            Export(FilePath, Current);
+            Export(FilePath, data);
         }
 
-        internal static void Load()
+        internal static Settings Load()
         {
-            Current = Import(FilePath);
+            return Import(FilePath);
         }
 
         internal static void Export(string path, Settings data)
@@ -76,5 +86,5 @@ namespace WPlugins.Common
             }
             return new Settings();
         }
-    }*/
+    }
 }
