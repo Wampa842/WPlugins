@@ -51,7 +51,7 @@ namespace WPlugins.ObjImport
         private string filePath = "";
         private bool _importComplete = false;
 
-        public ObjFileImporter(string path, IPXPmxBuilder builder, Settings settings)
+        public ObjFileImporter(string path, IPXPmxBuilder builder, Settings settings, bool um)
         {
             this.builder = builder;
             this.settings = settings;
@@ -65,20 +65,14 @@ namespace WPlugins.ObjImport
             filePath = path;
 
             worker = new BackgroundWorker { WorkerReportsProgress = true, WorkerSupportsCancellation = true };
-            worker.ProgressChanged += Worker_ProgressChanged;
             worker.DoWork += Worker_ProcessFile;
-        }
-
-        private void Worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            throw new NotImplementedException();
         }
 
         public void ProcessFile()
         {
-            worker.RunWorkerCompleted += (o, e) =>
+            worker.RunWorkerCompleted += (sender, e) =>
             {
-                if(e.Cancelled)
+                if (e.Cancelled)
                 {
                     MessageBox.Show("cancelled");
                 }
@@ -86,6 +80,10 @@ namespace WPlugins.ObjImport
                 {
                     _importComplete = true;
                 }
+            };
+            worker.ProgressChanged += (sender, e) =>
+            {
+
             };
             worker.RunWorkerAsync();
         }
@@ -318,7 +316,244 @@ namespace WPlugins.ObjImport
             }
         }
 
-		//Read and parse the MTL file that belongs to the OBJ
+        public ObjFileImporter(string path, IPXPmxBuilder builder, Settings settings)
+        {
+            this.builder = builder;
+            this.settings = settings;
+            this.ObjFileName = Path.GetFileNameWithoutExtension(path);
+            vList = new List<V3>();
+            vtList = new List<V2>();
+            vnList = new List<V3>();
+            vertexDict = new Dictionary<Tuple<int, int, int>, int>();
+            vertices = new List<IPXVertex>();
+            materials = new List<IPXMaterial>();
+            filePath = path;
+            IPXMaterial material = builder.Material();
+            IPXMaterial template = null;
+
+            using (logger = new StreamWriter(this.LogFileUrl))
+            using (StreamReader reader = new StreamReader(filePath))
+            {
+                string line;
+                string[] tok;
+                string groupName = "";
+
+                //Counters for the sake of verbosity
+                int lineNum = 0;
+                int vNum = 0;
+                int vtNum = 0;
+                int vnNum = 0;
+                int fNum = 0;
+                int triNum = 0;
+                int quadNum = 0;
+                int triOutNum = 0;
+                int gNum = 0;
+
+                while (!reader.EndOfStream)
+                {
+                    line = reader.ReadLine().Trim();
+                    ++lineNum;
+
+                    //Skip empty and comment lines
+                    if (string.IsNullOrWhiteSpace(line) || line[0] == '#')
+                        continue;
+                    tok = line.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                    int v, vt, vn, v1, v2, v3, v4;
+                    bool groupWithoutMaterial = false;  // Indicates if a group has been created but no material was assigned to it.
+
+                    switch (tok[0])
+                    {
+                        //Vertex position
+                        case "v":
+                            try
+                            {
+                                vList.Add(new V3(float.Parse(tok[1]), float.Parse(tok[2]), -float.Parse(tok[3])));
+                            }
+                            catch (FormatException)
+                            {
+                                logger.WriteLine($"ERROR (OBJ) FormatException on line {lineNum}: {line}");
+                                this.ErrorNum++;
+                            }
+                            ++vNum;
+                            break;
+                        //Texture coordinate
+                        case "vt":
+                            try
+                            {
+                                vtList.Add(new V2(float.Parse(tok[1]), -float.Parse(tok[2])));
+                            }
+                            catch (FormatException)
+                            {
+                                logger.WriteLine($"ERROR (OBJ) FormatException on line {lineNum}: {line}");
+                                this.ErrorNum++;
+                            }
+                            ++vtNum;
+                            break;
+                        //Vertex normal vector
+                        case "vn":
+                            try
+                            {
+                                vnList.Add(new V3(float.Parse(tok[1]), float.Parse(tok[2]), -float.Parse(tok[3])));
+                            }
+                            catch (FormatException)
+                            {
+                                logger.WriteLine($"ERROR (OBJ) FormatException on line {lineNum}: {line}");
+                                this.ErrorNum++;
+                            }
+                            ++vnNum;
+                            break;
+                        //Face
+                        case "f":
+                            ++fNum;
+                            //Construct triangle
+                            if (groupWithoutMaterial)
+                            {
+                                material = builder.Material();
+                                material.Name = material.NameE = groupName;
+                                materials.Add(material);
+                            }
+                            if (tok.Length == 4)
+                            {
+                                ++triNum;
+                                ++triOutNum;
+                                VertexElements(tok[1], out v, out vt, out vn);
+                                v1 = CreateVertex(v, vt, vn);
+                                if (v1 >= 0)
+                                {
+                                    VertexElements(tok[2], out v, out vt, out vn);
+                                    v2 = CreateVertex(v, vt, vn);
+                                    if (v2 >= 0)
+                                    {
+                                        VertexElements(tok[3], out v, out vt, out vn);
+                                        v3 = CreateVertex(v, vt, vn);
+                                        if (v3 >= 0)
+                                        {
+                                            IPXFace face = builder.Face();
+                                            face.Vertex3 = vertices[v1];
+                                            face.Vertex2 = vertices[v2];
+                                            face.Vertex1 = vertices[v3];
+                                            material.Faces.Add(face);
+                                        }
+                                    }
+                                }
+                            }
+                            //Construct two triangles from quad
+                            else if (tok.Length == 5)
+                            {
+                                ++quadNum;
+                                ++triOutNum;
+                                VertexElements(tok[1], out v, out vt, out vn);
+                                v1 = CreateVertex(v, vt, vn);
+                                if (v1 >= 0)
+                                {
+                                    VertexElements(tok[2], out v, out vt, out vn);
+                                    v2 = CreateVertex(v, vt, vn);
+                                    if (v2 >= 0)
+                                    {
+                                        VertexElements(tok[3], out v, out vt, out vn);
+                                        v3 = CreateVertex(v, vt, vn);
+                                        if (v3 >= 0)
+                                        {
+                                            VertexElements(tok[4], out v, out vt, out vn);
+                                            v4 = CreateVertex(v, vt, vn);
+                                            if (v4 >= 0)
+                                            {
+                                                IPXFace face = builder.Face();
+                                                face.Vertex3 = vertices[v1];
+                                                face.Vertex2 = vertices[v2];
+                                                face.Vertex1 = vertices[settings.TurnQuads ? v3 : v4];
+                                                material.Faces.Add(face);
+
+                                                face = builder.Face();
+                                                face.Vertex3 = vertices[settings.TurnQuads ? v1 : v2];
+                                                face.Vertex2 = vertices[v3];
+                                                face.Vertex1 = vertices[v4];
+                                                material.Faces.Add(face);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            //Handle polygons - currently not supported
+                            else
+                            {
+                                logger.WriteLine($"ERROR (OBJ) Unsupported polygon ({tok.Length - 1} points) on line {lineNum}: {line}");
+                                this.ErrorNum++;
+                            }
+                            break;
+                        //Group - create new material instance
+                        /*
+                         * A group definition is always followed by:
+                         * - Material assignment
+                         * - Smoothing group assignment (ignored)
+                         * - Face definition
+                         * 
+                         * If a group definition is followed by a face definition with no assigned material, assign the default material to it.
+                         * */
+                        case "g":
+                            if (tok.Length >= 2)
+                            {
+                                groupName = line.Trim().Substring(2, line.Length - 2);
+                            }
+                            else
+                            {
+                                logger.WriteLine($"ERROR (OBJ) Invalid group definition on line {lineNum}: {line}");
+                                this.ErrorNum++;
+                            }
+                            ++gNum;
+                            break;
+                        //Material - assign the template's properties to the instance created by g
+                        case "usemtl":
+                            string name = line.Trim().Substring(7, line.Length - 7);
+                            material = builder.Material();
+                            material.Name = material.NameE = groupName;
+                            materials.Add(material);
+                            if (loadWithoutMaterials)
+                            {
+                                material.Diffuse = new V4(1.0f, 1.0f, 1.0f, 1.0f);
+                                material.Ambient = new V3(0.5f, 0.5f, 0.5f);
+                                material.Specular = new V3();
+                                material.Tex = "";
+                                material.Power = 10.0f;
+                                material.Edge = false;
+                                material.SelfShadow = true;
+                                material.SelfShadowMap = true;
+                                material.Shadow = true;
+                            }
+                            else
+                            {
+                                if (uniqueMaterials.ContainsKey(name))
+                                {
+                                    template = uniqueMaterials[name];
+                                    material.Diffuse = template.Diffuse;
+                                    material.Ambient = template.Ambient;
+                                    material.Specular = template.Specular;
+                                    material.Tex = template.Tex;
+                                    material.Power = template.Power;
+                                    material.Edge = false;
+                                    material.SelfShadow = true;
+                                    material.SelfShadowMap = true;
+                                    material.Shadow = true;
+                                }
+                                else
+                                {
+                                    logger.WriteLine($"WARNING (OBJ) Material not found ({name}) on line {lineNum}");
+                                    this.ErrorNum++;
+                                }
+                            }
+                            break;
+                        //Material template library - process MTL
+                        case "mtllib":
+                            uniqueMaterials = ReadMaterialLibrary(Path.Combine(Path.GetDirectoryName(filePath), line.Trim().Substring(7, line.Length - 7).Trim()));
+                            break;
+                    }
+                }
+                logger.WriteLine($"LOG (OBJ) Finished ({ErrorNum} errors)");
+                logger.WriteLine($"LOG (OBJ) {vNum} vertices, {vtNum} texture coordinates, {vnNum} normal vectors, {fNum} face records ({triNum} triangles, {quadNum} quads), {triOutNum} total triangles, {gNum} groups");
+            }
+        }
+
 		private Dictionary<string, IPXMaterial> ReadMaterialLibrary(string path)
 		{
 			Dictionary<string, IPXMaterial> output = new Dictionary<string, IPXMaterial>();

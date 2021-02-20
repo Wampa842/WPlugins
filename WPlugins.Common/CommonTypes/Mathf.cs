@@ -55,5 +55,7 @@ namespace WPlugins
         public static int CeilingToInt(double x) => (int)Math.Ceiling(x);
         public static float Pow(double a, double exponent) => (float)Math.Pow(a, exponent);
         public static float Sqrt(double a) => (float)Math.Sqrt(a);
+        public static float Rad(this double deg) => (float)(deg * (PI / 180));
+        public static float Deg(this double rad) => (float)(rad * (180 / PI));
     }
 }

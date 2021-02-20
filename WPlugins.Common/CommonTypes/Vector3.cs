@@ -193,6 +193,8 @@ namespace WPlugins
         /// </summary>
         public static Vector3 Average(Vector3 a, Vector3 b) => (a + b) / 2;
 
+        public static Vector3 Normalize(Vector3 v) => v.Normalized;
+
         /// <summary>
         /// The dot product of two vectors.
         /// </summary>
