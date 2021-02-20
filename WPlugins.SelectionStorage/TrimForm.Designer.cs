@@ -288,20 +288,20 @@
             // trimCloneButton
             // 
             this.trimCloneButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.trimCloneButton.Location = new System.Drawing.Point(307, 118);
+            this.trimCloneButton.Location = new System.Drawing.Point(289, 118);
             this.trimCloneButton.Name = "trimCloneButton";
-            this.trimCloneButton.Size = new System.Drawing.Size(75, 23);
+            this.trimCloneButton.Size = new System.Drawing.Size(93, 23);
             this.trimCloneButton.TabIndex = 6;
-            this.trimCloneButton.Text = "Trim clone";
+            this.trimCloneButton.Text = "Clone and trim";
             this.trimCloneButton.UseVisualStyleBackColor = true;
             this.trimCloneButton.Click += new System.EventHandler(this.trimCloneButton_Click);
             // 
             // trimButton
             // 
             this.trimButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.trimButton.Location = new System.Drawing.Point(226, 118);
+            this.trimButton.Location = new System.Drawing.Point(190, 118);
             this.trimButton.Name = "trimButton";
-            this.trimButton.Size = new System.Drawing.Size(75, 23);
+            this.trimButton.Size = new System.Drawing.Size(93, 23);
             this.trimButton.TabIndex = 7;
             this.trimButton.Text = "Trim original";
             this.trimButton.UseVisualStyleBackColor = true;

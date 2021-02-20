@@ -90,7 +90,7 @@
             this.viewToolStripMenuItem});
             this.mainMenuStrip.Location = new System.Drawing.Point(0, 0);
             this.mainMenuStrip.Name = "mainMenuStrip";
-            this.mainMenuStrip.Size = new System.Drawing.Size(464, 24);
+            this.mainMenuStrip.Size = new System.Drawing.Size(484, 24);
             this.mainMenuStrip.TabIndex = 0;
             this.mainMenuStrip.Text = "mainMenuStrip";
             // 
@@ -107,7 +107,7 @@
             // 
             this.exportToFileToolStripMenuItem.Enabled = false;
             this.exportToFileToolStripMenuItem.Name = "exportToFileToolStripMenuItem";
-            this.exportToFileToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.exportToFileToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.exportToFileToolStripMenuItem.Text = "Export to file";
             this.exportToFileToolStripMenuItem.Click += new System.EventHandler(this.exportToFileToolStripMenuItem_Click);
             // 
@@ -115,7 +115,7 @@
             // 
             this.importFromFileToolStripMenuItem.Enabled = false;
             this.importFromFileToolStripMenuItem.Name = "importFromFileToolStripMenuItem";
-            this.importFromFileToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.importFromFileToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.importFromFileToolStripMenuItem.Text = "Import from file";
             // 
             // viewToolStripMenuItem
@@ -147,9 +147,10 @@
             this.numberBodiesColumn,
             this.numberJointsColumn});
             this.storedList.FullRowSelect = true;
+            this.storedList.HideSelection = false;
             this.storedList.Location = new System.Drawing.Point(12, 27);
             this.storedList.Name = "storedList";
-            this.storedList.Size = new System.Drawing.Size(389, 340);
+            this.storedList.Size = new System.Drawing.Size(409, 340);
             this.storedList.TabIndex = 1;
             this.storedList.UseCompatibleStateImageBehavior = false;
             this.storedList.View = System.Windows.Forms.View.Details;
@@ -193,7 +194,7 @@
             this.storeCurrentButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.storeCurrentButton.Location = new System.Drawing.Point(12, 429);
             this.storeCurrentButton.Name = "storeCurrentButton";
-            this.storeCurrentButton.Size = new System.Drawing.Size(440, 35);
+            this.storeCurrentButton.Size = new System.Drawing.Size(460, 35);
             this.storeCurrentButton.TabIndex = 2;
             this.storeCurrentButton.Text = "Store current selection";
             this.storeCurrentButton.UseVisualStyleBackColor = true;
@@ -205,7 +206,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.nameText.Location = new System.Drawing.Point(56, 374);
             this.nameText.Name = "nameText";
-            this.nameText.Size = new System.Drawing.Size(283, 20);
+            this.nameText.Size = new System.Drawing.Size(303, 20);
             this.nameText.TabIndex = 3;
             // 
             // restoreButton
@@ -215,7 +216,7 @@
             this.restoreButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.restoreButton.Location = new System.Drawing.Point(12, 470);
             this.restoreButton.Name = "restoreButton";
-            this.restoreButton.Size = new System.Drawing.Size(440, 35);
+            this.restoreButton.Size = new System.Drawing.Size(460, 35);
             this.restoreButton.TabIndex = 5;
             this.restoreButton.Text = "Restore selection";
             this.restoreButton.UseVisualStyleBackColor = true;
@@ -246,7 +247,7 @@
             // renameButton
             // 
             this.renameButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.renameButton.Location = new System.Drawing.Point(345, 372);
+            this.renameButton.Location = new System.Drawing.Point(365, 372);
             this.renameButton.Name = "renameButton";
             this.renameButton.Size = new System.Drawing.Size(107, 23);
             this.renameButton.TabIndex = 7;
@@ -264,7 +265,7 @@
             // trimButton
             // 
             this.trimButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.trimButton.Location = new System.Drawing.Point(352, 402);
+            this.trimButton.Location = new System.Drawing.Point(372, 402);
             this.trimButton.Name = "trimButton";
             this.trimButton.Size = new System.Drawing.Size(100, 23);
             this.trimButton.TabIndex = 15;
@@ -277,7 +278,7 @@
             // cloneButton
             // 
             this.cloneButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.cloneButton.Location = new System.Drawing.Point(407, 290);
+            this.cloneButton.Location = new System.Drawing.Point(427, 290);
             this.cloneButton.Name = "cloneButton";
             this.cloneButton.Size = new System.Drawing.Size(45, 26);
             this.cloneButton.TabIndex = 16;
@@ -291,7 +292,7 @@
             this.moveDownButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.moveDownButton.BackgroundImage = global::WPlugins.SelectionStorage.Properties.Resources.icon_down;
             this.moveDownButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.moveDownButton.Location = new System.Drawing.Point(407, 258);
+            this.moveDownButton.Location = new System.Drawing.Point(427, 258);
             this.moveDownButton.Name = "moveDownButton";
             this.moveDownButton.Size = new System.Drawing.Size(45, 26);
             this.moveDownButton.TabIndex = 14;
@@ -304,7 +305,7 @@
             this.moveUpButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.moveUpButton.BackgroundImage = global::WPlugins.SelectionStorage.Properties.Resources.icon_up;
             this.moveUpButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.moveUpButton.Location = new System.Drawing.Point(407, 231);
+            this.moveUpButton.Location = new System.Drawing.Point(427, 231);
             this.moveUpButton.Name = "moveUpButton";
             this.moveUpButton.Size = new System.Drawing.Size(45, 26);
             this.moveUpButton.TabIndex = 13;
@@ -318,7 +319,7 @@
             this.complementButton.BackgroundImage = global::WPlugins.SelectionStorage.Properties.Resources.icon_complement;
             this.complementButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.complementButton.Enabled = false;
-            this.complementButton.Location = new System.Drawing.Point(407, 180);
+            this.complementButton.Location = new System.Drawing.Point(427, 180);
             this.complementButton.Name = "complementButton";
             this.complementButton.Size = new System.Drawing.Size(45, 45);
             this.complementButton.TabIndex = 12;
@@ -332,7 +333,7 @@
             this.differenceButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.differenceButton.BackgroundImage = global::WPlugins.SelectionStorage.Properties.Resources.icon_difference;
             this.differenceButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.differenceButton.Location = new System.Drawing.Point(407, 129);
+            this.differenceButton.Location = new System.Drawing.Point(427, 129);
             this.differenceButton.Name = "differenceButton";
             this.differenceButton.Size = new System.Drawing.Size(45, 45);
             this.differenceButton.TabIndex = 11;
@@ -346,7 +347,7 @@
             this.intersectButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.intersectButton.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("intersectButton.BackgroundImage")));
             this.intersectButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.intersectButton.Location = new System.Drawing.Point(407, 78);
+            this.intersectButton.Location = new System.Drawing.Point(427, 78);
             this.intersectButton.Name = "intersectButton";
             this.intersectButton.Size = new System.Drawing.Size(45, 45);
             this.intersectButton.TabIndex = 10;
@@ -360,7 +361,7 @@
             this.unionButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.unionButton.BackgroundImage = global::WPlugins.SelectionStorage.Properties.Resources.icon_union;
             this.unionButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.unionButton.Location = new System.Drawing.Point(407, 27);
+            this.unionButton.Location = new System.Drawing.Point(427, 27);
             this.unionButton.Name = "unionButton";
             this.unionButton.Size = new System.Drawing.Size(45, 45);
             this.unionButton.TabIndex = 9;
@@ -374,7 +375,7 @@
             this.deleteButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.deleteButton.BackgroundImage = global::WPlugins.SelectionStorage.Properties.Resources.icon_delete;
             this.deleteButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.deleteButton.Location = new System.Drawing.Point(407, 322);
+            this.deleteButton.Location = new System.Drawing.Point(427, 322);
             this.deleteButton.Name = "deleteButton";
             this.deleteButton.Size = new System.Drawing.Size(45, 45);
             this.deleteButton.TabIndex = 8;
@@ -390,9 +391,9 @@
             this.selectiveAllCheck.CheckState = System.Windows.Forms.CheckState.Checked;
             this.selectiveAllCheck.Location = new System.Drawing.Point(12, 406);
             this.selectiveAllCheck.Name = "selectiveAllCheck";
-            this.selectiveAllCheck.Size = new System.Drawing.Size(162, 17);
+            this.selectiveAllCheck.Size = new System.Drawing.Size(88, 17);
             this.selectiveAllCheck.TabIndex = 6;
-            this.selectiveAllCheck.Text = "Select types to store/restore:";
+            this.selectiveAllCheck.Text = "Filter by type:";
             this.selectiveAllCheck.UseVisualStyleBackColor = true;
             this.selectiveAllCheck.Click += new System.EventHandler(this.selectiveAllCheck_Click);
             // 
@@ -403,7 +404,7 @@
             this.selectiveJointCheck.AutoSize = true;
             this.selectiveJointCheck.Checked = true;
             this.selectiveJointCheck.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.selectiveJointCheck.Location = new System.Drawing.Point(312, 402);
+            this.selectiveJointCheck.Location = new System.Drawing.Point(232, 402);
             this.selectiveJointCheck.Name = "selectiveJointCheck";
             this.selectiveJointCheck.Size = new System.Drawing.Size(22, 23);
             this.selectiveJointCheck.TabIndex = 5;
@@ -419,7 +420,7 @@
             this.selectiveRigidbodyCheck.AutoSize = true;
             this.selectiveRigidbodyCheck.Checked = true;
             this.selectiveRigidbodyCheck.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.selectiveRigidbodyCheck.Location = new System.Drawing.Point(275, 402);
+            this.selectiveRigidbodyCheck.Location = new System.Drawing.Point(195, 402);
             this.selectiveRigidbodyCheck.Name = "selectiveRigidbodyCheck";
             this.selectiveRigidbodyCheck.Size = new System.Drawing.Size(31, 23);
             this.selectiveRigidbodyCheck.TabIndex = 4;
@@ -435,7 +436,7 @@
             this.selectiveTriangleCheck.AutoSize = true;
             this.selectiveTriangleCheck.Checked = true;
             this.selectiveTriangleCheck.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.selectiveTriangleCheck.Location = new System.Drawing.Point(216, 402);
+            this.selectiveTriangleCheck.Location = new System.Drawing.Point(136, 402);
             this.selectiveTriangleCheck.Name = "selectiveTriangleCheck";
             this.selectiveTriangleCheck.Size = new System.Drawing.Size(23, 23);
             this.selectiveTriangleCheck.TabIndex = 3;
@@ -451,7 +452,7 @@
             this.selectiveBoneCheck.AutoSize = true;
             this.selectiveBoneCheck.Checked = true;
             this.selectiveBoneCheck.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.selectiveBoneCheck.Location = new System.Drawing.Point(245, 402);
+            this.selectiveBoneCheck.Location = new System.Drawing.Point(165, 402);
             this.selectiveBoneCheck.Name = "selectiveBoneCheck";
             this.selectiveBoneCheck.Size = new System.Drawing.Size(24, 23);
             this.selectiveBoneCheck.TabIndex = 2;
@@ -467,7 +468,7 @@
             this.selectiveVertexCheck.AutoSize = true;
             this.selectiveVertexCheck.Checked = true;
             this.selectiveVertexCheck.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.selectiveVertexCheck.Location = new System.Drawing.Point(186, 402);
+            this.selectiveVertexCheck.Location = new System.Drawing.Point(106, 402);
             this.selectiveVertexCheck.Name = "selectiveVertexCheck";
             this.selectiveVertexCheck.Size = new System.Drawing.Size(24, 23);
             this.selectiveVertexCheck.TabIndex = 2;
@@ -486,7 +487,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(464, 517);
+            this.ClientSize = new System.Drawing.Size(484, 517);
             this.Controls.Add(this.cloneButton);
             this.Controls.Add(this.trimButton);
             this.Controls.Add(this.selectiveAllCheck);
