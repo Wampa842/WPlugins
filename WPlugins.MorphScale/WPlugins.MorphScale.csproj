@@ -46,7 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Main.cs" />
+    <Compile Include="MorphScale.cs" />
     <Compile Include="MorphScaleForm.cs">
       <SubType>Form</SubType>
     </Compile>

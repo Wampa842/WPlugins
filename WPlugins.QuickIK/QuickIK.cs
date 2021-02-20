@@ -8,7 +8,7 @@ using PEPlugin;
 
 namespace WPlugins.QuickIK
 {
-    public class Main : IPEPlugin
+    public class QuickIK : IPEPlugin
     {
         private MainForm _form;
         public void Run(IPERunArgs args)

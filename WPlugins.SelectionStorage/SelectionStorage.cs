@@ -25,7 +25,7 @@ using PEPlugin;
 
 namespace WPlugins.SelectionStorage
 {
-    public class Main : IPEPlugin
+    public class SelectionStorage : IPEPlugin
     {
         private SelectionStorageForm _form;
         public void Run(IPERunArgs args)

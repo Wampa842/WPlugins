@@ -23,28 +23,27 @@ using System.Text;
 using System.Threading.Tasks;
 using PEPlugin;
 
-namespace WPlugins.MorphScale
+namespace WPlugins.NameUtil
 {
-    public class Main : IPEPlugin
-    {
-        public void Run(IPERunArgs args)
-        {
-            MorphScaleForm form = new MorphScaleForm(args);
-            form.Show();
-        }
+	public class NameUtil : IPEPlugin
+	{
+		public void Run(IPERunArgs args)
+		{
+			throw new NotImplementedException();
+		}
 
-        public string Name => "Morph Scale";
-        public string Version => Common.Info.Version.ToString();
-        public string Description => "A tool to scale and apply morphs.";
-        class PluginOptions : IPEPluginOption
-        {
-            public bool Bootup => false;
+		public string Name => "Name utility";
+		public string Version => Common.Info.Version.ToString();
+		public string Description => "A tool to set, replace and edit item names";
+		class PluginOptions : IPEPluginOption
+		{
+			public bool Bootup => true;
 
-            public bool RegisterMenu => true;
+			public bool RegisterMenu => true;
 
-            public string RegisterMenuText => "Morph Scale";
-        }
-        public IPEPluginOption Option => new PluginOptions();
-        public void Dispose() { }
-    }
+			public string RegisterMenuText => "Name utility";
+		}
+		public IPEPluginOption Option => new PluginOptions();
+		public void Dispose(){}
+	}
 }

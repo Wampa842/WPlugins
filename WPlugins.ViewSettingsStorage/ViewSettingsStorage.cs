@@ -7,7 +7,7 @@ using PEPlugin;
 
 namespace WPlugins.ViewSettingsStorage
 {
-    public class Main : IPEPlugin
+    public class ViewSettingsStorage : IPEPlugin
     {
         private MainForm _form;
         public void Run(IPERunArgs args)

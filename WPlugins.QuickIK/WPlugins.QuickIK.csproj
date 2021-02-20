@@ -47,7 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Builder.cs" />
-    <Compile Include="Main.cs" />
+    <Compile Include="QuickIK.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

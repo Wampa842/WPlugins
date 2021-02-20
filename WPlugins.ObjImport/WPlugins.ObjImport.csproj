@@ -53,7 +53,7 @@
     <Compile Include="ImportProgressForm.Designer.cs">
       <DependentUpon>ImportProgressForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Main.cs" />
+    <Compile Include="ObjImport.cs" />
     <Compile Include="ObjFileImporter.cs" />
     <Compile Include="ObjImportForm.cs">
       <SubType>Form</SubType>

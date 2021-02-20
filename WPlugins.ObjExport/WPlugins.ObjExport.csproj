@@ -53,7 +53,7 @@
     <Compile Include="ExportProgressForm.Designer.cs">
       <DependentUpon>ExportProgressForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Main.cs" />
+    <Compile Include="ObjExport.cs" />
     <Compile Include="ObjExportForm.cs">
       <SubType>Form</SubType>
     </Compile>

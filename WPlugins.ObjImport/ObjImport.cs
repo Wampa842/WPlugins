@@ -27,7 +27,7 @@ using PEPlugin.Pmx;
 
 namespace WPlugins.ObjImport
 {
-    public class Main : IPEImportPlugin
+    public class ObjImport : IPEImportPlugin
 	{
 		private IPXPmxBuilder builder = PEStaticBuilder.Pmx;
 		private IPXPmx pmx;

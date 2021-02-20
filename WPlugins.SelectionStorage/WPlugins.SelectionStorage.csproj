@@ -46,7 +46,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Main.cs" />
+    <Compile Include="SelectionExportForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SelectionExportForm.Designer.cs">
+      <DependentUpon>SelectionExportForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SelectionStorage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -77,6 +83,9 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SelectionExportForm.resx">
+      <DependentUpon>SelectionExportForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SelectionStorageForm.resx">
       <DependentUpon>SelectionStorageForm.cs</DependentUpon>

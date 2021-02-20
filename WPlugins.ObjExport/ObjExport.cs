@@ -27,7 +27,7 @@ using PEPlugin.Pmx;
 namespace WPlugins.ObjExport
 {
 
-    public class Main : IPEExportPlugin
+    public class ObjExport : IPEExportPlugin
 	{
 		ObjExportForm form;
 		string path;
