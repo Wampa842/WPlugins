@@ -1,18 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<WPluginsBatch>
-  <create>
-    <type>bone</type>
-    <name>Test Bone</name>
-    <position>
-      <x>1</x>
-      <y>0</y>
-      <z>1</z>
-    </position>
-    <translation>true</translation>
-  </create>
-  <echo>Hello world!</echo>
-  <weightobject>
-    <object>[Cc]ube1</object>
-    <bone>Test Bone</bone>
-  </weightobject>
+<WPluginsBatch file="processxml test.pmx">
+  <uvmorph name="Test UV morph">
+    <step>
+      <object>Cube1</object>
+      <pan u="0.5" v="0"></pan>
+    </step>
+    <step>
+      <object>Cube1</object>
+      <pan u="0" v="1"></pan>
+    </step>
+  </uvmorph>
 </WPluginsBatch>

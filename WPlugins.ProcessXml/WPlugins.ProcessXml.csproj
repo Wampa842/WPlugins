@@ -31,8 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="PEPlugin">
-      <HintPath>..\PEPlugin\PEPlugin.dll</HintPath>
+    <Reference Include="PEPlugin, Version=0.0.8.4, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>H:\MMD\PMX Editor\PmxEditor\Lib\PEPlugin\PEPlugin.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -46,8 +47,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands.cs" />
     <Compile Include="Runner.cs" />
+    <Compile Include="RunnerArgs.cs" />
     <Compile Include="RunnerForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -56,6 +57,9 @@
     </Compile>
     <Compile Include="ProcessXml.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RunnerProgress.cs" />
+    <Compile Include="Selector.cs" />
+    <Compile Include="XmlExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="RunnerForm.resx">
@@ -63,7 +67,19 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="test.xml" />
+    <Content Include="test.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Commands documentation.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Commands documentation.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WPlugins.Common\WPlugins.Common.csproj">
+      <Project>{fa4db914-c20f-474a-8c97-251c7ce78688}</Project>
+      <Name>WPlugins.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

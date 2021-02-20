@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
+using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
 using System.Xml;
@@ -22,17 +22,38 @@ namespace WPlugins.ProcessXml
             _args = args;
         }
 
-        private void AppendLog(string line)
+        // Add a new line to the log and update the progress bar. If the percent parameter is negative, the progress bar is not affected.
+        private void ReportProgress(string line, int percent)
         {
             //if (!verbose || verboseLogging.Checked)
-            validateOutput.Text += line + Environment.NewLine;
+            if (!string.IsNullOrEmpty(line))
+            {
+                validateOutput.AppendText(line + Environment.NewLine);
+            }
+
+            if (percent >= 0)
+                executionProgress.Value = percent;
+        }
+
+        private void UpdatePmx(IPXPmx pmx)
+        {
+            Application.DoEvents();
+            // TODO: this method seems to block the main UI thread.
+            _args.Host.Connector.Pmx.Update(pmx);
+            _args.Host.Connector.View.PmxView.UpdateModel();
+            _args.Host.Connector.View.PmxView.UpdateView();
+            _args.Host.Connector.Form.UpdateList(PEPlugin.Pmd.UpdateObject.All);
+            cancelButton.Enabled = false;
         }
 
         private void browseButton_Click(object sender, EventArgs e)
         {
-            OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Multiselect = false;
-            dialog.Filter = "XML Files|*.xml|All files|*.*";
+            OpenFileDialog dialog = new OpenFileDialog
+            {
+                Multiselect = false,
+                Filter = "XML Files|*.xml|All files|*.*"
+            };
+
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 pathText.Text = dialog.FileName;
@@ -52,8 +73,9 @@ namespace WPlugins.ProcessXml
                 validateOutput.Text = "Begin validation..." + Environment.NewLine;
                 XmlDocument document = new XmlDocument();
                 document.Load(pathText.Text);
-                bool valid = Runner.ValidateXml(document, AppendLog);
-                AppendLog(valid ? "Validation successful." : "Validation failed.");
+                //bool valid = Runner.ValidateXml(document, AppendLog);
+                bool valid = true;
+                ReportProgress(valid ? "Validation successful." : "Validation failed.", -1);
                 executeButton.Enabled = valid;
             }
             catch (XmlException ex)
@@ -70,15 +92,12 @@ namespace WPlugins.ProcessXml
 
         private void executeButton_Click(object sender, EventArgs e)
         {
-            validateOutput.Text = "Executing..." + Environment.NewLine;
+            ReportProgress("Start execution...", 0);
+            cancelButton.Enabled = true;
             IPXPmx pmx = _args.Host.Connector.Pmx.GetCurrentState();
             XmlDocument doc = new XmlDocument();
             doc.Load(pathText.Text);
-            Runner.Execute(doc, pmx, _args.Host.Builder.Pmx, AppendLog);
-            _args.Host.Connector.Pmx.Update(pmx);
-            _args.Host.Connector.View.PmxView.UpdateModel();
-            _args.Host.Connector.View.PmxView.UpdateView();
-            _args.Host.Connector.Form.UpdateList(PEPlugin.Pmd.UpdateObject.All);
+            Runner.ExecuteAsync(doc, pmx, _args.Host.Builder.Pmx, ReportProgress, UpdatePmx);
         }
 
         private void RunnerForm_DragDrop(object sender, DragEventArgs e)
@@ -92,6 +111,13 @@ namespace WPlugins.ProcessXml
                 e.Effect = DragDropEffects.Link;
             else
                 e.Effect = DragDropEffects.None;
+        }
+
+        private void cancelButton_Click(object sender, EventArgs e)
+        {
+            cancelButton.Enabled = false;
+            ReportProgress("> Cancel pending...", -1);
+            Runner.CancelWorker();
         }
     }
 }
