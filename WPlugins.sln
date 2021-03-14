@@ -39,6 +39,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPlugins.MiscTools", "WPlug
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPlugins.ProcessXml.Creator", "WPlugins.ProcessXml.Creator\WPlugins.ProcessXml.Creator.csproj", "{EF682504-4B64-49FF-983A-2BC0DD628BE2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPlugins.ObjIO", "WPlugins.ObjIO\WPlugins.ObjIO.csproj", "{5522A8CB-7215-49B7-A9B3-16745684B9B4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPlugins.MorphTarget", "WPlugins.MorphTarget\WPlugins.MorphTarget.csproj", "{384B60AC-C629-4AA9-9987-8124BA411D96}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -105,6 +109,14 @@ Global
 		{EF682504-4B64-49FF-983A-2BC0DD628BE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF682504-4B64-49FF-983A-2BC0DD628BE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF682504-4B64-49FF-983A-2BC0DD628BE2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5522A8CB-7215-49B7-A9B3-16745684B9B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5522A8CB-7215-49B7-A9B3-16745684B9B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5522A8CB-7215-49B7-A9B3-16745684B9B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5522A8CB-7215-49B7-A9B3-16745684B9B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{384B60AC-C629-4AA9-9987-8124BA411D96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{384B60AC-C629-4AA9-9987-8124BA411D96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{384B60AC-C629-4AA9-9987-8124BA411D96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{384B60AC-C629-4AA9-9987-8124BA411D96}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
