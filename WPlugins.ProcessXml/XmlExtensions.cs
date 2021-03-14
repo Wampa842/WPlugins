@@ -164,5 +164,17 @@ namespace WPlugins.ProcessXml
             string lowerCaseName = name.ToLowerInvariant();
             return node.ChildNodes.OfType<XmlNode>().Where(a => a.Name.ToLowerInvariant() == lowerCaseName).FirstOrDefault();
         }
+
+        /// <summary>
+        /// Returns the node's child element of the given name. Case-insensitive.
+        /// </summary>
+        internal static XmlElement GetChildElementCI(this XmlNode node, string name)
+        {
+            if (!node.HasChildNodes)
+                return null;
+
+            string lowerCaseName = name.ToLowerInvariant();
+            return node.ChildNodes.OfType<XmlElement>().Where(a => a.Name.ToLowerInvariant() == lowerCaseName).FirstOrDefault();
+        }
     }
 }

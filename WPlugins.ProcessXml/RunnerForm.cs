@@ -15,30 +15,20 @@ namespace WPlugins.ProcessXml
 {
     public partial class RunnerForm : Form
     {
+        private RunnerProgress _progress;
         private IPERunArgs _args;
+
         public RunnerForm(IPERunArgs args)
         {
             InitializeComponent();
+            _progress = new RunnerProgress(validateOutput, executionProgress);
             _args = args;
-        }
-
-        // Add a new line to the log and update the progress bar. If the percent parameter is negative, the progress bar is not affected.
-        private void ReportProgress(string line, int percent)
-        {
-            //if (!verbose || verboseLogging.Checked)
-            if (!string.IsNullOrEmpty(line))
-            {
-                validateOutput.AppendText(line + Environment.NewLine);
-            }
-
-            if (percent >= 0)
-                executionProgress.Value = percent;
         }
 
         private void UpdatePmx(IPXPmx pmx)
         {
             Application.DoEvents();
-            // TODO: this method seems to block the main UI thread.
+            // TODO: This method blocks the UI thread and there's no way around it. Consider starting the UI on a new thread.
             _args.Host.Connector.Pmx.Update(pmx);
             _args.Host.Connector.View.PmxView.UpdateModel();
             _args.Host.Connector.View.PmxView.UpdateView();
@@ -60,44 +50,20 @@ namespace WPlugins.ProcessXml
             }
         }
 
-        private void validateButton_Click(object sender, EventArgs e)
+        private async void executeButton_Click(object sender, EventArgs e)
         {
-            if (!File.Exists(pathText.Text))
-            {
-                validateOutput.Text = string.Format("File not found: {0}", pathText.Text);
-                executeButton.Enabled = false;
-                return;
-            }
-            try
-            {
-                validateOutput.Text = "Begin validation..." + Environment.NewLine;
-                XmlDocument document = new XmlDocument();
-                document.Load(pathText.Text);
-                //bool valid = Runner.ValidateXml(document, AppendLog);
-                bool valid = true;
-                ReportProgress(valid ? "Validation successful." : "Validation failed.", -1);
-                executeButton.Enabled = valid;
-            }
-            catch (XmlException ex)
-            {
-                validateOutput.Text = string.Format("Not a valid XML file: {0}\n{1}", pathText.Text, ex.Message);
-                executeButton.Enabled = false;
-            }
-            catch (Exception ex)
-            {
-                validateOutput.Text = string.Format("Failed to load file: {0}\n{1}", pathText.Text, ex.Message);
-                executeButton.Enabled = false;
-            }
-        }
-
-        private void executeButton_Click(object sender, EventArgs e)
-        {
-            ReportProgress("Start execution...", 0);
             cancelButton.Enabled = true;
             IPXPmx pmx = _args.Host.Connector.Pmx.GetCurrentState();
+            IPXPmxBuilder builder = _args.Host.Builder.Pmx;
             XmlDocument doc = new XmlDocument();
             doc.Load(pathText.Text);
-            Runner.ExecuteAsync(doc, pmx, _args.Host.Builder.Pmx, ReportProgress, UpdatePmx);
+
+            RunnerResult result = await Task.Run(() => { return Runner.Execute(doc, pmx, builder, _progress); });
+            if(result == RunnerResult.Success)
+            {
+                UpdatePmx(pmx);
+            }
+            cancelButton.Enabled = false;
         }
 
         private void RunnerForm_DragDrop(object sender, DragEventArgs e)
@@ -116,8 +82,7 @@ namespace WPlugins.ProcessXml
         private void cancelButton_Click(object sender, EventArgs e)
         {
             cancelButton.Enabled = false;
-            ReportProgress("> Cancel pending...", -1);
-            Runner.CancelWorker();
+            
         }
     }
 }

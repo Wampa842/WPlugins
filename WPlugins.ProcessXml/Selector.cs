@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -47,6 +48,33 @@ namespace WPlugins.ProcessXml
 
         public static class Vertex
         {
+            private static void Combine(HashSet<IPXVertex> dst, IEnumerable<IPXVertex> src, string mode)
+            {
+                switch (mode)
+                {
+                    case "intersect":
+                    case "intersection":
+                    case "and":
+                        dst.IntersectWith(src);
+                        break;
+                    case "subtract":
+                    case "sub":
+                        dst.ExceptWith(src);
+                        break;
+                    case "replace":
+                        dst.Clear();
+                        dst.UnionWith(src);
+                        break;
+                    case "add":
+                    case "union":
+                    case "or":
+                    default:
+                        dst.UnionWith(src);
+                        break;
+                }
+                System.Windows.Forms.MessageBox.Show(dst.Count.ToString());
+            }
+
             /// <summary>
             /// Selects vertices based on a list of XML nodes.
             /// </summary>
@@ -106,27 +134,31 @@ namespace WPlugins.ProcessXml
                 {
                     string type = selector.GetAttributeCI("type").ToLowerInvariant();
                     string method = selector.GetAttributeCI("method").ToLowerInvariant();
+                    string combine = selector.GetAttributeCI("combine").ToLowerInvariant();
 
                     switch (type)
                     {
+                        // Find by material properties
                         case "material":
                         case "object":
                             switch (method)
                             {
                                 case "note":
-                                    vertices.UnionWith(Vertex.ByMaterialNote(selector.InnerText, pmx));
+                                    //vertices.UnionWith(Vertex.ByMaterialNote(selector.InnerText, pmx));
+                                    Combine(vertices, Vertex.ByMaterialNote(selector.InnerText, pmx), combine);
                                     break;
                                 case "index":
                                     if (int.TryParse(selector.InnerText, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out int index))
                                     {
-                                        vertices.UnionWith(Vertex.FromMaterial(Material.ByIndex(index, pmx)));
+                                        Combine(vertices, Vertex.FromMaterial(Material.ByIndex(index, pmx)), combine);
                                     }
                                     break;
                                 default:
-                                    vertices.UnionWith(Vertex.ByMaterialName(selector.InnerText, pmx));
+                                    Combine(vertices, Vertex.ByMaterialName(selector.InnerText, pmx), combine);
                                     break;
                             }
                             break;
+                        // Find by bone weights
                         case "bone":
                         case "weight":
                             switch (method)
@@ -134,13 +166,43 @@ namespace WPlugins.ProcessXml
                                 case "index":
                                     if (int.TryParse(selector.InnerText, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out int index))
                                     {
-                                        vertices.UnionWith(Vertex.FromBoneWeight(Bone.ByIndex(index, pmx), pmx));
+                                        Combine(vertices, Vertex.FromBoneWeight(Bone.ByIndex(index, pmx), pmx), combine);
                                     }
                                     break;
                                 default:
-                                    vertices.UnionWith(Vertex.FromBoneWeight(Bone.ByName(selector.InnerText, pmx).FirstOrDefault(), pmx));
+                                    Combine(vertices, Vertex.FromBoneWeight(Bone.ByName(selector.InnerText, pmx).FirstOrDefault(), pmx), combine);
                                     break;
                             }
+                            break;
+                        // Find by position inside box
+                        case "box":
+                            switch (method)
+                            {
+                                // Box is defined by a center position, and a size vector.
+                                case "center":
+                                    XmlElement centerElement = selector.GetChildElementCI("center");
+                                    XmlElement sizeElement = selector.GetChildElementCI("size");
+                                    if (centerElement != null && sizeElement != null)
+                                    {
+                                        V3 center = centerElement.GetV3();
+                                        V3 size = sizeElement.GetV3();
+
+                                        V3 a = new V3(center.X - size.X / 2, center.Y - size.Y / 2, center.Z - size.Z / 2);
+                                        V3 b = new V3(center.X + size.X / 2, center.Y + size.Y / 2, center.Z + size.Z / 2);
+                                        Combine(vertices, Vertex.InsideCube(a, b, pmx), combine);
+                                    }
+                                    break;
+                                // Box is defined by its two opposite corners.
+                                default:
+                                    Combine(vertices, Vertex.InsideCube(selector.GetChildElementCI("a").GetV3(), selector.GetChildElementCI("b").GetV3(), pmx), combine);
+                                    break;
+                            }
+                            break;
+                        // Find by position inside sphere
+                        case "sphere":
+                            break;
+                        // Find by position inside cylinder
+                        case "cylinder":
                             break;
                         default:
                             break;
@@ -196,17 +258,33 @@ namespace WPlugins.ProcessXml
             /// </summary>
             public static IEnumerable<IPXVertex> InsideSphere(V3 center, float radius, IPXPmx pmx)
             {
-                HashSet<IPXVertex> vertices = new HashSet<IPXVertex>();
                 float squared = radius * radius;
-                foreach (IPXVertex v in pmx.Vertex)
+                return pmx.Vertex.Where(v => (v.Position - center).LengthSq() <= squared);
+            }
+
+            /// <summary>
+            /// Returns the vertices that are inside the cube defined by its two opposing points.
+            /// </summary>
+            public static IEnumerable<IPXVertex> InsideCube(V3 a, V3 b, IPXPmx pmx)
+            {
+                float xmin = Math.Min(a.X, b.X);
+                float xmax = Math.Max(a.X, b.X);
+                float ymin = Math.Min(a.Y, b.Y);
+                float ymax = Math.Max(a.Y, b.Y);
+                float zmin = Math.Min(a.Z, b.Z);
+                float zmax = Math.Max(a.Z, b.Z);
+
+                return pmx.Vertex.Where(v =>
                 {
-                    V3 dist = v.Position - center;
-                    if (dist.LengthSq() <= squared)
-                    {
-                        vertices.Add(v);
-                    }
-                }
-                return vertices;
+                    float x = v.Position.X;
+                    float y = v.Position.Y;
+                    float z = v.Position.Z;
+
+                    if (x < xmin || x > xmax) return false;
+                    if (y < ymin || y > ymax) return false;
+                    if (z < zmin || z > zmax) return false;
+                    return true;
+                });
             }
         }
     }

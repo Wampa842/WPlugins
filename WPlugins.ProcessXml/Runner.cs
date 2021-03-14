@@ -13,12 +13,9 @@ using PEPlugin.SDX;
 
 namespace WPlugins.ProcessXml
 {
+    public enum RunnerResult { Success = 0, Fail = 1, Cancelled = 2 }
     public static class Runner
     {
-        private static BackgroundWorker _worker;
-        private static Action<string, int> _report;
-        private static Action<IPXPmx> _update;
-
         // This is just to make my work easier so I don't have to typecast to float and back to int
         private static int Percent(float amount, float total) => (int)Math.Round((amount / total) * 100);
         /// <summary>
@@ -40,66 +37,15 @@ namespace WPlugins.ProcessXml
                 return o;
             }
         }
-        
-        /// <summary>
-        /// Begins execution in a background worker.
-        /// </summary>
-        public static async void ExecuteAsync(XmlDocument doc, IPXPmx pmx, IPXPmxBuilder builder, Action<string, int> report, Action<IPXPmx> update)
-        {
-            _report = report;
-            _update = update;
-            await Task.Run(() => _worker.RunWorkerAsync(new RunnerArgs(doc, pmx, builder)));
-        }
 
         /// <summary>
-        /// Requests cancellation on the background worker.
+        /// Executes the provided XmlDocument on the PMX object.
         /// </summary>
-        public static void CancelWorker()
+        public static RunnerResult Execute(XmlDocument doc, IPXPmx pmx, IPXPmxBuilder builder, RunnerProgress progress)
         {
-            _worker.CancelAsync();
-        }
+            XmlElement root = doc.DocumentElement;
 
-        private static void WorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            // If the result is a PMX object, the execution was successful and the scene can be updated.
-            if (e.Result is IPXPmx)
-            {
-                _report("> Execution completed successfully.", 100);
-                _update((IPXPmx)e.Result);
-            }
-            // If the result is an exception, the execution was interrupted by an error. The user is notified and the scene is NOT updated.
-            else if (e.Result is Exception)
-            {
-                _report("> Interrupted by " + e.Result.GetType().ToString(), -1);
-                _report(e.ToString(), -1);
-            }
-            // If the result is null, the execution was interrupted by cancellation.
-            else if (e.Result == null)
-            {
-                _report("> Cancelled by user", -1);
-            }
-            // If this point is reached, something fucky is going on.
-            else
-            {
-                _report("> I don't know how you reached this point... something weird is going on.", -1);
-            }
-        }
-
-        private static void WorkerProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            _report((string)e.UserState, e.ProgressPercentage);
-        }
-
-        private static void WorkerDoWork(object sender, DoWorkEventArgs eventArgs)
-        {
-            // Get some more convenient references
-            BackgroundWorker worker = (BackgroundWorker)sender;
-            RunnerArgs args = (RunnerArgs)eventArgs.Argument;
-            XmlElement root = args.Document.DocumentElement;
-            IPXPmx pmx = args.Pmx;
-            IPXPmxBuilder builder = args.Builder;
-
-            worker.ReportProgress(0, "> Execution started.");
+            progress.Report(0, "> Execution started.");
 
             // Begin processing
             // Only the first level of elements are interpreted as commands.
@@ -190,7 +136,7 @@ namespace WPlugins.ProcessXml
                                     }
                                 }
                                 pmx.Bone.Add(bone);
-                                worker.ReportProgress(Percent(i + 1, commands.Length), string.Format("[bone] Added new bone {0}.", bone.Name));
+                                progress.Report(Percent(i + 1, commands.Length), string.Format("[bone] Added new bone {0}.", bone.Name));
                             }
                             break;
                         // Assigns the selected vertices to the selected bone using BDEF1.
@@ -202,20 +148,20 @@ namespace WPlugins.ProcessXml
                                     bone = Selector.Bone.Selector(node["target"], pmx).FirstOrDefault();
                                     if (bone == null)
                                     {
-                                        worker.ReportProgress(Percent(i + 1, commands.Length), string.Format("[weight] Bone was not found.", node["target"].InnerText));
+                                        progress.Report(Percent(i + 1, commands.Length), string.Format("[weight] Bone was not found.", node["target"].InnerText));
                                         break;
                                     }
                                 }
                                 else
                                 {
-                                    worker.ReportProgress(Percent(i + 1, commands.Length), "[weight] Bone selector was not specified.");
+                                    progress.Report(Percent(i + 1, commands.Length), "[weight] Bone selector was not specified.");
                                     break;
                                 }
 
                                 // Set vertex weights
                                 if (node["select"] == null)
                                 {
-                                    worker.ReportProgress(Percent(i + 1, commands.Length), "[weight] No vertices were selected.");
+                                    progress.Report(Percent(i + 1, commands.Length), "[weight] No vertices were selected.");
                                     break;
                                 }
                                 IEnumerable<IPXVertex> vertices = Selector.Vertex.SelectorNode(node["select"], pmx);
@@ -227,7 +173,7 @@ namespace WPlugins.ProcessXml
                                     v.Weight2 = v.Weight3 = v.Weight4 = 0;
                                 }
 
-                                worker.ReportProgress(Percent(i + 1, commands.Length), string.Format("[weight] Weighted {0} vertices to {1} ({2}).", vertices.Count(), bone.Name, bone.NameE));
+                                progress.Report(Percent(i + 1, commands.Length), string.Format("[weight] Weighted {0} vertices to {1} ({2}).", vertices.Count(), bone.Name, bone.NameE));
                             }
                             break;
                         // Creates a new UV morph.
@@ -339,7 +285,7 @@ namespace WPlugins.ProcessXml
                                 }
 
                                 pmx.Morph.Add(morph);
-                                worker.ReportProgress(Percent(i + 1, commands.Length), string.Format("[uvmorph] Created UV morph {0} with {1} offsets.", morph.Name, morph.Offsets.Count));
+                                progress.Report(Percent(i + 1, commands.Length), string.Format("[uvmorph] Created UV morph {0} with {1} offsets.", morph.Name, morph.Offsets.Count));
                             }
                             break;
                         // No particular functionality, testing only.
@@ -359,7 +305,7 @@ namespace WPlugins.ProcessXml
                             {
                                 if (node["select"] == null)
                                 {
-                                    worker.ReportProgress(Percent(i + 1, commands.Length), "[weight] No vertices were selected.");
+                                    progress.Report(Percent(i + 1, commands.Length), "[weight] No vertices were selected.");
                                     break;
                                 }
                                 IEnumerable<IPXVertex> vertices = Selector.Vertex.SelectorNode(node["select"], pmx);
@@ -444,7 +390,7 @@ namespace WPlugins.ProcessXml
                             {
                                 if (node["select"] == null)
                                 {
-                                    worker.ReportProgress(Percent(i + 1, commands.Length), "[weight] No vertices were selected.");
+                                    progress.Report(Percent(i + 1, commands.Length), "[weight] No vertices were selected.");
                                     break;
                                 }
                                 HashSet<IPXVertex> vertices = new HashSet<IPXVertex>(Selector.Vertex.SelectorNode(node["select"], pmx));
@@ -482,7 +428,7 @@ namespace WPlugins.ProcessXml
                         // Sets environment variables.
                         case "settings":
                             {
-                                foreach(XmlElement child in node.ChildNodes.OfType<XmlElement>())
+                                foreach (XmlElement child in node.ChildNodes.OfType<XmlElement>())
                                 {
                                     switch (child.Name.ToLowerInvariant())
                                     {
@@ -509,7 +455,7 @@ namespace WPlugins.ProcessXml
                                 if (int.TryParse(node.GetAttributeCI("skip"), out int skipNumber) && skipNumber > 0)
                                 {
                                     StringBuilder sb = new StringBuilder(string.Format("Would you like to skip the following {0} command(s)?\n", skipNumber));
-                                    for(int j = 1; j <= skipNumber; ++j)
+                                    for (int j = 1; j <= skipNumber; ++j)
                                     {
                                         sb.Append(commands[i + j].Name);
                                     }
@@ -524,10 +470,10 @@ namespace WPlugins.ProcessXml
                         // Prints a line in the console.
                         case "echo":
                         case "print":
-                            worker.ReportProgress(Percent(i + 1, commands.Length), node.InnerText);
+                            progress.Report(Percent(i + 1, commands.Length), node.InnerText);
                             break;
                         default:
-                            worker.ReportProgress(Percent(i + 1, commands.Length), "Skipping unknown command " + node.Name);
+                            progress.Report(Percent(i + 1, commands.Length), "Skipping unknown command " + node.Name);
                             break;
                     }
                 }
@@ -535,35 +481,20 @@ namespace WPlugins.ProcessXml
                 {
                     if (GlobalSettings.Exception == GlobalSettings.ErrorHandling.Ask)
                     {
-                        if (System.Windows.Forms.MessageBox.Show(string.Format("The following exception has occured:\n\n{0}\n\nWould you like to continue execution?", ex.ToString()), "Exception", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Error) == System.Windows.Forms.DialogResult.No)
+                        if (MessageBox.Show(string.Format("The following exception has occured:\n\n{0}\n\nWould you like to continue execution?", ex.ToString()), "Exception", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Error) == System.Windows.Forms.DialogResult.No)
                         {
-                            eventArgs.Result = ex;
-                            return;
+                            return RunnerResult.Fail;
                         }
                     }
                     else if (GlobalSettings.Exception == GlobalSettings.ErrorHandling.Abort)
                     {
-                        eventArgs.Result = ex;
-                        return;
+                        return RunnerResult.Fail;
                     }
                 }
             }
 
-            // If control has reached this point, the execution is considered successful and e.Result can be set.
-            eventArgs.Result = pmx;
-        }
-
-        static Runner()
-        {
-            // Initialize the BackgroundWorker
-#pragma warning disable IDE0017 // Simplify object initialization
-            _worker = new BackgroundWorker();
-#pragma warning restore IDE0017 // Simplify object initialization
-            _worker.WorkerReportsProgress = true;
-            _worker.WorkerSupportsCancellation = true;
-            _worker.DoWork += WorkerDoWork;
-            _worker.ProgressChanged += WorkerProgressChanged;
-            _worker.RunWorkerCompleted += WorkerCompleted;
+            // If control has reached this point, the execution is considered successful.
+            return RunnerResult.Success;
         }
     }
 }
